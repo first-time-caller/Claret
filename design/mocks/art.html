@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts-local.css">
+<style>
+:root{--serif:"Newsreader",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"DM Mono",ui-monospace,monospace;
+  --c-ruby:#8C1530;--c-garnet:#7B2B2B;--c-claret:#6E1526;--c-lemon:#ECE08A;--c-tawny:#9A5A2E;--c-straw:#E5CF78;--c-purple:#4A1238;--c-brick:#8A3B24}
+*{box-sizing:border-box}
+body{margin:0;background:#ECE9E9;font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.board{padding:56px 64px 72px;display:flex;flex-direction:column;gap:36px;width:max-content;background:#ECE9E9}
+.board-h{display:flex;flex-direction:column;gap:6px;max-width:1300px}
+.board-h .k{font:500 13px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#7A6D71}
+.board-h h1{margin:0;font:600 44px/1.1 var(--serif)}
+.board-h p{margin:0;font-size:17px;line-height:1.5;color:#5E5357;max-width:980px}
+.row{display:flex;gap:56px;align-items:flex-start}
+.cap{font:500 13px var(--mono);letter-spacing:.06em;color:#7A6D71;margin-top:18px;text-align:center;width:393px}
+.phone{width:393px;height:852px;border-radius:56px;overflow:hidden;position:relative;background:var(--bg);color:var(--ink);box-shadow:0 0 0 9px #0d0d0d,0 0 0 10.5px #3a3a3a,0 40px 80px -20px rgba(0,0,0,.45)}
+.light{--bg:#F5F3F3;--cell:#fff;--ink:#1D1517;--ink2:#6C6064;--line:#E2DCDD;--accent:#6E1526;--on:#fff;--glass:rgba(255,255,255,.6);--glass-b:rgba(255,255,255,.75)}
+.dark{--bg:#0E0A0B;--cell:#1B1517;--ink:#F3EDEE;--ink2:#A5989C;--line:#2E2629;--accent:#E27D8F;--on:#1B0B0F;--glass:rgba(40,30,33,.55);--glass-b:rgba(255,255,255,.14)}
+.sb{position:absolute;top:0;left:0;right:0;height:54px;display:flex;justify-content:space-between;align-items:center;padding:6px 34px 0 52px;z-index:50;font:600 17px var(--sans);color:var(--sbc,var(--ink))}
+.sb svg{height:13px}.sb .ic{display:flex;gap:6px;align-items:center}
+.island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:126px;height:37px;border-radius:20px;background:#000;z-index:60}
+.homebar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:139px;height:5px;border-radius:3px;background:var(--hb,var(--ink));z-index:60}
+.lg{background:var(--glass);-webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);box-shadow:inset 0 1px 0 var(--glass-b),inset 0 0 0 .5px var(--glass-b),0 8px 30px rgba(0,0,0,.14)}
+.scroll{position:absolute;inset:54px 0 0;overflow:hidden;padding:6px 0 0}
+.lt{display:flex;justify-content:space-between;align-items:center;padding:4px 20px 10px}
+.lt h2{margin:0;font:600 34px/1.1 var(--serif)}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#C9A3AC,#6E1526)}
+.shelf-h{display:flex;justify-content:space-between;align-items:baseline;padding:18px 20px 10px}
+.shelf-h h3{margin:0;font:600 21px/1.2 var(--sans);letter-spacing:-.01em}
+.shelf-h span{font:500 15px var(--sans);color:var(--accent)}
+.shelf{display:flex;gap:14px;padding:0 20px;overflow:hidden}
+/* artwork */
+.art{position:relative;overflow:hidden;background:var(--line);flex:none}
+.art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.gen{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:12%;color:var(--gt,#fff);
+  background:radial-gradient(circle at 50% 44%,color-mix(in oklab,var(--c) 78%,#000) 0 34%,var(--c) 54%,color-mix(in oklab,var(--c) 58%,#fff) 82%,color-mix(in oklab,var(--c) 30%,#fff) 100%)}
+.gen .gp{font:600 .62em/1.2 var(--sans);letter-spacing:.16em;text-transform:uppercase;opacity:.85}
+.gen .gc{font:500 1.5em/1.02 var(--serif);letter-spacing:-.01em}
+.gen .gv{font:500 .8em var(--mono);opacity:.85}
+.sq{border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.round{border-radius:50%}
+.tile{display:flex;flex-direction:column;gap:6px;width:150px;flex:none}
+.tile .t{font:500 14px/1.25 var(--sans)}
+.tile .s{font:400 13px/1.25 var(--sans);color:var(--ink2);margin-top:-4px}
+.ptile{display:flex;flex-direction:column;align-items:center;gap:8px;width:110px;flex:none;text-align:center}
+.ptile .t{font:500 13px/1.25 var(--sans)}
+/* top pick card */
+.pickcard{width:300px;height:350px;border-radius:18px;overflow:hidden;flex:none;position:relative;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.pickcard .band{position:absolute;left:0;right:0;bottom:0;height:116px;padding:16px;display:flex;flex-direction:column;gap:4px;background:var(--band)}
+.pickcard .k{font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.pickcard .t{font:500 22px/1.15 var(--serif)}
+.pickcard .s{font:400 14px var(--sans);opacity:.85}
+.pickcard .art{position:absolute;inset:0 0 116px 0}
+/* mini player */
+.mini{position:absolute;left:20px;right:20px;bottom:104px;height:58px;border-radius:29px;display:flex;align-items:center;gap:12px;padding:0 8px;z-index:40}
+.mini .art{width:42px;height:42px;border-radius:21px}
+.mini .t{font:600 14px var(--sans)}
+.mini .s{font:400 12px var(--mono);color:var(--ink2)}
+.mini .tm{margin-left:auto;font:600 17px var(--mono);color:var(--accent);padding-right:10px}
+.tabbar{position:absolute;left:20px;right:20px;bottom:30px;display:flex;gap:10px;z-index:40}
+.tabpill{flex:1;height:62px;border-radius:31px;display:grid;grid-template-columns:repeat(3,1fr);align-items:center;padding:0 6px}
+.tabpill .t{display:flex;flex-direction:column;align-items:center;gap:2px;font:500 10px var(--sans);color:var(--ink2)}
+.tabpill .t svg{width:26px;height:26px}
+.tabpill .t.on{color:var(--accent);background:color-mix(in oklab,var(--ink) 8%,transparent);border-radius:24px;padding:6px 0;margin:0 4px}
+.tabbtn{width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--accent)}
+.tabbtn svg{width:28px;height:28px}
+/* producer page */
+.phead{position:absolute;inset:0 0 auto;height:430px}
+.phead .art{position:absolute;inset:0;border-radius:0}
+.phead::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.3),transparent 30%,transparent 55%,rgba(0,0,0,.65))}
+.pname{position:absolute;left:20px;right:90px;top:340px;z-index:3;color:#fff;font:600 34px/1.05 var(--serif)}
+.pplay{position:absolute;right:20px;top:348px;width:52px;height:52px;border-radius:50%;background:var(--accent);color:var(--on);z-index:3;display:flex;align-items:center;justify-content:center}
+.pplay svg{width:24px;height:24px}
+.pbody{position:absolute;top:430px;left:0;right:0;bottom:0;padding:14px 0 0;display:flex;flex-direction:column}
+.pmeta{padding:0 20px;font:400 15px var(--sans);color:var(--ink2)}
+.list{padding:0 20px}
+.li{display:flex;gap:12px;align-items:center;padding:8px 0;border-bottom:.5px solid var(--line)}
+.li .art{width:48px;height:48px;border-radius:6px}
+.li .m{flex:1;min-width:0}
+.li .t{font:500 16px/1.25 var(--sans)}
+.li .s{font:400 13px var(--sans);color:var(--ink2)}
+.li .p{font:500 15px var(--mono)}
+.back{position:absolute;top:58px;left:16px;width:40px;height:40px;border-radius:50%;z-index:20;display:flex;align-items:center;justify-content:center;color:var(--ink)}
+.back svg{width:18px;height:18px}
+/* wine page */
+.wart{position:absolute;top:112px;left:50%;transform:translateX(-50%);width:262px;height:262px;border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.28)}
+.wbody{position:absolute;top:396px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;padding:0 24px}
+.wt{font:600 23px/1.2 var(--serif)}
+.wp{font:500 20px var(--sans);color:var(--accent)}
+.wm{font:400 13px var(--sans);color:var(--ink2);margin-top:2px;letter-spacing:.02em}
+.wbtns{display:flex;gap:12px;margin-top:14px;width:100%}
+.wbtns span{flex:1;height:48px;border-radius:12px;background:color-mix(in oklab,var(--ink) 7%,transparent);display:flex;align-items:center;justify-content:center;gap:8px;font:600 16px var(--sans);color:var(--accent)}
+.wbtns svg{width:18px;height:18px}
+.wnote{font:400 14px/1.45 var(--sans);color:var(--ink2);text-align:left;margin-top:14px;align-self:stretch}
+.wlist{position:absolute;top:612px;left:0;right:0;padding:0 20px}
+.wrow{display:flex;justify-content:space-between;align-items:baseline;padding:11px 0;border-bottom:.5px solid var(--line);font:400 15px var(--sans)}
+.wrow .k{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
+.wrow .v{font:400 15px var(--mono)}
+/* now pouring */
+.np{position:absolute;inset:0;background:radial-gradient(ellipse 120% 80% at 50% 30%,#A8243F,#5A0F20 55%,#24060C)}
+.np::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.12),transparent 40%)}
+.np-grab{position:absolute;top:62px;left:50%;transform:translateX(-50%);width:36px;height:5px;border-radius:3px;background:rgba(255,255,255,.4)}
+.npart{position:absolute;top:104px;left:32px;width:329px;height:329px;border-radius:14px;box-shadow:0 26px 60px rgba(0,0,0,.45)}
+.np-t{position:absolute;top:462px;left:32px;right:32px;color:#fff}
+.np-t .a{font:600 22px/1.2 var(--serif)}
+.np-t .b{font:400 18px var(--sans);opacity:.7;margin-top:2px}
+.scrub{position:absolute;top:540px;left:32px;right:32px;color:rgba(255,255,255,.7)}
+.scrub .bar{height:6px;border-radius:3px;background:rgba(255,255,255,.22)}
+.scrub .bar i{display:block;height:100%;width:62%;background:rgba(255,255,255,.92);border-radius:3px}
+.scrub .tt{display:flex;justify-content:space-between;font:500 12px var(--mono);margin-top:8px}
+.scrub .lbl{font:600 13px var(--sans);color:#fff;margin-bottom:10px;letter-spacing:.01em}
+.ctrl{position:absolute;top:620px;left:32px;right:32px;display:flex;justify-content:space-between;align-items:center;color:#fff}
+.ctrl .c{font:600 15px var(--mono);width:64px;text-align:center;opacity:.9}
+.ctrl .big{width:84px;height:84px;border-radius:50%;background:rgba(255,255,255,.95);color:#5A0F20;display:flex;align-items:center;justify-content:center}
+.ctrl .big svg{width:34px;height:34px}
+.np-foot{position:absolute;bottom:48px;left:44px;right:44px;display:flex;justify-content:space-between;color:rgba(255,255,255,.75);font:500 12px var(--sans)}
+.np-foot span{display:flex;flex-direction:column;align-items:center;gap:6px}
+.np-foot svg{width:24px;height:24px}
+</style></head><body>
+<template id="sbt"><div class="sb"><span>19:40</span><span class="ic"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="currentColor"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx="1" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.5l2.4-2.9a3.6 3.6 0 0 0-4.8 0zM3.2 5.7l1.6 1.9a5 5 0 0 1 6.4 0l1.6-1.9a7.6 7.6 0 0 0-9.6 0zM.4 2.6L2 4.5a9.7 9.7 0 0 1 12 0l1.6-1.9a12.2 12.2 0 0 0-15.2 0z" fill="currentColor"/></svg><svg viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="9" rx="2" fill="currentColor"/></svg></span></div><div class="island"></div><div class="homebar"></div></template>
+<template id="tabs"><div class="tabbar"><div class="tabpill lg"><span class="t on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10l-.4 5.2a4.6 4.6 0 0 1-9.2 0z"/><path d="M12 13v7M8.5 21h7"/></svg>Tonight</span><span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3"/></svg>Cellar</span><span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>Explore</span></div><div class="tabbtn lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M10 8h4v8h-4z"/></svg></div></div></template>
+
+<section class="board" id="board-art">
+  <div class="board-h"><span class="k">The Glass · artwork-led</span><h1>Producers as artists, wines as albums</h1><p>Apple Music's structure for wine. Producers get round artwork and their own page; each wine gets square cover art from a bottle photo, your own label scan, or a generated cover in its tasting colour. Tonight's pick becomes "Now pouring", with the fridge timer as the progress bar.</p></div>
+  <div class="row">
+
+    <!-- Tonight / Listen Now -->
+    <div><div class="phone light">
+      <div class="scroll">
+        <div class="lt"><h2>Tonight</h2><span class="avatar"></span></div>
+        <div class="shelf">
+          <div class="pickcard" style="--band:#5A1A1F"><div class="art" data-art="northern-rhone" data-gen="Domaine Les Bruyères|Crozes-Hermitage|2022|garnet"></div><div class="band"><span class="k">Tonight's pick · cold &amp; wet · lamb</span><span class="t">A savoury, medium-bodied red</span><span class="s">Crozes-Hermitage · £21 · Majestic</span></div></div>
+          <div class="pickcard" style="--band:#6E1526"><div class="art" data-art="bordeaux"></div><div class="band"><span class="k">Sideways</span><span class="t">Classic claret</span><span class="s">Médoc · from £18</span></div></div>
+        </div>
+        <div class="shelf-h"><h3>Producers for you</h3><span>See all</span></div>
+        <div class="shelf">
+          <div class="ptile"><div class="art round" style="width:96px;height:96px" data-art="lopez-de-heredia" data-gen="|LdH||brick"></div><span class="t">López de Heredia</span></div>
+          <div class="ptile"><div class="art round" style="width:96px;height:96px" data-art="chateau-margaux" data-gen="|CM||claret"></div><span class="t">Château Margaux</span></div>
+          <div class="ptile"><div class="art round" style="width:96px;height:96px" data-art="taylors" data-gen="|T||tawny"></div><span class="t">Taylor's</span></div>
+          <div class="ptile"><div class="art round" style="width:96px;height:96px" data-art="penfolds" data-gen="|P||purple"></div><span class="t">Penfolds</span></div>
+        </div>
+        <div class="shelf-h"><h3>New to you</h3><span>See all</span></div>
+        <div class="shelf">
+          <div class="tile"><div class="art sq" style="width:150px;height:150px" data-art="etna-x" data-gen="Tenuta delle Terre Nere|Etna Rosso|2022|ruby"></div><span class="t">Etna Rosso 2022</span><span class="s">Terre Nere · £24</span></div>
+          <div class="tile"><div class="art sq" style="width:150px;height:150px" data-art="santorini" ></div><span class="t">Santorini Assyrtiko</span><span class="s">Sigalas · £27</span></div>
+          <div class="tile"><div class="art sq" style="width:150px;height:150px" data-gen="Raúl Pérez|Ultreia|2021|ruby"></div><span class="t">Ultreia</span><span class="s">Raúl Pérez</span></div>
+        </div>
+      </div>
+      <div class="mini lg"><div class="art" data-gen="|C||ruby" style="font-size:9px"></div><div><div class="t">Chinon is chilling</div><div class="s">Out in 8:00</div></div><span class="tm">8:00</span></div>
+    </div><div class="cap">Tonight · shelves like Listen Now</div></div>
+
+    <!-- Producer / Artist page -->
+    <div><div class="phone light" style="--sbc:#fff">
+      <div class="phead"><div class="art" data-art="lopez-de-heredia" data-alt="rioja"></div></div>
+      <span class="back lg" style="--glass:rgba(255,255,255,.35);color:#fff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></span>
+      <div class="pname">López de Heredia</div>
+      <span class="pplay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10.5-6.5z"/></svg></span>
+      <div class="pbody">
+        <div class="pmeta">Haro, Rioja Alta · since 1877 · you've had 2</div>
+        <div class="shelf-h"><h3>Top wines</h3><span>See all</span></div>
+        <div class="list">
+          <div class="li"><div class="art" data-art="tondonia-bottle" data-gen="López de Heredia|Tondonia|Reserva|brick"></div><div class="m"><div class="t">Viña Tondonia Reserva</div><div class="s">Red · Tempranillo, Garnacha</div></div><span class="p">£42</span></div>
+          <div class="li"><div class="art" data-gen="López de Heredia|Bosconia|Reserva|garnet"></div><div class="m"><div class="t">Viña Bosconia Reserva</div><div class="s">Red · softer, rounder</div></div><span class="p">£38</span></div>
+          <div class="li"><div class="art" data-gen="López de Heredia|Tondonia Blanco|Reserva|gold"></div><div class="m"><div class="t">Viña Tondonia Blanco</div><div class="s">White · Viura, oxidative</div></div><span class="p">£44</span></div>
+        </div>
+        <div class="shelf-h"><h3>Vintages</h3><span>See all</span></div>
+        <div class="shelf">
+          <div class="tile" style="width:100px"><div class="art sq" style="width:100px;height:100px;font-size:8px" data-gen="Tondonia|Reserva|2012|brick"></div><span class="t">2012</span></div>
+          <div class="tile" style="width:100px"><div class="art sq" style="width:100px;height:100px;font-size:8px" data-gen="Tondonia|Reserva|2011|tawny"></div><span class="t">2011</span></div>
+          <div class="tile" style="width:100px"><div class="art sq" style="width:100px;height:100px;font-size:8px" data-gen="Tondonia|Reserva|2010|garnet"></div><span class="t">2010</span></div>
+        </div>
+      </div>
+    </div><div class="cap">Producer · like an artist page</div></div>
+
+    <!-- Wine / Album page -->
+    <div><div class="phone light">
+      <span class="back" style="top:60px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent)"><path d="M15 5l-7 7 7 7"/></svg></span>
+      <div class="art wart" data-art="tondonia-bottle" data-gen="López de Heredia|Viña Tondonia|Reserva 2012|brick" style="font-size:16px"></div>
+      <div class="wbody">
+        <div class="wt">Viña Tondonia Reserva 2012</div>
+        <div class="wp">López de Heredia</div>
+        <div class="wm">RED · RIOJA ALTA · TEMPRANILLO · 13%</div>
+        <div class="wbtns"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Drinking this</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/></svg>Compare</span></div>
+        <p class="wnote">Six years in old American oak before release. Dried cherry, leather, tobacco and a bright, salty finish. Close to the Bosconia you rated 4.5.</p>
+      </div>
+      <div class="wlist">
+        <div class="wrow"><span class="k">Drink</span><span class="v">now – 2035</span></div>
+        <div class="wrow"><span>The Wine Society</span><span class="v">£42 · Oct</span></div>
+        <div class="wrow"><span>Berry Bros &amp; Rudd</span><span class="v">£46 · Sep</span></div>
+      </div>
+    </div><div class="cap">Wine · like an album page</div></div>
+
+    <!-- Now pouring -->
+    <div><div class="phone dark" style="--sbc:#fff;--hb:#fff">
+      <div class="np"></div>
+      <div class="np-grab"></div>
+      <div class="art npart" data-gen="Charles Joguet|Chinon Cuvée Terroir|2022|ruby" style="font-size:18px"></div>
+      <div class="np-t"><div class="a">Chinon 'Cuvée Terroir' 2022</div><div class="b">Charles Joguet</div></div>
+      <div class="scrub"><div class="lbl">In the fridge · serve at 16°C</div><div class="bar"><i></i></div><div class="tt"><span>12:24</span><span>−7:36</span></div></div>
+      <div class="ctrl"><span class="c">−5 min</span><span class="big"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></span><span class="c">+5 min</span></div>
+      <div class="np-foot"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/></svg>Log it</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 3h10l-.4 5.2a4.6 4.6 0 0 1-9.2 0zM12 13v7M8.5 21h7"/></svg>Serve notes</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg>Sideways</span></div>
+    </div><div class="cap">Now pouring · the fridge timer as progress</div></div>
+
+  </div>
+</section>
+<script>
+const PATHS = window.PATHS || {};
+document.querySelectorAll('.phone').forEach(p => p.prepend(document.getElementById('sbt').content.cloneNode(true)));
+document.querySelector('.phone.light').append(document.getElementById('tabs').content.cloneNode(true));
+const pale = new Set(['lemon','straw','gold']);
+document.querySelectorAll('[data-gen],[data-art]').forEach(a => {
+  const keys = [a.dataset.art, a.dataset.alt].filter(Boolean);
+  const src = keys.map(k => PATHS[k]).find(Boolean);
+  if (src) { const i = document.createElement('img'); i.src = src; a.append(i); return; }
+  if (!a.dataset.gen) return;
+  const [p, c, v, col] = a.dataset.gen.split('|');
+  const g = document.createElement('div'); g.className = 'gen';
+  g.style.setProperty('--c', 'var(--c-' + col + ')'); if (pale.has(col)) g.style.setProperty('--gt', '#2A1E14');
+  g.innerHTML = '<span class="gp"></span><span class="gc"></span><span class="gv"></span>';
+  g.children[0].textContent = p; g.children[1].textContent = c; g.children[2].textContent = v;
+  if (a.classList.contains('round')) { g.style.alignItems = 'center'; g.style.justifyContent = 'center'; g.children[1].style.fontSize = '2.6em'; g.children[0].remove(); g.children[1].remove(); }
+  a.append(g);
+  const w = a.getBoundingClientRect().width;
+  if (!a.classList.contains('round') && w < 70) { g.innerHTML = ''; const m = document.createElement('span'); m.className = 'gc'; m.style.cssText = 'margin:auto;font-size:22px'; m.textContent = (c || p).trim()[0]; g.append(m); g.style.padding = '0'; }
+  else if (!a.classList.contains('round') && w <= 110) { g.children[0].textContent = c; g.children[1].textContent = v; g.children[1].style.fontSize = '24px'; g.children[2].textContent = ''; }
+});
+</script>
+</body></html>

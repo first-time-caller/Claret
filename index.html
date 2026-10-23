@@ -197,9 +197,9 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--bar);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);
   border-top:.5px solid var(--line);padding:6px max(16px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
 .tabs-inner{max-width:520px;margin-inline:auto;display:grid;grid-template-columns:repeat(4,1fr)}
-.tab{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:50px;justify-content:center;font-size:11px;font-weight:500;color:var(--ink2);transition:color .2s}
-.tab svg{width:26px;height:26px}
-.tab[aria-current="page"]{color:var(--accent)}
+.tabpill .tab{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:50px;justify-content:center;font-size:11px;font-weight:500;color:var(--ink2);transition:color .2s}
+.tabpill .tab svg{width:26px;height:26px}
+.tabpill .tab[aria-current="page"]{color:var(--accent)}
 
 /* Sheet */
 .sheet-wrap{position:fixed;inset:0;z-index:30;display:flex;align-items:flex-end;justify-content:center}
@@ -215,36 +215,165 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
 .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:40;background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:15px;max-width:calc(100% - 32px);text-align:center}
 .unsynced{color:var(--warn)}
 
+
+/* ===== The Glass: hero photo fading into the wine's colour ===== */
+.top.hide{display:none}
+.hero{--wine:var(--c-garnet);--hc:#fff;position:relative;min-height:600px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;
+  margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));color:var(--hc);
+  background:linear-gradient(180deg,transparent 78%,var(--bg) 99%),radial-gradient(ellipse 130% 70% at 50% 78%,color-mix(in oklab,var(--wine) 80%,#000) 0 26%,var(--wine) 46%,color-mix(in oklab,var(--wine) 55%,var(--bg)) 72%,var(--bg) 96%)}
+.hero-img{position:absolute;inset:0 0 auto;width:100%;height:58%;object-fit:cover;transition:opacity .6s var(--ease)}
+.hero-img[data-loading]{opacity:0}
+.hero-wash{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.28) 0,transparent 18%,transparent 30%,color-mix(in oklab,var(--wine) 70%,transparent) 50%,color-mix(in oklab,var(--wine) 92%,#000) 62%,transparent 63%)}
+.hero.noimg .hero-wash{display:none}
+.hero-in{position:relative;z-index:2;display:flex;flex-direction:column;gap:12px;padding:0 max(20px,env(safe-area-inset-right,0px)) 116px max(20px,env(safe-area-inset-left,0px))}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;font:500 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;min-height:36px;color:inherit;align-self:flex-start;opacity:.92}
+.hero-eyebrow svg{width:12px;height:12px}
+.hero-title{font:500 44px/1.03 var(--serif);letter-spacing:-.02em;margin:0;text-wrap:balance}
+.hero-why{font:400 17px/1.4 var(--sans);margin:0;max-width:34ch;opacity:.9}
+.ctx-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.gchip{min-height:36px;border-radius:18px;padding:0 14px;display:inline-flex;align-items:center;gap:6px;font:500 15px var(--sans);color:inherit;
+  background:color-mix(in oklab,var(--hc) 15%,transparent);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:inset 0 0 0 .5px color-mix(in oklab,var(--hc) 32%,transparent)}
+.gchip svg{width:15px;height:15px}
+.credit{position:absolute;z-index:3;left:max(16px,env(safe-area-inset-left,0px));top:12px;font:500 10px var(--mono);letter-spacing:.04em;color:#fff;background:rgba(0,0,0,.35);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-radius:999px;padding:5px 10px;max-width:calc(100% - 32px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:24px}
+.region-name{position:absolute;z-index:3;left:max(20px,env(safe-area-inset-left,0px));top:12px;font:500 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+@media (min-width:560px){.hero{margin-inline:0;border-radius:32px}}
+
+/* Liquid Glass material */
+.lgm{background:color-mix(in oklab,var(--cell) 72%,transparent);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);
+  box-shadow:inset 0 1px 0 color-mix(in oklab,#fff 60%,transparent),inset 0 0 0 .5px color-mix(in oklab,var(--ink) 10%,transparent),0 10px 34px rgba(0,0,0,.14)}
+.look-card{position:relative;z-index:4;margin-top:-92px;border-radius:30px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.look-top{display:flex;gap:14px;align-items:flex-start}
+.bottle{width:34px;height:96px;flex:none}
+.look-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.look-list{font:400 19px/1.35 var(--serif);margin:0}
+.pillbtns{display:flex;gap:10px}
+.pillbtns .btn{border-radius:999px;min-height:50px}
+
+/* Where it's from */
+.strip{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding-inline:max(16px,env(safe-area-inset-left,0px));scrollbar-width:none;padding-block:2px 6px}
+.strip::-webkit-scrollbar{display:none}
+.place{flex:none;width:232px;height:300px;border-radius:24px;overflow:hidden;position:relative;scroll-snap-align:start;color:#fff;text-align:left;background:var(--line)}
+.place img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.place::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.72))}
+.place-in{position:absolute;left:16px;right:16px;bottom:16px;z-index:2;display:flex;flex-direction:column;gap:4px}
+.place-k{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;opacity:.85}
+.place-t{font:500 22px/1.1 var(--serif)}
+.place-s{font:400 13px/1.35 var(--sans);opacity:.9}
+.sheet-photo{width:calc(100% + 2 * max(16px,env(safe-area-inset-left,0px)));margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-top:-26px;height:260px;object-fit:cover;display:block}
+.fine{font:400 12px/1.4 var(--sans);color:var(--ink2)}
+.fine a{color:inherit}
+
+/* Label photos from your scans */
+.labelthumb{width:40px;height:52px;border-radius:8px;object-fit:cover;flex:none;box-shadow:0 0 0 .5px color-mix(in oklab,var(--ink) 15%,transparent)}
+.row.has-glass .labelthumb+.row-main{margin-left:-4px}
+
+/* Floating tab bar */
+.tabs.glassbar{background:none;border:0;-webkit-backdrop-filter:none;backdrop-filter:none;padding-block:0 calc(14px + env(safe-area-inset-bottom,0px))}
+.glassbar .tabs-inner{display:flex;gap:10px;grid-template-columns:none}
+.tabpill{flex:1;min-height:62px;border-radius:31px;display:grid;grid-template-columns:repeat(3,1fr);align-items:center;padding:0 6px}
+.tabpill .tab{min-height:50px;border-radius:25px}
+.tabpill .tab[aria-current="page"]{background:color-mix(in oklab,var(--ink) 8%,transparent)}
+.scanbtn{width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--accent);flex:none}
+.scanbtn[aria-current="page"]{background:var(--accent);color:var(--on-accent)}
+.scanbtn svg{width:28px;height:28px}
+.toast{bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+
+.timerbar{position:fixed;z-index:25;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(90px + env(safe-area-inset-bottom,0px));max-width:496px;margin-inline:auto;border-radius:22px;padding:10px 16px;display:flex;align-items:center;gap:12px}
+.sheet-photo{width:100%;height:240px;margin:0;border-radius:18px}
+
+/* ===== Wine page (modelled on a merchant's product page) ===== */
+.wine-hero{--wine:var(--c-claret);position:relative;height:330px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;
+  margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));
+  background:linear-gradient(180deg,transparent 70%,var(--bg) 100%),radial-gradient(ellipse 90% 80% at 50% 60%,color-mix(in oklab,var(--wine) 85%,#000) 0 22%,var(--wine) 42%,color-mix(in oklab,var(--wine) 45%,var(--bg)) 72%,var(--bg) 100%)}
+.wine-hero img.ph{position:absolute;inset:0 0 auto;width:100%;height:62%;object-fit:cover;opacity:.55;-webkit-mask-image:linear-gradient(180deg,#000 30%,transparent);mask-image:linear-gradient(180deg,#000 30%,transparent)}
+.wine-hero .bottle{position:relative;z-index:2;width:78px;height:220px;margin-bottom:22px;filter:drop-shadow(0 18px 24px rgba(0,0,0,.35))}
+.wine-hero img.label{position:relative;z-index:2;height:230px;max-width:70%;object-fit:contain;border-radius:10px;margin-bottom:18px;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.backbtn{position:absolute;z-index:5;top:10px;left:max(12px,env(safe-area-inset-left,0px));width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ink)}
+.backbtn svg{width:18px;height:18px}
+.savebtn{position:absolute;z-index:5;top:10px;right:max(12px,env(safe-area-inset-right,0px));height:40px;border-radius:20px;padding:0 14px;display:flex;align-items:center;gap:6px;font:600 14px var(--sans);color:var(--ink)}
+.savebtn svg{width:16px;height:16px}
+.crumbs{display:flex;flex-wrap:wrap;gap:2px 6px;font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
+.crumbs button{color:inherit;min-height:28px;letter-spacing:inherit;text-transform:inherit;font:inherit}
+.crumbs span[aria-hidden]{opacity:.5}
+.wname{font:500 28px/1.15 var(--serif);letter-spacing:-.01em;margin:2px 0 0;text-wrap:balance}
+.wby{font:italic 400 18px/1.35 var(--serif);color:var(--ink2);margin:0}
+.wby button{color:var(--accent);font:inherit}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tags span{font:500 13px var(--sans);padding:5px 11px;border-radius:999px;background:color-mix(in oklab,var(--ink) 6%,transparent)}
+.mat{display:flex;flex-direction:column;gap:8px}
+.mat-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.mat-h b{font:600 16px var(--sans)}
+.mat-h span{font:400 13px var(--mono);color:var(--ink2)}
+.tl{position:relative;height:30px;margin-top:14px}
+.tl .rail{position:absolute;left:0;right:0;top:9px;height:4px;border-radius:2px;background:color-mix(in oklab,var(--ink) 10%,transparent)}
+.tl .win{position:absolute;top:7px;height:8px;border-radius:4px;background:var(--accent)}
+.tl .win.alt{top:18px;height:4px;background:color-mix(in oklab,var(--accent) 45%,transparent)}
+.tl .now{position:absolute;top:2px;width:2px;height:20px;background:var(--ink);border-radius:1px}
+.tl .now::after{content:"Now";position:absolute;top:-14px;left:50%;transform:translateX(-50%);font:500 10px var(--mono);color:var(--ink)}
+.tl-y{display:flex;justify-content:space-between;font:400 11px var(--mono);color:var(--ink2)}
+.scores{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding-inline:max(16px,env(safe-area-inset-left,0px))}
+.scores::-webkit-scrollbar{display:none}
+.score{flex:none;min-width:132px;max-width:180px;background:var(--cell);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;text-align:left}
+.score .n{font:500 28px/1 var(--serif)}
+.score .n small{font:400 14px var(--mono);color:var(--ink2);margin-left:2px}
+.score .w{font:600 13px/1.25 var(--sans)}
+.score .d{font:400 12px var(--mono);color:var(--ink2)}
+.score.you{background:var(--accent);color:var(--on-accent)}
+.score.you .n small,.score.you .d{color:inherit;opacity:.8}
+.score.add{justify-content:center;align-items:center;color:var(--accent);font:600 14px var(--sans);border:1.5px dashed color-mix(in oklab,var(--accent) 40%,var(--line));background:transparent}
+.note{display:flex;flex-direction:column;gap:6px;padding:14px 16px}
+.note p{margin:0;font:400 16px/1.5 var(--serif)}
+.note .who{font:500 12px/1.3 var(--sans);color:var(--ink2)}
+.note .who a{color:inherit}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:0}
+.facts dt,.facts dd{margin:0;padding:11px 16px;border-top:1px solid var(--line);font-size:15px}
+.facts dt{color:var(--ink2)}
+.facts dd{text-align:right;min-width:0;overflow-wrap:anywhere}
+.facts dt:first-of-type,.facts dt:first-of-type+dd{border-top:0}
+.food{font:italic 400 17px/1.45 var(--serif);margin:0;padding-inline:4px}
+.rec-k{font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.srcline{font:400 12px/1.5 var(--sans);color:var(--ink2);padding-inline:4px;margin:0}
+.srcline a{color:inherit}
+.sugg{font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--warn)}
+.search{display:flex;align-items:center;gap:8px;background:color-mix(in oklab,var(--ink) 7%,var(--bg));border-radius:12px;padding:0 12px;min-height:44px}
+.search svg{width:18px;height:18px;color:var(--ink2);flex:none}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tiles .place{width:auto;height:180px;border-radius:18px}
+.tiles .place-t{font-size:18px}
+.grape-chip[data-tried="true"]::before{content:"●";color:var(--accent);margin-right:2px}
+.tabpill.four{grid-template-columns:repeat(4,1fr)}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
 <div class="shell">
   <header class="top">
-    <button class="moment" id="momentBtn" type="button" aria-haspopup="dialog">
-      <h1 id="title">Tonight</h1>
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
-    </button>
+    <div class="moment"><h1 id="title">Scan</h1></div>
     <p class="sub mono" id="sub"></p>
   </header>
 
   <main>
-    <section class="view" id="v-tonight" aria-labelledby="title">
-      <div class="sec">
-        <div class="seg" id="weather" role="radiogroup" aria-label="Weather">
-          <button type="button" role="radio" data-w="warm" aria-checked="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg>Warm</button>
-          <button type="button" role="radio" data-w="mild" aria-checked="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.2 11.1 3.5 3.5 0 0 0 7 18z"/></svg>Mild</button>
-          <button type="button" role="radio" data-w="cold-wet" aria-checked="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.2 8.1 3.5 3.5 0 0 0 7 15z"/><path d="M9 18l-1 3M13 18l-1 3M17 18l-1 3"/></svg>Cold &amp; wet</button>
-        </div>
-        <div class="chips" id="moods" role="group" aria-label="Mood"></div>
-        <div class="group">
-          <label class="row" for="food"><span class="lab">Eating</span><input class="input" id="food" type="text" autocomplete="off" placeholder="Lamb, fish and chips…"></label>
-          <label class="row" for="withWho"><span class="lab">With</span><input class="input" id="withWho" type="text" autocomplete="off" placeholder="Just me"></label>
+    <section class="view" id="v-tonight" aria-label="Tonight">
+      <div class="hero" id="hero">
+        <img class="hero-img" id="heroImg" alt="" data-loading hidden>
+        <div class="hero-wash" aria-hidden="true"></div>
+        <span class="region-name" id="heroRegion"></span>
+        <button class="credit" id="heroCredit" type="button" hidden></button>
+        <div class="hero-in">
+          <button class="hero-eyebrow" id="momentBtn" type="button" aria-haspopup="dialog"><span id="heroWhen">Tonight</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></button>
+          <h1 class="hero-title" id="heroTitle"></h1>
+          <p class="hero-why" id="heroWhy"></p>
+          <div class="ctx-chips" id="ctxChips"></div>
         </div>
       </div>
 
-      <div class="chips" id="limitsLine" aria-label="Your limits"></div>
+      <article class="look-card lgm" id="pick" aria-live="polite"></article>
 
-      <article class="pick" id="pick" aria-live="polite"></article>
+      <div class="sec" id="placesSec">
+        <div class="sec-h"><h2>Where it's from</h2></div>
+        <div class="strip" id="places"></div>
+      </div>
 
       <div class="sec">
         <div class="sec-h"><h2>Sideways</h2></div>
@@ -256,11 +385,20 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
         <div id="bottles" class="sec" aria-live="polite"></div>
       </div>
 
+      <div class="chips" id="limitsLine" aria-label="Your limits"></div>
+
       <div class="sec" id="recentSec" hidden>
         <div class="sec-h"><h2>Lately</h2><button class="link" type="button" data-go="log">See all</button></div>
         <div class="group" id="recent"></div>
       </div>
     </section>
+
+    <section class="view" id="v-explore" hidden>
+      <label class="search" for="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><input class="input" id="q" type="search" autocomplete="off" placeholder="Wines, producers, places, grapes"></label>
+      <div id="exploreOut" class="sec" style="gap:22px"></div>
+    </section>
+
+    <section class="view" id="v-wine" hidden aria-label="Wine"></section>
 
     <section class="view" id="v-scan" hidden>
       <div class="seg" id="scanMode" role="radiogroup" aria-label="What are you scanning?">
@@ -347,12 +485,15 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
     </section>
   </main>
 
-  <nav class="tabs" aria-label="Sections">
+  <nav class="tabs glassbar" aria-label="Sections">
     <div class="tabs-inner">
-      <button class="tab" type="button" data-tab="tonight" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h10l-.4 5.2a4.6 4.6 0 0 1-9.2 0z"/><path d="M12 13v7M8.5 21h7"/><path d="M7.3 7h9.4"/></svg><span id="tabMoment">Tonight</span></button>
-      <button class="tab" type="button" data-tab="scan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M10 8h4v8h-4z"/></svg>Scan</button>
-      <button class="tab" type="button" data-tab="log"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3"/><path d="M9 7h6M9 10.5h4"/></svg>Log</button>
-      <button class="tab" type="button" data-tab="you"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></svg>You</button>
+      <div class="tabpill lgm four">
+        <button class="tab" type="button" data-tab="tonight" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h10l-.4 5.2a4.6 4.6 0 0 1-9.2 0z"/><path d="M12 13v7M8.5 21h7"/><path d="M7.3 7h9.4"/></svg><span id="tabMoment">Tonight</span></button>
+        <button class="tab" type="button" data-tab="explore"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>Explore</button>
+        <button class="tab" type="button" data-tab="log"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3"/><path d="M9 7h6M9 10.5h4"/></svg>Log</button>
+        <button class="tab" type="button" data-tab="you"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></svg>You</button>
+      </div>
+      <button class="scanbtn lgm tab" type="button" data-tab="scan" aria-label="Scan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M10 8h4v8h-4z"/></svg></button>
     </div>
   </nav>
 
@@ -363,6 +504,7 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
       <div id="sheetBody" style="display:flex;flex-direction:column;gap:18px"></div>
     </div>
   </div>
+  <div class="timerbar lgm" id="timerBar" hidden><span class="glass" style="--c:var(--c-ruby);width:28px;height:28px" aria-hidden="true"></span><span class="row-main"><span class="row-t" id="timerText" style="font-family:var(--sans);font-size:15px;font-weight:600"></span></span><span class="mono" id="timerLeft" style="font-size:20px;font-weight:500;color:var(--accent)"></span><button class="link" type="button" id="timerStop" style="min-height:36px">Done</button></div>
   <div class="toast" id="toast" role="status" hidden></div>
 </div>
 
@@ -590,6 +732,181 @@ function resolvePlace(region, country) {
   return c;
 }
 
+
+/* Regions with photos (img/credits.json holds each photo's author and licence) */
+const REGIONS = {
+  'northern-rhone': { name: 'Côte-Rôtie & Hermitage', country: 'France', blurb: 'Steep granite terraces above the Rhône, where Syrah is at its most perfumed and savoury.', grapes: 'Syrah, Viognier, Marsanne, Roussanne' },
+  'beaujolais': { name: 'Beaujolais', country: 'France', blurb: 'Granite hills north of Lyon. Gamay, and ten crus such as Morgon, Fleurie and Moulin-à-Vent.', grapes: 'Gamay, Chardonnay' },
+  'burgundy': { name: 'Clos de Vougeot', country: 'Burgundy, France', blurb: 'Planted by Cistercian monks in the 12th century, in the heart of Pinot Noir country.', grapes: 'Pinot Noir, Chardonnay' },
+  'barossa': { name: 'Barossa Valley', country: 'South Australia', blurb: 'Warm valley with some of the world’s oldest Shiraz vines, planted from the 1840s.', grapes: 'Shiraz, Grenache, Mourvèdre, Riesling' },
+  'bordeaux': { name: 'Margaux, Médoc', country: 'Bordeaux, France', blurb: 'Left-bank gravel and Cabernet-led blends. Château Margaux is one of the four original 1855 first growths.', grapes: 'Cabernet Sauvignon, Merlot, Cabernet Franc, Petit Verdot' },
+  'rioja': { name: 'Rioja', country: 'Spain', blurb: 'Spain’s classic red, Tempranillo aged in oak, from young Joven to long-aged Gran Reserva.', grapes: 'Tempranillo, Garnacha, Graciano, Viura' },
+  'santorini': { name: 'Santorini', country: 'Greece', blurb: 'Volcanic island vines trained into low baskets, kouloura, to shelter them from the wind.', grapes: 'Assyrtiko, Athiri, Aidani' },
+  'sancerre': { name: 'Sancerre', country: 'Loire, France', blurb: 'A hilltop town above the Loire. Sauvignon Blanc on flint and limestone.', grapes: 'Sauvignon Blanc, Pinot Noir' },
+  'mosel': { name: 'Mosel', country: 'Germany', blurb: 'Slate slopes so steep they are worked by hand. Riesling, often light and off-dry.', grapes: 'Riesling, Elbling' },
+  'cote-de-beaune': { name: 'Meursault', country: 'Burgundy, France', blurb: 'Chardonnay country: Meursault, Puligny-Montrachet and Chassagne-Montrachet.', grapes: 'Chardonnay, Pinot Noir' },
+  'provence': { name: 'Provence', country: 'France', blurb: 'The home of pale, dry rosé, made from Grenache, Cinsault and Mourvèdre.', grapes: 'Grenache, Cinsault, Mourvèdre, Rolle' },
+  'kakheti': { name: 'Kakheti', country: 'Georgia', blurb: 'Some 8,000 years of winemaking in buried clay qvevri, the origin of amber wine.', grapes: 'Rkatsiteli, Saperavi, Mtsvane' },
+  'champagne': { name: 'Hautvillers', country: 'Champagne, France', blurb: 'The abbey where Dom Pérignon was cellarmaster, on chalk slopes above the Marne.', grapes: 'Chardonnay, Pinot Noir, Pinot Meunier' },
+  'valdobbiadene': { name: 'Valdobbiadene', country: 'Veneto, Italy', blurb: 'Steep hills of Prosecco Superiore, a UNESCO World Heritage site since 2019.', grapes: 'Glera' },
+  'douro': { name: 'Douro Valley', country: 'Portugal', blurb: 'Schist terraces cut by hand. The home of Port, and now of superb dry reds.', grapes: 'Touriga Nacional, Touriga Franca, Tinta Roriz' },
+  'jerez': { name: 'Jerez', country: 'Andalucía, Spain', blurb: 'Sherry ages under a layer of flor yeast in solera barrels that are never emptied.', grapes: 'Palomino, Pedro Ximénez, Moscatel' },
+  'etna': { name: 'Mount Etna', country: 'Sicily, Italy', blurb: 'Old vines on black volcanic soil, up to about 1,000 metres.', grapes: 'Nerello Mascalese, Carricante' },
+  'central-otago': { name: 'Central Otago', country: 'New Zealand', blurb: 'One of the world’s southernmost wine regions. Pinot Noir among schist and snowy peaks.', grapes: 'Pinot Noir, Riesling, Pinot Gris' }
+};
+const STYLE_REGIONS = {
+  'style:red/savoury-medium': ['northern-rhone', 'etna'], 'style:red/light-chilled': ['beaujolais'], 'style:red/pinot-fruit': ['central-otago', 'burgundy'],
+  'style:red/full-warm': ['barossa', 'douro'], 'style:red/classic': ['bordeaux'], 'style:red/mature': ['rioja', 'bordeaux'],
+  'style:white/crisp-saline': ['santorini'], 'style:white/zesty': ['sancerre'], 'style:white/aromatic': ['mosel'], 'style:white/rich': ['cote-de-beaune'],
+  'style:rose/pale': ['provence'], 'style:orange/skin': ['kakheti'], 'style:sparkling/traditional': ['champagne'], 'style:sparkling/easy': ['valdobbiadene'],
+  'style:sweet/fortified': ['douro', 'jerez'], 'style:sweet/fino': ['jerez']
+};
+const STYLE_HEAD = {
+  'style:red/savoury-medium': 'A savoury, medium-bodied red.', 'style:red/light-chilled': 'A light red, served cool.', 'style:red/pinot-fruit': 'A silky, red-fruited Pinot.',
+  'style:red/full-warm': 'A full, warming red.', 'style:red/classic': 'A classic, structured red.', 'style:red/mature': 'A mature, earthy red.',
+  'style:white/crisp-saline': 'Something crisp and saline.', 'style:white/zesty': 'A zesty, green-edged white.', 'style:white/aromatic': 'An aromatic, off-dry white.',
+  'style:white/rich': 'A rich, textured white.', 'style:rose/pale': 'A pale, dry rosé.', 'style:orange/skin': 'Something amber, with skin contact.',
+  'style:sparkling/traditional': 'A proper sparkling.', 'style:sparkling/easy': 'Easy, fruity fizz.', 'style:sweet/fortified': 'A small glass of something fortified.',
+  'style:sweet/fino': 'A cold, bone-dry Fino.'
+};
+const STYLE_BOTTLE = { 'style:red/full-warm': 'bordeaux', 'style:red/classic': 'bordeaux', 'style:red/mature': 'bordeaux', 'style:white/aromatic': 'flute', 'style:rose/pale': 'flute',
+  'style:sparkling/traditional': 'champagne', 'style:sparkling/easy': 'champagne', 'style:sweet/fortified': 'port', 'style:sweet/fino': 'port' };
+const PALE = new Set(['water-white', 'lemon', 'straw', 'gold', 'salmon', 'onion-skin', 'pink']);
+let CREDITS = {};
+fetch('img/credits.json').then(r => r.ok ? r.json() : {}).then(d => { CREDITS = d || {}; if (S.tab === 'tonight') renderTonight(); }).catch(() => {});
+const hasPhoto = k => !!(CREDITS[k] && CREDITS[k].file);
+function regionPhoto(k) { return CREDITS[k].file; }
+function creditLine(k) { const c = CREDITS[k]; return c ? 'Photo: ' + c.artist + ' · ' + c.license : ''; }
+let bottleN = 0;
+const BOTTLE_PATH = {
+  bordeaux: 'M13 2h8v26c0 4 9 6 9 14v50a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V42c0-8 9-10 9-14z',
+  burgundy: 'M13 2h8v22c0 10 10 14 10 24v44a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V48c0-10 10-14 10-24z',
+  flute: 'M14 2h6v30c0 8 7 12 7 20v40a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V52c0-8 7-12 7-20z',
+  champagne: 'M12 2h10v20c0 10 11 13 11 24v46a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V46c0-11 11-14 11-24z',
+  port: 'M13 2h8v30c0 4 10 4 10 14v46a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V46c0-10 10-10 10-14z'
+};
+function bottleSVG(shape, col) {
+  const id = 'bg' + (++bottleN);
+  const c = 'var(--c-' + col + ')';
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 34 96'); svg.setAttribute('class', 'bottle'); svg.setAttribute('aria-hidden', 'true');
+  svg.innerHTML = '<defs><linearGradient id="' + id + '" x1="0" x2="1"><stop offset="0" style="stop-color:color-mix(in oklab,' + c + ' 55%,#000)"/><stop offset=".38" style="stop-color:' + c + '"/><stop offset=".55" style="stop-color:color-mix(in oklab,' + c + ' 70%,#fff)"/><stop offset="1" style="stop-color:color-mix(in oklab,' + c + ' 45%,#000)"/></linearGradient></defs>' +
+    '<path d="' + BOTTLE_PATH[shape || 'burgundy'] + '" fill="url(#' + id + ')"/>' +
+    (shape === 'champagne' ? '<path d="M12 2h10v22H12z" fill="color-mix(in oklab,' + c + ' 40%,#000)" opacity=".9"/>' : '<rect x="13" y="2" width="8" height="7" rx="1.5" fill="color-mix(in oklab,' + c + ' 35%,#000)"/>') +
+    '<rect x="8" y="58" width="18" height="22" rx="2" fill="color-mix(in oklab,#fff 82%,' + c + ')" opacity=".92"/>';
+  return svg;
+}
+function openRegion(k) {
+  const r = REGIONS[k]; const c = CREDITS[k];
+  openSheet(r.name, [
+    hasPhoto(k) ? el('img', { class: 'sheet-photo', src: regionPhoto(k), alt: r.name + ', ' + r.country }) : null,
+    el('div', { class: 'eyebrow', text: r.country }),
+    el('p', { class: 'look-list', style: 'margin:0', text: r.blurb }),
+    el('div', { class: 'group' }, el('div', { class: 'row' }, el('span', { class: 'lab', text: 'Grapes' }), el('span', { class: 'row-main row-s', style: 'color:var(--ink)', text: r.grapes }))),
+    c ? el('p', { class: 'fine' }, creditLine(k) + ' · ', el('a', { href: c.source, target: '_blank', rel: 'noopener' }, 'Source')) : null
+  ]);
+}
+function openContext() {
+  const weather = el('div', { class: 'seg', role: 'radiogroup', 'aria-label': 'Weather' }, ...[['warm', 'Warm'], ['mild', 'Mild'], ['cold-wet', 'Cold & wet']].map(([k, n]) =>
+    el('button', { type: 'button', role: 'radio', 'aria-checked': String(S.weather === k), onclick: e => { S.weather = S.weather === k ? null : k; LS.set('claret.weather', S.weather); $$('button', weather).forEach(b => b.setAttribute('aria-checked', String(b === e.currentTarget && S.weather === k))); ctxChanged(); } }, n)));
+  const moods = el('div', { class: 'chips', role: 'group', 'aria-label': 'Mood' }, ...MOODS.map(([k, n]) =>
+    el('button', { class: 'chip', type: 'button', 'aria-pressed': String(S.mood === k), onclick: e => { S.mood = S.mood === k ? null : k; $$('.chip', moods).forEach(b => b.setAttribute('aria-pressed', String(b === e.currentTarget && S.mood === k))); ctxChanged(); } }, n)));
+  const food = el('input', { class: 'input', id: 'food', type: 'text', autocomplete: 'off', placeholder: 'Lamb, fish and chips…', value: S.food });
+  const withWho = el('input', { class: 'input', id: 'withWho', type: 'text', autocomplete: 'off', placeholder: 'Just me', value: S.withWho });
+  let t = null;
+  food.addEventListener('input', () => { S.food = food.value; clearTimeout(t); t = setTimeout(ctxChanged, 350); });
+  withWho.addEventListener('input', () => { S.withWho = withWho.value; clearTimeout(t); t = setTimeout(ctxChanged, 350); });
+  openSheet('The details', [
+    el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Weather' })), weather),
+    el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Mood' })), moods),
+    el('div', { class: 'group' }, el('label', { class: 'row', for: 'food' }, el('span', { class: 'lab', text: 'Eating' }), food), el('label', { class: 'row', for: 'withWho' }, el('span', { class: 'lab', text: 'With' }), withWho)),
+    el('button', { class: 'btn', type: 'button', 'data-close': true }, 'Show me')
+  ]);
+}
+function ctxChanged() { S.pick = null; $('#bottles').replaceChildren(); renderTonight(); }
+/* Fridge timer: an in-page countdown; the native app turns this into a Live Activity */
+function prepMinutes(prep) { const m = /(\d+)\s*(min|hour)/i.exec(prep || ''); if (!m || !/fridge/i.test(prep)) return 0; return +m[1] * (/hour/i.test(m[2]) ? 60 : 1); }
+const Timer = {
+  get() { return LS.get('claret.timer', null); },
+  start(label, mins) { LS.set('claret.timer', { label, end: Date.now() + mins * 60000 }); this.tick(); toast('Timer set for ' + mins + ' min'); },
+  stop() { LS.set('claret.timer', null); this.tick(); },
+  tick() {
+    const t = this.get(); const bar = $('#timerBar');
+    if (!t) { bar.hidden = true; return; }
+    const left = Math.max(0, t.end - Date.now());
+    bar.hidden = false;
+    $('#timerText').textContent = left ? 'Take the ' + t.label + ' out' : 'Take the ' + t.label + ' out now';
+    $('#timerLeft').textContent = Math.floor(left / 60000) + ':' + pad(Math.floor(left / 1000) % 60);
+    if (!left && !t.done) { t.done = true; LS.set('claret.timer', t); try { navigator.vibrate && navigator.vibrate([200, 100, 200]); } catch (e) {} toast('Take the ' + t.label + ' out of the fridge'); }
+  }
+};
+setInterval(() => Timer.tick(), 1000);
+
+/* Wine naming convention: "{vintage} {wine} by {producer}, {region}" (BBR style) */
+REGIONS['marlborough'] = { name: 'Marlborough', country: 'New Zealand', blurb: 'Sunny, cool and dry at the top of the South Island. The Wairau Valley made New Zealand Sauvignon Blanc famous.', grapes: 'Sauvignon Blanc, Pinot Noir, Chardonnay' };
+REGIONS['north-canterbury'] = { name: 'North Canterbury', country: 'New Zealand', blurb: 'Limestone hills of the Waipara Valley, sheltered by the Teviotdale range. Pinot Noir, Riesling and Chardonnay.', grapes: 'Pinot Noir, Riesling, Chardonnay' };
+const PLACE_REGION = { 'place:nz/marlborough': 'marlborough', 'place:nz/north-canterbury': 'north-canterbury', 'place:nz/central-otago': 'central-otago', 'place:fr/burgundy': 'burgundy',
+  'place:fr/bordeaux': 'bordeaux', 'place:fr/beaujolais': 'beaujolais', 'place:fr/rhone': 'northern-rhone', 'place:fr/champagne': 'champagne', 'place:fr/provence': 'provence', 'place:fr/loire': 'sancerre',
+  'place:es/rioja': 'rioja', 'place:es/jerez': 'jerez', 'place:pt/douro': 'douro', 'place:de/mosel': 'mosel', 'place:gr/santorini': 'santorini', 'place:it/etna': 'etna', 'place:it/veneto': 'valdobbiadene',
+  'place:au/barossa': 'barossa', 'place:ge/kakheti': 'kakheti' };
+
+/* Grapes: what they taste like, where they're classic, where to go next, and how to trade up or down */
+const GRAPE_INFO = {
+  'grape:sauvignon-blanc': { taste: 'Zesty and aromatic: passion fruit, gooseberry, citrus, cut grass.', places: ['Sancerre and Pouilly-Fumé', 'Marlborough', 'Elgin and Constantia', 'Adelaide Hills', 'White Bordeaux'], next: ['grape:gruner-veltliner', 'grape:verdejo', 'grape:albarino', 'grape:assyrtiko'], up: 'A top Sancerre or Pouilly-Fumé, or a barrel-fermented "wild" Marlborough Sauvignon', down: 'Touraine Sauvignon, or Chile’s Leyda and Casablanca' },
+  'grape:pinot-noir': { taste: 'Light to medium-bodied and silky: red cherry, raspberry, earth and forest floor.', places: ['Burgundy', 'Central Otago', 'Martinborough', 'Willamette Valley', 'Sonoma Coast', 'German Spätburgunder'], next: ['grape:gamay', 'grape:nerello-mascalese', 'grape:poulsard', 'grape:blaufrankisch', 'grape:mencia'], up: 'A village or premier cru red Burgundy, or single-vineyard Central Otago', down: 'Bourgogne Rouge from a good grower, or Chilean coastal Pinot' },
+  'grape:chardonnay': { taste: 'From lean and mineral to rich and toasty: apple, lemon, hazelnut, butter.', places: ['Chablis', 'Côte de Beaune', 'Margaret River', 'Sonoma', 'Jura'], next: ['grape:chenin-blanc', 'grape:godello', 'grape:savagnin', 'grape:furmint'], up: 'Meursault or Puligny-Montrachet', down: 'Mâcon-Villages or Limoux' },
+  'grape:syrah': { taste: 'Savoury and perfumed in cool places, lush and spicy in warm ones: blackberry, olive, pepper, smoked meat.', places: ['Northern Rhône', 'Barossa', 'Swartland', 'Hawke’s Bay', 'Washington'], next: ['grape:mencia', 'grape:mourvedre', 'grape:xinomavro', 'grape:blaufrankisch'], up: 'Côte-Rôtie or Hermitage', down: 'Crozes-Hermitage or Saint-Joseph from a cooperative' },
+  'grape:grenache': { taste: 'Warm and generous: strawberry, raspberry, herbs and spice.', places: ['Southern Rhône', 'Priorat', 'Sardinia (Cannonau)', 'McLaren Vale', 'Gredos'], next: ['grape:cinsault', 'grape:carignan', 'grape:mourvedre'], up: 'Châteauneuf-du-Pape or Priorat', down: 'Côtes du Rhône or Campo de Borja Garnacha' },
+  'grape:cabernet-sauvignon': { taste: 'Structured and long-lived: blackcurrant, cedar, graphite.', places: ['Médoc', 'Napa Valley', 'Coonawarra', 'Margaret River', 'Bolgheri'], next: ['grape:cabernet-franc', 'grape:touriga-nacional', 'grape:aglianico'], up: 'A Médoc classed growth or Napa Cabernet', down: 'Côtes de Bourg, or Chile’s Maipo' },
+  'grape:merlot': { taste: 'Plush and round: plum, black cherry, chocolate.', places: ['Saint-Émilion and Pomerol', 'Washington', 'Tuscany', 'Hawke’s Bay'], next: ['grape:cabernet-franc', 'grape:carmenere'], up: 'Saint-Émilion grand cru or Pomerol', down: 'Bordeaux Supérieur' },
+  'grape:cabernet-franc': { taste: 'Fresh and leafy: raspberry, pencil shavings, bell pepper.', places: ['Chinon and Bourgueil', 'Saumur-Champigny', 'Saint-Émilion'], next: ['grape:mencia', 'grape:gamay'], up: 'A top Chinon or Saumur-Champigny cuvée', down: 'Anjou Rouge' },
+  'grape:tempranillo': { taste: 'Red fruit and leather, with vanilla and dill from oak.', places: ['Rioja', 'Ribera del Duero', 'Toro', 'Douro (Tinta Roriz)'], next: ['grape:mencia', 'grape:touriga-nacional', 'grape:sangiovese'], up: 'Rioja Gran Reserva from a classic house', down: 'Rioja Crianza or La Mancha' },
+  'grape:sangiovese': { taste: 'Sour cherry, tomato leaf, herbs and firm acidity.', places: ['Chianti Classico', 'Brunello di Montalcino', 'Vino Nobile'], next: ['grape:nebbiolo', 'grape:aglianico', 'grape:nerello-mascalese'], up: 'Brunello di Montalcino', down: 'Chianti Rufina or Rosso di Montalcino' },
+  'grape:nebbiolo': { taste: 'Pale but powerful: rose, tar, cherry, big tannins.', places: ['Barolo', 'Barbaresco', 'Langhe', 'Valtellina'], next: ['grape:xinomavro', 'grape:nerello-mascalese'], up: 'Barolo or Barbaresco from a single cru', down: 'Langhe Nebbiolo' },
+  'grape:riesling': { taste: 'Piercing acidity, from bone dry to sweet: lime, peach, slate, later petrol.', places: ['Mosel', 'Rheingau', 'Alsace', 'Clare and Eden Valley', 'Wachau'], next: ['grape:gruner-veltliner', 'grape:furmint', 'grape:assyrtiko', 'grape:chenin-blanc'], up: 'A German Grosses Gewächs or Spätlese', down: 'Clare Valley or a Mosel Kabinett' },
+  'grape:chenin-blanc': { taste: 'Apple, quince, honey and wax, dry to sweet, with high acidity.', places: ['Vouvray', 'Savennières', 'Saumur', 'Swartland'], next: ['grape:chardonnay', 'grape:furmint', 'grape:savagnin'], up: 'Savennières or a top Vouvray sec', down: 'South African Chenin' },
+  'grape:gamay': { taste: 'Juicy and bright: red berries, violets, a little pepper.', places: ['Beaujolais crus', 'Loire', 'Switzerland'], next: ['grape:pinot-noir', 'grape:frappato', 'grape:poulsard'], up: 'Morgon or Moulin-à-Vent from a top grower', down: 'Beaujolais-Villages' },
+  'grape:albarino': { taste: 'Salty, peachy and fresh.', places: ['Rías Baixas', 'Vinho Verde (Alvarinho)'], next: ['grape:assyrtiko', 'grape:godello', 'grape:vermentino', 'grape:melon-de-bourgogne'], up: 'A single-vineyard Rías Baixas', down: 'Vinho Verde Alvarinho' },
+  'grape:gruner-veltliner': { taste: 'Green apple, white pepper, lentil.', places: ['Wachau', 'Kamptal', 'Kremstal', 'Weinviertel'], next: ['grape:riesling', 'grape:sauvignon-blanc', 'grape:furmint'], up: 'A Wachau Smaragd', down: 'Weinviertel DAC' },
+  'grape:malbec': { taste: 'Dark plum, violet, cocoa.', places: ['Mendoza', 'Cahors'], next: ['grape:syrah', 'grape:tempranillo'], up: 'High-altitude Uco Valley Malbec', down: 'Mendoza Malbec' }
+};
+function grapeName(id) { return (GRAPE[id] && GRAPE[id].name) || String(id).split(':')[1].replace(/-/g, ' ').replace(/\b\w/g, m => m.toUpperCase()); }
+
+/* Catalogue: a few real bottles shipped with the page. Merchant facts as listed on the merchant's page (Oct 2026); notes paraphrased and credited. */
+const CATALOGUE = [
+  { schema: 1, id: 'producer:isabel-estate', type: 'producer', name: 'Isabel Estate', aliases: ['isabel estate', 'isabel'], links: { place: 'place:nz/marlborough' },
+    claims: [{ a: 'subregion', v: 'Wairau Valley', src: 'merchant', conf: 0.9, at: '2026-10-23' }, { a: 'winemaker', v: 'Jeremy McKenzie', src: 'merchant', conf: 0.9, at: '2026-10-23' }] },
+  { schema: 1, id: 'wine:isabel-estate/bbr-new-zealand-sauvignon-blanc', type: 'wine', name: 'Berry Bros. & Rudd New Zealand Sauvignon Blanc', aliases: ['berry bros rudd new zealand sauvignon blanc', 'bbr new zealand sauvignon blanc', 'bbr sauvignon blanc'],
+    links: { producer: 'producer:isabel-estate', place: 'place:nz/marlborough', grapes: ['grape:sauvignon-blanc'], style: 'style:white/zesty' },
+    claims: [{ a: 'brand', v: 'Berry Bros. & Rudd', src: 'merchant', conf: 1, at: '2026-10-23' }, { a: 'subregion', v: 'Wairau Valley', src: 'merchant', conf: 0.9, at: '2026-10-23' }, { a: 'vineyards', v: 'Craiglochart and Blind River', src: 'merchant', conf: 0.9, at: '2026-10-23' }] },
+  { schema: 1, id: 'vintage:isabel-estate/bbr-new-zealand-sauvignon-blanc/2023', type: 'vintage', name: '2023', links: { wine: 'wine:isabel-estate/bbr-new-zealand-sauvignon-blanc' }, catalogue: true,
+    claims: [
+      { a: 'family', v: 'white', src: 'merchant', conf: 1, at: '2026-10-23' }, { a: 'appearance', v: 'lemon', src: 'claude', conf: 0.6, at: '2026-10-23' },
+      { a: 'sweetness', v: 'Dry', src: 'merchant', conf: 1, at: '2026-10-23' }, { a: 'body', v: 'Medium bodied', src: 'merchant', conf: 1, at: '2026-10-23' },
+      { a: 'abv', v: 12.9, u: '%', src: 'merchant', conf: 1, at: '2026-10-23' }, { a: 'blend', v: [{ g: 'grape:sauvignon-blanc', p: 100 }], src: 'merchant', conf: 1, at: '2026-10-23' },
+      { a: 'maturity', v: 'Ready – mature', src: 'merchant', conf: 1, at: '2026-10-23' }, { a: 'drink-window', v: [2024, 2026], src: 'merchant', conf: 1, at: '2026-10-23' },
+      { a: 'list-price', v: { price: 1595, size: 750, merchant: 'Berry Bros. & Rudd' }, src: 'merchant', conf: 0.8, at: '2026-10-23' },
+      { a: 'merchant-note', v: { text: 'Guava and passion fruit on the nose; a palate with real depth and a little creaminess, held by a mineral backbone and a saline lift.', who: 'Katie Merry, Wine Buyer, Berry Bros. & Rudd', url: 'https://www.bbr.com/products-20238042217-2023-berry-bros-and-rudd-new-zealand-sauvignon-blanc-by-isabel-estate-marlborough' }, src: 'merchant', conf: 1, at: '2026-10-23' },
+      { a: 'food', v: 'Fish, poultry, or creamy goat’s cheese.', src: 'merchant', conf: 1, at: '2026-10-23' },
+      { a: 'source', v: { name: 'Berry Bros. & Rudd product page', url: 'https://www.bbr.com/products-20238042217-2023-berry-bros-and-rudd-new-zealand-sauvignon-blanc-by-isabel-estate-marlborough' }, src: 'merchant', conf: 1, at: '2026-10-23' }] },
+  { schema: 1, id: 'producer:greystone-wines', type: 'producer', name: 'Greystone Wines', aliases: ['greystone wines', 'greystone'], links: { place: 'place:nz/north-canterbury' },
+    claims: [{ a: 'subregion', v: 'Waipara Valley', src: 'merchant', conf: 0.9, at: '2026-10-23' }, { a: 'winemaker', v: 'Dom Maxwell', src: 'merchant', conf: 0.9, at: '2026-10-23' }] },
+  { schema: 1, id: 'wine:greystone-wines/bbr-new-zealand-pinot-noir', type: 'wine', name: 'Berry Bros. & Rudd New Zealand Pinot Noir', aliases: ['berry bros rudd new zealand pinot noir', 'bbr new zealand pinot noir', 'bbr pinot noir'],
+    links: { producer: 'producer:greystone-wines', place: 'place:nz/north-canterbury', grapes: ['grape:pinot-noir'], style: 'style:red/pinot-fruit' },
+    claims: [{ a: 'brand', v: 'Berry Bros. & Rudd', src: 'merchant', conf: 1, at: '2026-10-23' }, { a: 'subregion', v: 'Waipara Valley', src: 'merchant', conf: 0.9, at: '2026-10-23' }, { a: 'soil', v: 'Limestone-rich hillsides', src: 'merchant', conf: 0.9, at: '2026-10-23' }] },
+  { schema: 1, id: 'vintage:greystone-wines/bbr-new-zealand-pinot-noir/2023', type: 'vintage', name: '2023', links: { wine: 'wine:greystone-wines/bbr-new-zealand-pinot-noir' }, catalogue: true,
+    claims: [
+      { a: 'family', v: 'red', src: 'merchant', conf: 1, at: '2026-10-23' }, { a: 'appearance', v: 'ruby', src: 'critic', conf: 0.8, at: '2026-10-23' },
+      { a: 'sweetness', v: 'Dry', src: 'merchant', conf: 1, at: '2026-10-23' }, { a: 'body', v: 'Medium bodied', src: 'merchant', conf: 1, at: '2026-10-23' },
+      { a: 'abv', v: 13, u: '%', src: 'merchant', conf: 1, at: '2026-10-23' }, { a: 'blend', v: [{ g: 'grape:pinot-noir', p: 100 }], src: 'merchant', conf: 1, at: '2026-10-23' },
+      { a: 'maturity', v: 'Ready – mature', src: 'merchant', conf: 1, at: '2026-10-23' }, { a: 'drink-window', v: [2024, 2027], src: 'merchant', conf: 1, at: '2026-10-23' },
+      { a: 'critic', v: { who: 'Jancis Robinson MW', pub: 'JancisRobinson.com', score: 16.5, scale: 20, date: '2026-05', drink: [2025, 2028], text: 'Transparent ruby, earthy and autumnal rather than fruit-driven; refreshing and delicate, and still fairly vigorous.' }, src: 'critic', conf: 1, at: '2026-10-23' },
+      { a: 'merchant-note', v: { text: 'Expressive, with an earthy, lifted nose, red cherry and redcurrant fruit, good acidity and fine, chalky tannins.', who: 'Katie Merry, Wine Buyer, Berry Bros. & Rudd', url: 'https://www.bbr.com/products-20238006286-2023-berry-bros-and-rudd-new-zealand-pinot-noir-by-greystone-wines-north-canterbury' }, src: 'merchant', conf: 1, at: '2026-10-23' },
+      { a: 'food', v: 'Pan-fried duck, roast pork, or mushroom pasta and risotto.', src: 'merchant', conf: 1, at: '2026-10-23' },
+      { a: 'source', v: { name: 'Berry Bros. & Rudd product page', url: 'https://www.bbr.com/products-20238006286-2023-berry-bros-and-rudd-new-zealand-pinot-noir-by-greystone-wines-north-canterbury' }, src: 'merchant', conf: 1, at: '2026-10-23' }] }
+];
+const CRITICS = [['Jancis Robinson MW', 20], ['Decanter', 100], ['Wine Advocate', 100], ['Vinous', 100], ['James Suckling', 100], ['Wine Spectator', 100], ['Tim Atkin MW', 100], ['Bob Campbell MW', 100], ['Jasper Morris MW', 100], ['Jeb Dunnuck', 100], ['Guía Peñín', 100], ['Wine Enthusiast', 100]];
+
 /* ============================================================
    Store: the only code that knows about claude.use("db") (section 11)
    ============================================================ */
@@ -636,6 +953,7 @@ const Store = {
         for (const n of this.nodes.values()) this.saveNode(n);
         for (const k of this.months.keys()) this.saveMonth(k);
       }
+      seedCatalogue();
       for (const n of this.nodes.values()) indexAlias(n.id, [n.name, ...(n.aliases || [])]);
       renderAll();
     } catch (e) { /* stay local */ }
@@ -756,15 +1074,20 @@ function describeVintage(vId) {
   const p = w.links && Store.nodes.get(w.links.producer);
   const place = w.links && w.links.place;
   const placeName = place ? placeLabel(place) : '';
+  const region = place ? placeShort(place) : '';
+  const vint = v.name && v.name !== 'NV' ? v.name : (v.name === 'NV' ? 'NV' : '');
   return {
-    title: (p ? p.name + ' ' : '') + (w.name || ''),
-    sub: [v.name, placeName].filter(Boolean).join(' · '),
+    title: [vint, w.name].filter(Boolean).join(' '),
+    by: [p ? 'by ' + p.name : '', region].filter(Boolean).join(', '),
+    sub: [p ? 'by ' + p.name : '', region].filter(Boolean).join(', '),
+    place, placeName,
     colour: best(v, 'appearance') || 'claret',
     family: best(v, 'family'),
     wine: w, producer: p, vintage: v,
     grapes: (w.links && w.links.grapes || []).map(g => (GRAPE[g] && GRAPE[g].name) || g.split(':')[1].replace(/-/g, ' '))
   };
 }
+function placeShort(id) { const l = placeLabel(id); return l.split(', ')[0]; }
 function placeLabel(id) {
   const c = COUNTRY[id.split('/')[0]];
   if (!c) return '';
@@ -878,7 +1201,7 @@ function palateText(P) {
   const tg = top(P.grape, gName); if (tg.length) lines.push('Best-rated grapes: ' + tg.join(', '));
   const tc = top(P.country, cName); if (tc.length) lines.push('Best-rated countries: ' + tc.join(', '));
   const lg = low(P.grape, gName); if (lg.length) lines.push('Rated low: ' + lg.join(', '));
-  const recent = Store.events('tasting').slice(0, 8).map(t => { const d = describeVintage(t.node); return d.title + ' ' + d.vintage.name + ' (' + t.rating + '/5)'; });
+  const recent = Store.events('tasting').slice(0, 8).map(t => { const d = describeVintage(t.node); return d.title + ' ' + d.by + ' (' + t.rating + '/5)'; });
   if (recent.length) lines.push('Recently drank: ' + recent.join('; '));
   return lines.join('\n');
 }
@@ -919,39 +1242,70 @@ function scoreStyles() {
 }
 function renderTonight() {
   const ranked = scoreStyles();
-  const pickBox = $('#pick');
-  pickBox.replaceChildren();
+  const hero = $('#hero'), card = $('#pick');
+  card.replaceChildren();
+  const d = new Date();
+  $('#heroWhen').textContent = [MOMENT_NAME[moment()], d.toLocaleDateString('en-GB', { weekday: 'long' }), season(d)[0].toUpperCase() + season(d).slice(1)].join(' · ');
+  // context chips
+  const chips = $('#ctxChips'); chips.replaceChildren();
+  const wName = { warm: 'Warm', mild: 'Mild', 'cold-wet': 'Cold & wet' }[S.weather];
+  const moodName = (MOODS.find(m => m[0] === S.mood) || [])[1];
+  for (const label of [wName || 'Weather?', S.food ? S.food.trim() : 'Eating?', S.withWho ? 'With ' + S.withWho.trim() : 'Just me', moodName].filter(Boolean))
+    chips.append(el('button', { class: 'gchip', type: 'button', onclick: openContext }, label));
   if (!ranked.length) {
-    pickBox.append(el('div', { class: 'empty', style: 'padding:0;background:none' }, el('h3', { text: 'Nothing fits your limits' }), el('p', { text: 'Your colour limits rule out every style. Change them in You.' })));
-    $('#alts').replaceChildren(); return;
+    hero.style.setProperty('--wine', 'var(--c-claret)'); hero.classList.add('noimg'); $('#heroImg').hidden = true; $('#heroCredit').hidden = true; $('#heroRegion').textContent = '';
+    $('#heroTitle').textContent = 'Nothing fits your limits.'; $('#heroWhy').textContent = 'Your colour limits rule out every style. Change them in You.';
+    $('#alts').replaceChildren(); $('#places').replaceChildren(); card.hidden = true; return;
   }
+  card.hidden = false;
   if (!S.pick || !ranked.find(r => r.style.id === S.pick)) S.pick = ranked[0].style.id;
   const cur = ranked.find(r => r.style.id === S.pick);
   const s = cur.style;
   const why = cur.why.length ? cur.why.slice(0, 3) : ['a good match for the moment'];
-  const sentence = why.join(', ').replace(/^\w/, m => m.toUpperCase()) + '.';
-  pickBox.append(
-    el('div', { class: 'pick-head' },
-      el('div', { class: 'glass lg' + (s.sparkle ? ' sparkle' : ''), style: '--c:var(--c-' + s.col + ')', 'aria-hidden': 'true' }),
-      el('div', { style: 'min-width:0' }, el('div', { class: 'eyebrow', text: FAMILY_NAME[s.fam] + ' · ' + COLOUR[s.col].name }), el('h3', { text: s.name }))),
-    el('p', { class: 'why', text: sentence }),
-    el('p', { class: 'look' }, el('span', { class: 'eyebrow', style: 'display:block;margin-bottom:4px', text: 'Look for' }), s.look.join(' · ')),
+  hero.style.setProperty('--wine', 'var(--c-' + s.col + ')');
+  hero.style.setProperty('--hc', PALE.has(s.col) ? '#241A10' : '#FFFFFF');
+  $('#heroTitle').textContent = STYLE_HEAD[s.id] || s.name + '.';
+  $('#heroWhy').textContent = why.join(', ').replace(/^\w/, m => m.toUpperCase()) + '.';
+  // hero photo: the first region for this style that has one
+  const regs = STYLE_REGIONS[s.id] || [];
+  const rk = regs.find(hasPhoto);
+  const img = $('#heroImg');
+  if (rk) {
+    hero.classList.remove('noimg');
+    if (img.dataset.k !== rk) { img.dataset.k = rk; img.setAttribute('data-loading', ''); img.onload = () => img.removeAttribute('data-loading'); img.src = regionPhoto(rk); img.alt = REGIONS[rk].name; }
+    img.hidden = false;
+    $('#heroRegion').textContent = '';
+    const cr = $('#heroCredit'); cr.hidden = false; cr.textContent = REGIONS[rk].name + ' · ' + creditLine(rk).replace('Photo: ', ''); cr.setAttribute('aria-label', REGIONS[rk].name + '. ' + creditLine(rk) + '. About this region'); cr.onclick = () => openRegion(rk);
+  } else { hero.classList.add('noimg'); img.hidden = true; $('#heroCredit').hidden = true; $('#heroRegion').textContent = ''; }
+  // the glass card
+  const mins = prepMinutes(s.serve[2]);
+  card.append(
+    el('div', { class: 'look-top' }, bottleSVG(STYLE_BOTTLE[s.id] || 'burgundy', s.col),
+      el('div', { class: 'look-main' }, el('span', { class: 'eyebrow', text: 'Look for · ' + FAMILY_NAME[s.fam] + ' · ' + COLOUR[s.col].name }), el('p', { class: 'look-list', text: s.look.slice(0, 4).join(' · ') }))),
     el('div', { class: 'serve' },
       el('div', null, el('span', { class: 'k', text: 'Serve' }), el('span', { class: 'v', text: s.serve[0] })),
       el('div', null, el('span', { class: 'k', text: 'Glass' }), el('span', { class: 'v', text: s.serve[1] })),
-      el('div', null, el('span', { class: 'k', text: 'Prep' }), el('span', { class: 'v', text: s.serve[2] })))
-  );
+      el('div', null, el('span', { class: 'k', text: 'Prep' }), el('span', { class: 'v', text: s.serve[2] }))),
+    el('div', { class: 'pillbtns' },
+      mins ? el('button', { class: 'btn', type: 'button', onclick: () => Timer.start(s.look[0].split(' ')[0], mins) }, 'Fridge timer') : el('button', { class: 'btn', type: 'button', onclick: findBottles }, 'Find bottles'),
+      el('button', { class: 'btn ghost', type: 'button', style: 'background:color-mix(in oklab,var(--ink) 8%,transparent);color:var(--ink)', onclick: () => $('#alts').scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 'Sideways')));
+  const inCat = [...Store.nodes.values()].filter(n => n.type === 'vintage' && n.catalogue).filter(v => { const w = Store.nodes.get(v.links.wine); return w && w.links.style === s.id; }).filter(v => !breaks({ family: best(v, 'family'), colour: best(v, 'appearance'), abv: best(v, 'abv'), prices: claimsOf(v, 'list-price').map(c => ({ amount: c.v.price / 100, per: 'bottle', size: c.v.size })) }).length);
+  if (inCat.length) card.append(el('div', { class: 'group', style: 'background:transparent' }, ...inCat.slice(0, 2).map(v => wineRow(v.id, 'In the catalogue'))));
+  // sideways
   const alts = $('#alts'); alts.replaceChildren();
-  for (const r of ranked.filter(r => r.style.id !== S.pick).slice(0, 3)) {
+  const altList = ranked.filter(r => r.style.id !== S.pick).slice(0, 3);
+  for (const r of altList) {
     alts.append(el('button', { class: 'row has-glass', type: 'button', onclick: () => { S.pick = r.style.id; $('#bottles').replaceChildren(); renderTonight(); window.scrollTo({ top: 0, behavior: 'smooth' }); } },
       el('div', { class: 'glass' + (r.style.sparkle ? ' sparkle' : ''), style: '--c:var(--c-' + r.style.col + ')', 'aria-hidden': 'true' }),
       el('div', { class: 'row-main' }, el('span', { class: 'row-t', text: r.style.name }), el('span', { class: 'row-s', text: r.style.look.slice(0, 3).join(' · ') })),
       chev()));
   }
-  // weather, moods
-  $$('#weather button').forEach(b => b.setAttribute('aria-checked', String(b.dataset.w === S.weather)));
-  const moods = $('#moods'); moods.replaceChildren();
-  for (const [id, name] of MOODS) moods.append(el('button', { class: 'chip', type: 'button', 'aria-pressed': String(S.mood === id), onclick: () => { S.mood = S.mood === id ? null : id; S.pick = null; $('#bottles').replaceChildren(); renderTonight(); } }, name));
+  // where it's from: this style's regions, then the alternatives'
+  const keys = [...new Set([...regs, ...altList.flatMap(r => STYLE_REGIONS[r.style.id] || [])])].filter(hasPhoto).slice(0, 6);
+  $('#placesSec').hidden = !keys.length;
+  $('#places').replaceChildren(...keys.map(k => el('button', { class: 'place', type: 'button', onclick: () => openRegion(k), 'aria-label': REGIONS[k].name },
+    el('img', { src: regionPhoto(k), alt: '', loading: 'lazy' }),
+    el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: REGIONS[k].country }), el('span', { class: 'place-t', text: REGIONS[k].name }), el('span', { class: 'place-s', text: REGIONS[k].blurb })))));
   renderLimitsLine();
   renderRecent();
 }
@@ -992,7 +1346,7 @@ async function findBottles() {
     'Adventurousness 0-1: ' + (Store.profile.explore ?? 0.5),
     '', 'Hard limits:', ...(limitsText().length ? limitsText().map(t => '- ' + t) : ['- none']),
     '', 'Their palate:', palateText(palate()),
-    '', 'Reply with only JSON: {"bottles":[{"role":"safe"|"sideways"|"discovery","producer":"","cuvee":"","vintage":"2022 or NV","country":"","region":"","grapes":[""],"colour":"one of ' + COLOURS.map(c => c.id).join('|') + '","family":"red|white|rose|orange|sparkling|sweet","abv":13,"price":18.5,"where":"Majestic, Waitrose","why":"one sentence, specific to this person"}]}'
+    '', 'Reply with only JSON: {"bottles":[{"role":"safe"|"sideways"|"discovery","producer":"","cuvee":"the wine\'s name as on the label, without producer or vintage","vintage":"2022 or NV","country":"","region":"","grapes":[""],"colour":"one of ' + COLOURS.map(c => c.id).join('|') + '","family":"red|white|rose|orange|sparkling|sweet","abv":13,"price":18.5,"where":"Majestic, Waitrose","why":"one sentence, specific to this person"}]}'
   ].filter(l => l !== '').join('\n');
   S.find.busy = true; S.find.ctl = new AbortController();
   $('#findBtn').lastChild.textContent = 'Stop';
@@ -1027,8 +1381,8 @@ function bottleRow(w, b, evId, i) {
     el('div', { class: 'glass', style: '--c:var(--c-' + (w.colour || 'claret') + ');margin-top:2px', 'aria-hidden': 'true' }),
     el('div', { class: 'row-main bottle' },
       el('span', { class: 'tag-pick', text: role }),
-      el('span', { class: 'row-t', text: [w.producer, w.cuvee].filter(Boolean).join(' ') + (w.vintage ? ' ' + w.vintage : '') }),
-      el('span', { class: 'row-s', text: [w.region, w.country, w.grapes.join(', ')].filter(Boolean).join(' · ') }),
+      el('button', { class: 'row-t', type: 'button', style: 'text-align:left', onclick: () => openWine(suggestedWine(w, b)) }, (() => { const v = /^\d{4}$/.test(w.vintage) ? w.vintage + ' ' : (w.vintage === 'NV' ? 'NV ' : ''); return v + (w.cuvee || w.producer); })()),
+      el('span', { class: 'row-s', text: ['by ' + w.producer, w.region || w.country].filter(Boolean).join(', ') + (w.grapes.length ? ' · ' + w.grapes.join(', ') : '') }),
       el('span', { class: 'row-s', style: 'color:var(--ink)', text: str(b.why) }),
       el('span', { class: 'row-s mono', text: [w.prices[0] ? '≈ £' + w.prices[0].amount.toFixed(2) : '', str(b.where)].filter(Boolean).join(' · ') }),
       el('button', { class: 'link', type: 'button', style: 'align-self:flex-start', onclick: () => { Store.updateEvent(evId, { outcome: 'taken', taken: i + 1 }); openLog(Object.assign({}, w, { price: w.prices[0] && w.prices[0].amount }), { suggestion: evId }); } }, 'Drinking this')));
@@ -1036,6 +1390,289 @@ function bottleRow(w, b, evId, i) {
 const str = v => typeof v === 'string' ? v.trim().slice(0, 300) : (typeof v === 'number' ? String(v) : '');
 const num = v => { const n = parseFloat(v); return isFinite(n) ? n : null; };
 const arr = v => Array.isArray(v) ? v.map(str).filter(Boolean).slice(0, 8) : (typeof v === 'string' && v ? v.split(/,\s*/) : []);
+
+/* ============================================================
+   Wine page
+   ============================================================ */
+const BOTTLE_FOR_GRAPE = { 'grape:riesling': 'flute', 'grape:gewurztraminer': 'flute', 'grape:pinot-gris': 'flute', 'grape:sauvignon-blanc': 'bordeaux', 'grape:cabernet-sauvignon': 'bordeaux', 'grape:merlot': 'bordeaux', 'grape:cabernet-franc': 'bordeaux', 'grape:tempranillo': 'bordeaux', 'grape:malbec': 'bordeaux', 'grape:semillon': 'bordeaux' };
+function bottleFor(d) {
+  const fam = d.family; const st = d.wine.links && d.wine.links.style;
+  if (st && STYLE_BOTTLE[st]) return STYLE_BOTTLE[st];
+  if (fam === 'sparkling') return 'champagne'; if (fam === 'sweet') return 'port';
+  const g = (d.wine.links && d.wine.links.grapes || [])[0];
+  return BOTTLE_FOR_GRAPE[g] || 'burgundy';
+}
+function claimsOf(node, a) { return (node && node.claims || []).filter(c => c.a === a); }
+function windowOf(v) {
+  const w = best(v, 'drink-window'); if (!w) return null;
+  if (Array.isArray(w) && w.length === 2) return w.map(Number);
+  const m = /(\d{4})\D+(\d{4})/.exec(String(w)); return m ? [+m[1], +m[2]] : null;
+}
+function maturityWord(win) {
+  if (!win) return null;
+  const y = new Date().getFullYear();
+  if (y < win[0]) return 'Not ready yet';
+  if (y > win[1]) return 'Past its window';
+  if (win[1] - y <= 0) return 'Drink up';
+  return y - win[0] < (win[1] - win[0]) / 2 ? 'Ready – youthful' : 'Ready – mature';
+}
+function openWine(vId) { if (S.tab !== 'wine') S.prevTab = S.tab; S.wine = vId; go('wine'); }
+function isSaved(vId) { const s = Store.events('saved').find(e => e.node === vId); return !!(s && !s.removed); }
+function toggleSaved(vId) {
+  const s = Store.events('saved').find(e => e.node === vId);
+  if (s) Store.updateEvent(s.id, { removed: !s.removed, at: new Date().toISOString() }); else Store.addEvent({ kind: 'saved', node: vId });
+  renderWine(); toast(isSaved(vId) ? 'Saved to Explore' : 'Removed from saved');
+}
+function renderWine() {
+  const box = $('#v-wine'); box.replaceChildren();
+  const vId = S.wine; const d = describeVintage(vId);
+  if (!d.vintage || !d.vintage.id) { box.append(el('div', { class: 'empty' }, el('h3', { text: 'Wine not found' }))); return; }
+  const v = d.vintage, w = d.wine, p = d.producer;
+  const col = d.colour;
+  const rk = PLACE_REGION[d.place] || PLACE_REGION[(d.place || '').split('/').slice(0, 2).join('/')];
+  const lp = labelURL(v);
+  const hero = el('div', { class: 'wine-hero', style: '--wine:var(--c-' + col + ')' },
+    rk && hasPhoto(rk) ? el('img', { class: 'ph', src: regionPhoto(rk), alt: '' }) : null,
+    lp ? el('img', { class: 'label', src: lp, alt: 'Your photo of the label' }) : bottleSVG(bottleFor(d), col),
+    el('button', { class: 'backbtn lgm', type: 'button', 'aria-label': 'Back', onclick: () => go(S.prevTab || 'explore') }, svgIcon('<path d="M15 5l-7 7 7 7"/>')),
+    el('button', { class: 'savebtn lgm', type: 'button', onclick: () => toggleSaved(vId) }, svgIcon(isSaved(vId) ? '<path d="M6 3h12v18l-6-4-6 4z" fill="currentColor"/>' : '<path d="M6 3h12v18l-6-4-6 4z"/>'), isSaved(vId) ? 'Saved' : 'Save'));
+  // breadcrumb: country > region
+  const crumbs = el('div', { class: 'crumbs' });
+  if (d.place) {
+    const parts = d.place.split('/'); const ids = parts.map((_, i) => parts.slice(0, i + 1).join('/'));
+    ids.forEach((id, i) => { if (i) crumbs.append(el('span', { 'aria-hidden': 'true', text: '›' })); crumbs.append(el('button', { type: 'button', onclick: () => openPlace(id) }, i ? placeShort(id) : placeLabel(id))); });
+    const sub = best(w, 'subregion'); if (sub) { crumbs.append(el('span', { 'aria-hidden': 'true', text: '›' }), el('span', { text: sub })); }
+  }
+  // tags: colour · sweetness · body · grapes (%)
+  const blend = best(v, 'blend');
+  const grapesText = Array.isArray(blend) ? blend.map(b => grapeName(b.g) + (b.p ? ' (' + b.p + '%)' : '')) : d.grapes;
+  const famName = d.family ? FAMILY_NAME[d.family] : (COLOUR[col] ? FAMILY_NAME[COLOUR[col].family] : null);
+  const tags = el('div', { class: 'tags' }, ...[famName, best(v, 'sweetness'), best(v, 'body'), ...grapesText].filter(Boolean).map(t => el('span', { text: t })));
+  // maturity
+  const win = windowOf(v);
+  const critics = claimsOf(v, 'critic');
+  const altWin = critics.map(c => c.v && c.v.drink).find(x => Array.isArray(x));
+  let mat = null;
+  if (win) {
+    const lo = Math.min(win[0], altWin ? altWin[0] : win[0]) - 1, hi = Math.max(win[1], altWin ? altWin[1] : win[1]) + 1;
+    const pct = y => ((y - lo) / (hi - lo) * 100).toFixed(1) + '%';
+    const now = new Date(); const yf = now.getFullYear() + now.getMonth() / 12;
+    const status = best(v, 'maturity') || maturityWord(win);
+    const statusSrc = claimsOf(v, 'maturity')[0];
+    mat = el('div', { class: 'group' }, el('div', { class: 'row mat', style: 'align-items:stretch' },
+      el('div', { class: 'mat-h' }, el('b', { text: status }), el('span', { text: 'Drink ' + win[0] + ' – ' + win[1] })),
+      el('div', { class: 'tl', role: 'img', 'aria-label': 'Drinking window ' + win[0] + ' to ' + win[1] + (altWin ? '; critic window ' + altWin[0] + ' to ' + altWin[1] : '') },
+        el('span', { class: 'rail' }), el('span', { class: 'win', style: 'left:' + pct(win[0]) + ';width:calc(' + pct(win[1] + 1) + ' - ' + pct(win[0]) + ')' }),
+        altWin ? el('span', { class: 'win alt', style: 'left:' + pct(altWin[0]) + ';width:calc(' + pct(altWin[1] + 1) + ' - ' + pct(altWin[0]) + ')' }) : null,
+        yf >= lo && yf <= hi + 1 ? el('span', { class: 'now', style: 'left:' + pct(yf) }) : null),
+      el('div', { class: 'tl-y' }, el('span', { text: String(lo) }), el('span', { text: String(hi) })),
+      el('span', { class: 'fine', text: (statusSrc ? 'Window from ' + (statusSrc.src === 'merchant' ? 'the merchant' : statusSrc.src) : 'Window') + (altWin ? '; the thin line is ' + critics.find(c => c.v && c.v.drink).v.who + '’s window' : '') + '.' })));
+  }
+  // scores: yours first, then each critic, then add
+  const mine = Store.events('tasting').filter(t => t.node === vId);
+  const avg = mine.length ? mine.reduce((a, t) => a + (t.rating || 0), 0) / mine.length : null;
+  const scores = el('div', { class: 'scores' },
+    avg != null ? el('div', { class: 'score you' }, el('span', { class: 'n' }, (Math.round(avg * 2) / 2).toString(), el('small', { text: '/5' })), el('span', { class: 'w', text: 'You' }), el('span', { class: 'd', text: mine.length + (mine.length === 1 ? ' tasting' : ' tastings') })) : null,
+    ...critics.map(c => el('div', { class: 'score' }, el('span', { class: 'n' }, String(c.v.score), el('small', { text: '/' + (c.v.scale || 100) })), el('span', { class: 'w', text: c.v.who }), el('span', { class: 'd', text: [c.v.pub && c.v.pub !== c.v.who ? c.v.pub : '', c.v.date ? fmtMonth(c.v.date) : '', c.src === 'label' ? 'from the label' : c.src === 'user' ? 'added by you' : ''].filter(Boolean).join(' · ') }))),
+    el('button', { class: 'score add', type: 'button', onclick: () => openAddScore(vId) }, '+ Add a score'));
+  // price
+  const lpc = claimsOf(v, 'list-price')[0];
+  const sightings = Store.events('sighting').filter(e => e.node === vId && e.per === 'bottle').slice(0, 4);
+  const typical = best(v, 'typical-price');
+  const priceRows = [
+    lpc ? el('div', { class: 'row' }, el('span', { class: 'row-main' }, el('span', { class: 'row-t', style: 'font-family:var(--sans);font-size:16px', text: lpc.v.merchant }), el('span', { class: 'row-s', text: 'Listed price · ' + (lpc.v.size || 750) / 10 + 'cl · ' + fmtMonth(lpc.at.slice(0, 7)) })), el('span', { class: 'row-end mono', style: 'color:var(--ink)', text: gbp(lpc.v.price) })) : null,
+    ...sightings.map(e => { const ven = e.venue && Store.nodes.get(e.venue); return el('div', { class: 'row' }, el('span', { class: 'row-main' }, el('span', { class: 'row-t', style: 'font-family:var(--sans);font-size:16px', text: ven ? ven.name : 'Seen in a shop' }), el('span', { class: 'row-s', text: 'You saw it · ' + new Date(e.at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) })), el('span', { class: 'row-end mono', style: 'color:var(--ink)', text: gbp(e.price) })); }),
+    !lpc && !sightings.length && typical ? el('div', { class: 'row' }, el('span', { class: 'row-main' }, el('span', { class: 'row-t', style: 'font-family:var(--sans);font-size:16px', text: 'Typical UK price' }), el('span', { class: 'row-s', text: 'Claude’s estimate, not a live price' })), el('span', { class: 'row-end mono', text: '≈ ' + gbp(typical) })) : null
+  ].filter(Boolean);
+  // notes: merchant, critics, yours
+  const notes = [
+    ...claimsOf(v, 'merchant-note').map(c => el('div', { class: 'note' }, el('p', { text: c.v.text }), el('span', { class: 'who' }, c.v.who + ' (paraphrased) · ', el('a', { href: c.v.url, target: '_blank', rel: 'noopener' }, 'Read in full')))),
+    ...critics.filter(c => c.v.text).map(c => el('div', { class: 'note' }, el('p', { text: c.v.text }), el('span', { class: 'who', text: c.v.who + ', ' + c.v.score + '/' + (c.v.scale || 100) + (c.v.drink ? ', drink ' + c.v.drink.join(' – ') : '') + (c.v.pub ? ' · ' + c.v.pub : '') + (c.v.date ? ', ' + fmtMonth(c.v.date) : '') + ' (paraphrased)' }))),
+    ...mine.filter(t => t.notes).map(t => el('div', { class: 'note' }, el('p', { text: t.notes }), el('span', { class: 'who', text: 'You, ' + new Date(t.at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) + ' · ' + t.rating + '/5' })))
+  ];
+  if (!notes.length && best(v, 'expect')) notes.push(el('div', { class: 'note' }, el('p', { text: best(v, 'expect') }), el('span', { class: 'who', text: 'What to expect, from Claude' })));
+  // facts
+  const facts = [['Colour', famName], ['Sweetness', best(v, 'sweetness')], ['Vintage', v.name], ['Alcohol', best(v, 'abv') != null ? best(v, 'abv') + '%' : null],
+    ['Maturity', win ? (best(v, 'maturity') || maturityWord(win)) + ' (' + win[0] + ' – ' + win[1] + ')' : null], ['Grapes', grapesText.join(', ')], ['Body', best(v, 'body')],
+    ['Producer', p ? p.name : null], ['Brand', best(w, 'brand')], ['Region', d.place ? placeLabel(d.place) : null], ['Sub-region', best(w, 'subregion')], ['Vineyards', best(w, 'vineyards')],
+    ['Soil', best(w, 'soil')], ['Winemaker', best(p, 'winemaker')], ['In the glass', best(v, 'appearance') ? COLOUR[best(v, 'appearance')].name : null]].filter(f => f[1]);
+  const dl = el('dl', { class: 'facts' }); facts.forEach(([k, val]) => dl.append(el('dt', { text: k }), el('dd', { text: String(val) })));
+  const food = best(v, 'food');
+  const srcs = claimsOf(v, 'source');
+  const fromClaude = (v.claims || []).some(c => c.src === 'claude' && c.a === 'suggested');
+  box.append(...[
+    hero,
+    el('div', { class: 'sec', style: 'gap:8px' }, crumbs, el('h1', { class: 'wname', text: d.title }), el('p', { class: 'wby' }, p ? el('button', { type: 'button', onclick: () => openProducer(p.id) }, 'by ' + p.name) : '', d.place ? (p ? ', ' : '') + placeShort(d.place) : ''), fromClaude ? el('span', { class: 'sugg', text: 'Suggested by Claude · check the details' }) : null, tags),
+    el('div', { class: 'pillbtns' }, el('button', { class: 'btn', type: 'button', onclick: () => openLog(wineToForm(d), {}) }, 'Drinking this'), el('button', { class: 'btn ghost', type: 'button', style: 'background:color-mix(in oklab,var(--ink) 8%,transparent);color:var(--ink)', onclick: () => findLike(vId) }, 'More like this')),
+    mat,
+    el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Scores' })), scores),
+    priceRows.length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Price' })), el('div', { class: 'group' }, ...priceRows)) : null,
+    notes.length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Tasting notes' })), el('div', { class: 'group' }, ...notes)) : null,
+    food ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'With food' })), el('p', { class: 'food', text: food })) : null,
+    el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Details' })), el('div', { class: 'group' }, dl)),
+    el('div', { class: 'sec', id: 'recs' }, ...localRecs(d)),
+    el('div', { class: 'sec', id: 'likeOut', 'aria-live': 'polite' }),
+    srcs.length || rk ? el('p', { class: 'srcline' }, ...srcs.flatMap(c => ['Details from the ', el('a', { href: c.v.url, target: '_blank', rel: 'noopener' }, c.v.name), ', ' + fmtMonth(c.at.slice(0, 7)) + '. ']), rk && hasPhoto(rk) ? REGIONS[rk].name + ' ' + creditLine(rk).toLowerCase() + '.' : '') : null
+  ].filter(Boolean));
+}
+function fmtMonth(ym) { const [y, m] = String(ym).split('-').map(Number); return m ? new Date(y, m - 1, 1).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : String(ym); }
+function svgIcon(path) { const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('fill', 'none'); s.setAttribute('stroke', 'currentColor'); s.setAttribute('stroke-width', '2.2'); s.setAttribute('stroke-linecap', 'round'); s.setAttribute('stroke-linejoin', 'round'); s.setAttribute('aria-hidden', 'true'); s.innerHTML = path; return s; }
+function wineToForm(d) {
+  const blend = best(d.vintage, 'blend');
+  return { producer: d.producer ? d.producer.name : '', cuvee: d.wine.name, vintage: d.vintage.name === 'NV' ? 'NV' : d.vintage.name,
+    region: d.place && d.place.split('/').length > 1 ? placeShort(d.place) : '', country: d.place ? (COUNTRY[d.place.split('/')[0]] || {}).name : '',
+    grapes: Array.isArray(blend) ? blend.map(b => grapeName(b.g)) : d.grapes, colour: best(d.vintage, 'appearance'), family: d.family, abv: best(d.vintage, 'abv'),
+    price: (claimsOf(d.vintage, 'list-price')[0] || { v: {} }).v.price / 100 || undefined };
+}
+/* Recommendations from the atlas: no network needed */
+function localRecs(d) {
+  const g = (d.wine.links && d.wine.links.grapes || [])[0];
+  const info = GRAPE_INFO[g];
+  const out = [el('div', { class: 'sec-h' }, el('h2', { text: 'Where next' }))];
+  const rows = [];
+  if (info) {
+    const here = d.place ? placeShort(d.place) : '';
+    const elsewhere = info.places.filter(pl => !here || !pl.includes(here)).slice(0, 4);
+    rows.push(recRow('Same grape, elsewhere', elsewhere.join(' · '), grapeName(g), () => openGrape(g)));
+    if (info.next.length) rows.push(recRow('Next step', info.next.slice(0, 4).map(grapeName).join(' · '), 'If you like ' + grapeName(g) + ', these are one step away', () => openGrape(info.next[0])));
+    rows.push(recRow('Trade up', info.up, null, null));
+    rows.push(recRow('Trade down', info.down, null, null));
+  }
+  const st = d.wine.links && d.wine.links.style;
+  if (st && STYLE[st]) rows.push(recRow('Sideways, same feel', STYLE[st].look.slice(0, 4).join(' · '), STYLE[st].name, null));
+  if (!rows.length) return [];
+  out.push(el('div', { class: 'group' }, ...rows));
+  return out;
+}
+function recRow(k, t, s, fn) {
+  return el(fn ? 'button' : 'div', Object.assign({ class: 'row', style: 'align-items:flex-start' }, fn ? { type: 'button', onclick: fn } : {}),
+    el('span', { class: 'row-main' }, el('span', { class: 'rec-k', text: k }), el('span', { class: 'row-t', text: t }), s ? el('span', { class: 'row-s', text: s }) : null), fn ? chev() : null);
+}
+/* More like this: Claude names real bottles; code enforces limits; each opens as a wine page */
+async function findLike(vId) {
+  const out = $('#likeOut'); const sample = await getSample();
+  if (!sample) { out.replaceChildren(el('p', { class: 'foot', text: 'Bottle suggestions need Claude. Open Claret in the Claude app; the suggestions above work anywhere.' })); return; }
+  const d = describeVintage(vId);
+  out.replaceChildren(el('div', { class: 'status' }, el('span', { class: 'spin', 'aria-hidden': 'true' }), 'Finding bottles like this…'));
+  out.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const price = (claimsOf(d.vintage, 'list-price')[0] || { v: {} }).v.price;
+  const prompt = ['You are Claret, a UK wine companion with nothing to sell. The person is looking at this wine:',
+    d.title + ' ' + d.by + (price ? ' (' + gbp(price) + ')' : '') + '. Grapes: ' + d.grapes.join(', ') + '.',
+    'Suggest 5 real wines that are easy to buy in the UK, one for each role: "sideways" (same feel, different place), "same-grape" (same grape, another classic place), "trade-up", "trade-down", "next-step" (a different grape one step away for discovery).',
+    'Give a realistic UK shelf price per 75cl. Do not invent wines or critic scores; if unsure of an exact cuvée, name the producer and appellation. Never break a hard limit.',
+    'Hard limits:', ...(limitsText().length ? limitsText().map(t => '- ' + t) : ['- none']), 'Their palate:', palateText(palate()),
+    'Reply with only JSON: {"bottles":[{"role":"","producer":"","wine":"name as it appears on the label, without producer or vintage","vintage":"2022 or NV","country":"","region":"","grapes":[""],"colour":"one of ' + COLOURS.map(c => c.id).join('|') + '","family":"red|white|rose|orange|sparkling|sweet","abv":13,"price":18.5,"where":"merchants","why":"one sentence"}]}'].join('\n');
+  try {
+    const r = await sample.json(prompt, { modelTier: 'default', cache: false });
+    const list = Array.isArray(r && r.bottles) ? r.bottles.slice(0, 6) : [];
+    const ROLE = { sideways: 'Sideways', 'same-grape': 'Same grape, elsewhere', 'trade-up': 'Trade up', 'trade-down': 'Trade down', 'next-step': 'Next step' };
+    const g = el('div', { class: 'group' }); let dropped = 0;
+    for (const b of list) {
+      const w = { producer: str(b.producer), cuvee: str(b.wine || b.cuvee), vintage: str(b.vintage), country: str(b.country), region: str(b.region), grapes: arr(b.grapes), colour: COLOUR[b.colour] ? b.colour : null, family: str(b.family), abv: num(b.abv), prices: num(b.price) ? [{ amount: num(b.price), per: 'bottle', size: 750 }] : [] };
+      if (!w.producer && !w.cuvee) continue;
+      if (breaks(w).length) { dropped++; continue; }
+      const id = suggestedWine(w, b);
+      const dd = describeVintage(id);
+      g.append(el('button', { class: 'row has-glass', type: 'button', style: 'align-items:flex-start', onclick: () => openWine(id) },
+        el('div', { class: 'glass', style: '--c:var(--c-' + (w.colour || 'claret') + ');margin-top:2px', 'aria-hidden': 'true' }),
+        el('span', { class: 'row-main' }, el('span', { class: 'rec-k', text: ROLE[b.role] || 'Like this' }), el('span', { class: 'row-t', text: dd.title }), el('span', { class: 'row-s', text: dd.by }), el('span', { class: 'row-s', style: 'color:var(--ink)', text: str(b.why) }),
+          el('span', { class: 'row-s mono', text: [w.prices[0] ? '≈ £' + w.prices[0].amount.toFixed(2) : '', str(b.where)].filter(Boolean).join(' · ') })), chev()));
+    }
+    out.replaceChildren(el('div', { class: 'sec-h' }, el('h2', { text: 'Bottles like this' })), g,
+      el('p', { class: 'foot', text: (dropped ? dropped + ' removed for breaking your limits. ' : '') + 'Prices are Claude’s typical UK estimates, not live stock.' }));
+  } catch (e) { out.replaceChildren(el('p', { class: 'foot', text: sampleError(e) })); }
+}
+/* A Claude-named bottle becomes a node in your graph, marked as a suggestion */
+function suggestedWine(w, b) {
+  const id = recordWine({ producer: w.producer, cuvee: w.cuvee, vintage: w.vintage, region: w.region, country: w.country, grapes: w.grapes, colour: w.colour, family: w.family, abv: w.abv }, 'claude');
+  const v = Store.nodes.get(id);
+  if (w.prices[0]) claim(v, 'typical-price', Math.round(w.prices[0].amount * 100), 'claude', { u: 'GBP' });
+  if (b && b.why) claim(v, 'expect', str(b.why), 'claude');
+  if (!(v.claims || []).some(c => c.src !== 'claude')) claim(v, 'suggested', true, 'claude');
+  Store.saveNode(v);
+  return id;
+}
+function openAddScore(vId) {
+  const who = el('select', { class: 'input', id: 'scWho', style: 'max-width:none;text-align:right' }, ...CRITICS.map(([n, sc]) => el('option', { value: n, 'data-scale': sc, text: n })), el('option', { value: '', text: 'Someone else' }));
+  const score = el('input', { class: 'input mono', id: 'scScore', type: 'number', inputmode: 'decimal', step: '0.5', min: '0', placeholder: '16.5', style: 'text-align:right;width:96px' });
+  const scale = el('select', { class: 'input mono', id: 'scScale' }, el('option', { value: '100', text: '/100' }), el('option', { value: '20', text: '/20' }));
+  const other = el('input', { class: 'input', id: 'scOther', type: 'text', placeholder: 'Critic or publication', hidden: true });
+  const date = el('input', { class: 'input mono', id: 'scDate', type: 'month', style: 'width:auto' });
+  const note = el('textarea', { class: 'input', id: 'scNote', placeholder: 'Optional: a line in your own words', 'aria-label': 'Note' });
+  const sync = () => { const o = who.selectedOptions[0]; other.hidden = !!who.value; if (o && o.dataset.scale) scale.value = o.dataset.scale; };
+  who.addEventListener('change', sync); sync();
+  openSheet('Add a critic’s score', [
+    el('div', { class: 'group' }, el('label', { class: 'row', for: 'scWho' }, el('span', { class: 'lab', text: 'Critic' }), who), el('label', { class: 'row', for: 'scOther' }, other),
+      el('label', { class: 'row', for: 'scScore' }, el('span', { class: 'lab', text: 'Score' }), el('span', { class: 'row-main' }), score, scale),
+      el('label', { class: 'row', for: 'scDate' }, el('span', { class: 'lab', text: 'Published' }), el('span', { class: 'row-main' }), date), el('div', { class: 'row' }, note)),
+    el('p', { class: 'foot', text: 'Add scores you’ve read yourself: in a review, on a shelf card or a neck tag. Claret never makes scores up.' }),
+    el('button', { class: 'btn', type: 'button', onclick: () => {
+      const name = who.value || other.value.trim(); const n = num(score.value); const sc = +scale.value;
+      if (!name) { toast('Add the critic’s name.'); return; }
+      if (n == null || n < 0 || n > sc) { toast('Enter a score out of ' + sc + '.'); return; }
+      const v = Store.nodes.get(vId);
+      claim(v, 'critic', { who: name, score: n, scale: sc, date: date.value || null, text: note.value.trim() || null }, 'user');
+      Store.saveNode(v); closeSheet(); renderWine(); toast('Score added');
+    } }, 'Add score')]);
+}
+function openProducer(pId) {
+  const p = Store.nodes.get(pId); if (!p) return;
+  const wines = [...Store.nodes.values()].filter(n => n.type === 'vintage' && !n.mergedInto).filter(v => { const w = Store.nodes.get(v.links.wine); return w && w.links.producer === pId; });
+  const place = p.links && p.links.place;
+  const rk = place && PLACE_REGION[place];
+  openSheet(p.name, [
+    rk && hasPhoto(rk) ? el('img', { class: 'sheet-photo', src: regionPhoto(rk), alt: REGIONS[rk].name }) : null,
+    el('div', { class: 'eyebrow', text: [best(p, 'subregion'), place ? placeLabel(place) : ''].filter(Boolean).join(' · ') }),
+    best(p, 'winemaker') ? el('p', { class: 'look-list', style: 'margin:0', text: 'Winemaker: ' + best(p, 'winemaker') }) : null,
+    el('div', { class: 'group' }, ...wines.map(v => wineRow(v.id)))]);
+}
+function wineRow(vId, extra) {
+  const d = describeVintage(vId); const v = d.vintage;
+  const cr = claimsOf(v, 'critic')[0]; const lp = labelURL(v);
+  const price = (claimsOf(v, 'list-price')[0] || { v: {} }).v.price || best(v, 'typical-price');
+  return el('button', { class: 'row has-glass', type: 'button', style: 'align-items:flex-start', onclick: () => { closeSheet(); openWine(vId); } },
+    lp ? el('img', { class: 'labelthumb', src: lp, alt: '' }) : el('div', { class: 'glass' + (d.family === 'sparkling' ? ' sparkle' : ''), style: '--c:var(--c-' + d.colour + ');margin-top:2px', 'aria-hidden': 'true' }),
+    el('span', { class: 'row-main' }, extra ? el('span', { class: 'rec-k', text: extra }) : null, el('span', { class: 'row-t', text: d.title }), el('span', { class: 'row-s', text: d.by }),
+      el('span', { class: 'row-s mono', text: [price ? gbp(price) : '', cr ? cr.v.score + '/' + (cr.v.scale || 100) + ' ' + cr.v.who.split(' ').slice(0, 2).join(' ') : ''].filter(Boolean).join(' · ') })), chev());
+}
+function openPlace(id) {
+  const rk = PLACE_REGION[id];
+  if (rk && REGIONS[rk]) return openRegion(rk);
+  const c = COUNTRY[id.split('/')[0]];
+  const wines = [...Store.nodes.values()].filter(n => n.type === 'vintage').filter(v => { const w = Store.nodes.get(v.links.wine); return w && w.links.place && w.links.place.startsWith(id); });
+  openSheet(id === (c && c.id) ? c.name : placeLabel(id), [
+    c && id === c.id ? el('div', { class: 'chips' }, ...c.regions.map(r => el('button', { class: 'chip', type: 'button', onclick: () => openPlace(r.id) }, r.name))) : null,
+    wines.length ? el('div', { class: 'group' }, ...wines.map(v => wineRow(v.id))) : el('p', { class: 'foot', text: 'Nothing from here in your catalogue yet.' })]);
+}
+function openGrape(gId) {
+  const info = GRAPE_INFO[gId]; const P = palate(); const mine = P.grape[gId];
+  const wines = [...Store.nodes.values()].filter(n => n.type === 'vintage').filter(v => { const w = Store.nodes.get(v.links.wine); return w && (w.links.grapes || []).includes(gId); });
+  openSheet(grapeName(gId), [
+    el('div', { class: 'eyebrow', text: (GRAPE[gId] ? (GRAPE[gId].colour === 'red' ? 'Red grape' : 'White grape') : 'Grape') + (mine ? ' · you rate it ' + mine.avg.toFixed(1) + '/5 over ' + mine.n : ' · not tried yet') }),
+    info ? el('p', { class: 'look-list', style: 'margin:0', text: info.taste }) : null,
+    info ? el('div', { class: 'group' }, recRow('Classic places', info.places.join(' · ')), recRow('Next step', info.next.map(grapeName).join(' · ')), recRow('Trade up', info.up), recRow('Trade down', info.down)) : null,
+    wines.length ? el('div', { class: 'group' }, ...wines.map(v => wineRow(v.id))) : null]);
+}
+/* Explore: the catalogue, places and grapes, searchable */
+function renderExplore() {
+  const q = fold($('#q').value);
+  const out = $('#exploreOut'); out.replaceChildren();
+  const vintages = [...Store.nodes.values()].filter(n => n.type === 'vintage' && !n.mergedInto);
+  const match = id => { if (!q) return true; const d = describeVintage(id); return fold(d.title + ' ' + d.by + ' ' + d.grapes.join(' ') + ' ' + (d.placeName || '')).includes(q); };
+  const saved = Store.events('saved').filter(e => !e.removed).map(e => e.node).filter(id => Store.nodes.has(id) && match(id));
+  if (saved.length) out.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Saved' })), el('div', { class: 'group' }, ...[...new Set(saved)].map(id => wineRow(id)))));
+  const cat = vintages.filter(v => match(v.id)).sort((a, b) => (b.catalogue ? 1 : 0) - (a.catalogue ? 1 : 0) || String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')));
+  out.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: q ? 'Wines' : 'The catalogue' })),
+    cat.length ? el('div', { class: 'group' }, ...cat.slice(0, 40).map(v => wineRow(v.id))) : el('p', { class: 'foot', text: 'No wines match. Scan a label or ask for bottles on Tonight to add more.' }),
+    !q ? el('p', { class: 'foot', text: 'Two Berry Bros. & Rudd bottles to start, plus every wine you scan, log or get suggested.' }) : null));
+  const regs = Object.keys(REGIONS).filter(k => hasPhoto(k) && (!q || fold(REGIONS[k].name + ' ' + REGIONS[k].country + ' ' + REGIONS[k].grapes).includes(q)));
+  if (regs.length) out.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Places' })), el('div', { class: 'tiles' }, ...regs.map(k => el('button', { class: 'place', type: 'button', onclick: () => openRegion(k), 'aria-label': REGIONS[k].name },
+    el('img', { src: regionPhoto(k), alt: '', loading: 'lazy' }), el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: REGIONS[k].country }), el('span', { class: 'place-t', text: REGIONS[k].name })))))));
+  const P = palate();
+  const gr = Object.keys(GRAPE_INFO).filter(g => !q || fold(grapeName(g)).includes(q));
+  if (gr.length) out.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Grapes' })), el('div', { class: 'chips' }, ...gr.map(g => el('button', { class: 'chip grape-chip', type: 'button', 'data-tried': String(!!P.grape[g]), onclick: () => openGrape(g) }, grapeName(g)))),
+    el('p', { class: 'foot', text: '● you’ve logged it. The rest is new ground.' })));
+}
 
 /* ============================================================
    Claude access
@@ -1089,11 +1726,11 @@ async function renderScan() {
   $('#stopBtn').hidden = !S.scan.busy;
 }
 /* Downsize photos before sending: faster, and well inside the image limits */
-function shrink(file) {
+function shrink(file, maxEdge = 2000) {
   return new Promise(res => {
     const img = new Image(); const url = URL.createObjectURL(file);
     img.onload = () => {
-      const maxEdge = 2000, k = Math.min(1, maxEdge / Math.max(img.naturalWidth, img.naturalHeight));
+      const k = Math.min(1, maxEdge / Math.max(img.naturalWidth, img.naturalHeight));
       const cv = document.createElement('canvas'); cv.width = Math.round(img.naturalWidth * k); cv.height = Math.round(img.naturalHeight * k);
       cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
       cv.toBlob(b => { URL.revokeObjectURL(url); res(b || file); }, 'image/jpeg', 0.85);
@@ -1112,7 +1749,7 @@ function scanPrompt(mode) {
   }[mode];
   return [
     'You are Claret, a UK wine companion with nothing to sell. ' + head,
-    'Only report what is printed or clearly shown. Never invent missing text; leave unknown fields out. Prices are GBP. For lists, UK glass measures are 125, 175 or 250 ml; give each price as its own entry.',
+    'Only report what is printed or clearly shown. Never invent missing text; leave unknown fields out. Include critic scores or medals only if they are printed on the label, a neck tag, a sticker or a shelf card in the photo. Prices are GBP. For lists, UK glass measures are 125, 175 or 250 ml; give each price as its own entry.',
     venue ? 'They are at: ' + venue : '',
     'Moment: ' + MOMENT_NAME[c.moment] + ', ' + c.season + (c.food ? ', eating ' + c.food : '') + (c.mood ? ', mood ' + c.mood : ''),
     '', 'Hard limits (judge fit against these; the app also checks them):', ...(limitsText().length ? limitsText().map(t => '- ' + t) : ['- none']),
@@ -1121,7 +1758,7 @@ function scanPrompt(mode) {
     mode === 'compare' ? 'Then set "pick" to the 0-based index of the one you would choose for them and "pickWhy".' : '',
     mode === 'list' ? 'Then set "picks": up to 3 entries {"index":n,"kind":"best-fit"|"best-value"|"new-to-you","why":""}. Judge value against typical UK retail: restaurant lists usually charge 2.5-3.5x retail.' : '',
     '', 'Reply with only JSON:',
-    '{"items":[{"producer":"","cuvee":"","vintage":"2019 or NV","country":"","region":"","grapes":[""],"colour":"one of ' + COLOURS.map(c => c.id).join('|') + '","family":"red|white|rose|orange|sparkling|sweet","abv":13.5,"prices":[{"amount":45,"per":"bottle|glass|carafe","size":750}],"raw":"text as printed","conf":0.9,"fit":"yes|maybe|no","why":"","expect":"","serve":""}],"venueHint":null' + (mode === 'compare' ? ',"pick":0,"pickWhy":""' : '') + (mode === 'list' ? ',"picks":[]' : '') + '}'
+    '{"items":[{"producer":"","cuvee":"","vintage":"2019 or NV","country":"","region":"","grapes":[""],"colour":"one of ' + COLOURS.map(c => c.id).join('|') + '","family":"red|white|rose|orange|sparkling|sweet","abv":13.5,"prices":[{"amount":45,"per":"bottle|glass|carafe","size":750}],"raw":"text as printed","conf":0.9,"critics":[{"who":"critic or publication exactly as printed","score":93,"scale":100}],"fit":"yes|maybe|no","why":"","expect":"","serve":""}],"venueHint":null' + (mode === 'compare' ? ',"pick":0,"pickWhy":""' : '') + (mode === 'list' ? ',"picks":[]' : '') + '}'
   ].filter(l => l !== '').join('\n');
 }
 async function readScan() {
@@ -1133,7 +1770,7 @@ async function readScan() {
   try {
     const images = await Promise.all(S.scan.files.map(f => shrink(f.blob)));
     const r = await sample.json(scanPrompt(mode), { images, modelTier: mode === 'list' ? 'default' : 'quick', signal: S.scan.ctl.signal, cache: false });
-    showScan(mode, r);
+    showScan(mode, r, images);
   } catch (e) {
     out.replaceChildren(e && e.code === 'cancelled' ? '' : el('p', { class: 'foot', text: sampleError(e) }));
   } finally { S.scan.busy = false; renderScan(); }
@@ -1142,11 +1779,23 @@ function cleanItem(it) {
   const w = { producer: str(it.producer), cuvee: str(it.cuvee), vintage: str(it.vintage), country: str(it.country), region: str(it.region), grapes: arr(it.grapes),
     colour: COLOUR[it.colour] ? it.colour : null, family: ['red', 'white', 'rose', 'orange', 'sparkling', 'sweet'].includes(it.family) ? it.family : null, abv: num(it.abv),
     prices: (Array.isArray(it.prices) ? it.prices : []).map(p => ({ amount: num(p && p.amount), per: ['bottle', 'glass', 'carafe'].includes(p && p.per) ? p.per : 'bottle', size: num(p && p.size) })).filter(p => p.amount && p.amount > 0 && p.amount < 100000),
-    raw: str(it.raw), conf: num(it.conf), fit: ['yes', 'maybe', 'no'].includes(it.fit) ? it.fit : null, why: str(it.why), expect: str(it.expect), serve: str(it.serve) };
+    raw: str(it.raw), conf: num(it.conf), critics: (Array.isArray(it.critics) ? it.critics : []).map(c => ({ who: str(c && c.who), score: num(c && c.score), scale: num(c && c.scale) || 100 })).filter(c => c.who && c.score != null && c.score <= c.scale).slice(0, 6), fit: ['yes', 'maybe', 'no'].includes(it.fit) ? it.fit : null, why: str(it.why), expect: str(it.expect), serve: str(it.serve) };
   if (!w.producer && !w.cuvee && !w.region) return null;
   return w;
 }
-function showScan(mode, r) {
+let assetsP = null;
+function getAssets() { if (!assetsP) assetsP = (async () => { try { return window.claude && window.claude.use ? await window.claude.use('assets') : null; } catch (e) { return null; } })(); return assetsP; }
+async function keepLabel(vId, blob) {
+  const assets = await getAssets(); if (!assets || !blob) return;
+  try {
+    const small = await shrink(blob, 900);
+    const a = await assets.upload(small);
+    const v = Store.nodes.get(vId); if (!v) return;
+    claim(v, 'label-photo', a.id, 'user'); Store.saveNode(v);
+  } catch (e) { /* the scan still counts without the photo */ }
+}
+const labelURL = v => { const id = best(v, 'label-photo'); return id ? '/_blob/' + id : null; };
+function showScan(mode, r, images) {
   const out = $('#scanOut'); out.replaceChildren();
   const items = (Array.isArray(r && r.items) ? r.items : []).map(cleanItem).filter(Boolean).slice(0, 120);
   if (!items.length) { out.append(el('div', { class: 'empty' }, el('h3', { text: 'Couldn’t read a wine' }), el('p', { text: 'Try a closer, sharper photo with the label filling the frame.' }))); return; }
@@ -1156,6 +1805,8 @@ function showScan(mode, r) {
   // record nodes, one scan event and a sighting per price
   const src = mode === 'list' ? 'list' : 'label';
   const ids = items.map(w => recordWine(w, src));
+  items.forEach((w, i) => { if (!w.critics.length) return; const v = Store.nodes.get(ids[i]); w.critics.forEach(c => claim(v, 'critic', { who: c.who, score: c.score, scale: c.scale, date: null, text: null }, 'label')); Store.saveNode(v); });
+  if (images && mode !== 'list') ids.forEach((id, i) => { const b = mode === 'label' ? (i === 0 ? images[0] : null) : images[i]; if (b && !best(Store.nodes.get(id), 'label-photo')) keepLabel(id, b); });
   const scan = Store.addEvent({ kind: 'scan', mode, venue: venueId, model: mode === 'list' ? 'default' : 'quick', found: ids, raw: { pick: num(r.pick), picks: r.picks || null } });
   items.forEach((w, i) => w.prices.forEach(p => Store.addEvent({ kind: 'sighting', node: ids[i], venue: venueId, channel: mode === 'list' ? 'restaurant' : 'shop', price: Math.round(p.amount * 100), cur: 'GBP', size: p.size || (p.per === 'glass' ? 175 : 750), per: p.per, scan: scan.id, conf: w.conf || 0.8 })));
 
@@ -1168,8 +1819,9 @@ function showScan(mode, r) {
       el('div', { class: 'glass' + (w.family === 'sparkling' ? ' sparkle' : ''), style: '--c:var(--c-' + (w.colour || 'claret') + ');margin-top:2px', 'aria-hidden': 'true' }),
       el('div', { class: 'row-main bottle' },
         label ? el('span', { class: 'tag-pick', text: label }) : null,
-        el('span', { class: 'row-t', text: [w.producer, w.cuvee].filter(Boolean).join(' ') + (w.vintage ? ' ' + w.vintage : '') }),
-        el('span', { class: 'row-s', text: [w.region, w.country, w.grapes.join(', '), w.abv ? w.abv + '%' : ''].filter(Boolean).join(' · ') }),
+        el('button', { class: 'row-t', type: 'button', style: 'text-align:left', onclick: () => openWine(ids[i]) }, describeVintage(ids[i]).title),
+        el('span', { class: 'row-s', text: [describeVintage(ids[i]).by, w.grapes.join(', '), w.abv ? w.abv + '%' : ''].filter(Boolean).join(' · ') }),
+        w.critics.length ? el('span', { class: 'row-s mono', style: 'color:var(--ink)', text: w.critics.map(c => c.score + '/' + c.scale + ' ' + c.who).join(' · ') }) : null,
         w.prices.length ? el('span', { class: 'row-s mono', style: 'color:var(--ink)', text: w.prices.map(p => '£' + p.amount.toFixed(2) + ' ' + (p.per === 'glass' ? (p.size || 175) + 'ml' : p.per === 'carafe' ? 'carafe' : 'bottle')).join(' · ') }) : null,
         seen ? el('span', { class: 'row-s mono', text: seen }) : null,
         verdict,
@@ -1211,8 +1863,9 @@ function priorSightings(nodeId, exceptScan) {
 function logRow(t) {
   const d = describeVintage(t.node);
   const colour = t.appearance || d.colour;
-  return el('button', { class: 'row has-glass', type: 'button', onclick: () => openTasting(t) },
-    el('div', { class: 'glass' + (d.family === 'sparkling' ? ' sparkle' : ''), style: '--c:var(--c-' + colour + ')', 'aria-hidden': 'true' }),
+  const lp = labelURL(d.vintage);
+  return el('button', { class: 'row has-glass', type: 'button', onclick: () => openWine(t.node) },
+    lp ? el('img', { class: 'labelthumb', src: lp, alt: '' }) : el('div', { class: 'glass' + (d.family === 'sparkling' ? ' sparkle' : ''), style: '--c:var(--c-' + colour + ')', 'aria-hidden': 'true' }),
     el('div', { class: 'row-main' }, el('span', { class: 'row-t', text: d.title || 'Unnamed wine' }), el('span', { class: 'row-s', text: [d.sub, t.notes ? '“' + t.notes.slice(0, 60) + (t.notes.length > 60 ? '…' : '') + '”' : ''].filter(Boolean).join(' · ') })),
     el('div', { class: 'row-end' }, stars(t.rating), el('div', { class: 'row-s mono', style: 'font-size:12px', text: new Date(t.at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) })));
 }
@@ -1325,7 +1978,9 @@ function openTasting(t) {
     v('Where', t.venue ? (Store.nodes.get(t.venue) || {}).name : ''), v('Paid', t.paid ? gbp(t.paid.price) : ''), v('Buy again', t.again ? 'Yes' : ''),
     v('Date', new Date(t.at).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' })));
   const others = Store.events('tasting').filter(x => x.id !== t.id && describeVintage(x.node).wine.id === d.wine.id);
+  const lp = labelURL(d.vintage);
   openSheet(d.title || 'Wine', [
+    lp ? el('img', { class: 'sheet-photo', src: lp, alt: 'Your photo of the label', style: 'height:300px;object-fit:contain;background:color-mix(in oklab,var(--ink) 6%,transparent)' }) : null,
     el('div', { class: 'pick-head' }, el('div', { class: 'glass lg', style: '--c:var(--c-' + (t.appearance || d.colour) + ')', 'aria-hidden': 'true' }), el('div', null, el('div', { class: 'eyebrow', text: d.sub }), el('h3', { style: 'font:600 22px/1.2 var(--serif);margin:4px 0 0', text: d.title }))),
     box,
     others.length ? el('p', { class: 'foot', text: 'You’ve had this wine ' + (others.length + 1) + ' times. Last time: ' + others[0].rating + '/5, ' + new Date(others[0].at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) + '.' }) : null
@@ -1411,20 +2066,21 @@ $('#exportBtn').addEventListener('click', async () => {
 /* ============================================================
    Shell: header, tabs, moment switch
    ============================================================ */
-const TAB_TITLE = { scan: 'Scan', log: 'Log', you: 'You' };
+const TAB_TITLE = { scan: 'Scan', log: 'Log', you: 'You', explore: 'Explore', wine: '' };
 function renderHeader() {
   const m = moment();
   const d = new Date();
-  $('#title').textContent = S.tab === 'tonight' ? MOMENT_NAME[m] : TAB_TITLE[S.tab];
+  $('.top').classList.toggle('hide', S.tab === 'tonight' || S.tab === 'wine');
+  $('#title').textContent = TAB_TITLE[S.tab] || '';
   $('#tabMoment').textContent = MOMENT_NAME[m] === 'This afternoon' ? 'Today' : MOMENT_NAME[m];
-  $('#momentBtn').disabled = S.tab !== 'tonight';
   const s = season(d);
   $('#sub').textContent = [d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' }), pad(d.getHours()) + ':' + pad(d.getMinutes()), s[0].toUpperCase() + s.slice(1), Store.profile.home.city].filter(Boolean).join(' · ');
 }
 function go(tab, focusSel) {
   S.tab = tab;
-  for (const v of ['tonight', 'scan', 'log', 'you']) $('#v-' + v).hidden = v !== tab;
-  $$('.tab').forEach(b => { if (b.dataset.tab === tab) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
+  for (const v of ['tonight', 'explore', 'wine', 'scan', 'log', 'you']) $('#v-' + v).hidden = v !== tab;
+  const lit = tab === 'wine' ? S.prevTab : tab;
+  $$('.tab').forEach(b => { if (b.dataset.tab === lit) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
   renderAll();
   window.scrollTo(0, 0);
   if (focusSel) setTimeout(() => { const n = $(focusSel); n && n.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 50);
@@ -1434,6 +2090,8 @@ function renderAll() {
   if (S.tab === 'tonight') renderTonight();
   if (S.tab === 'scan') renderScan();
   if (S.tab === 'log') renderLog();
+  if (S.tab === 'explore') renderExplore();
+  if (S.tab === 'wine') renderWine();
   if (S.tab === 'you') renderYou();
 }
 let toastT = null;
@@ -1449,22 +2107,24 @@ $('#momentBtn').addEventListener('click', () => {
       moment() === k ? el('span', { class: 'row-end', style: 'color:var(--accent)', text: '✓' }) : null))),
   el('p', { class: 'foot', text: 'Claret switches from Today to Tonight at ' + Store.profile.moments.tonightFrom + '. Change the times in You.' })]);
 });
-$('#weather').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S.weather = S.weather === b.dataset.w ? null : b.dataset.w; LS.set('claret.weather', S.weather); S.pick = null; $('#bottles').replaceChildren(); renderTonight(); });
-let foodT = null;
-$('#food').addEventListener('input', e => { S.food = e.target.value; clearTimeout(foodT); foodT = setTimeout(() => { S.pick = null; $('#bottles').replaceChildren(); renderTonight(); }, 400); });
-$('#withWho').addEventListener('input', e => { S.withWho = e.target.value; });
 $('#findBtn').addEventListener('click', findBottles);
 $('#addLog').addEventListener('click', () => openLog());
+$('#timerStop').addEventListener('click', () => Timer.stop());
 $('#scanMode').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S.scan.mode = b.dataset.m; $('#photo').toggleAttribute('multiple', b.dataset.m !== 'label'); $('#scanOut').replaceChildren(); renderScan(); });
 $('#photo').addEventListener('change', e => { for (const f of e.target.files) S.scan.files.push({ blob: f }); e.target.value = ''; $('#scanOut').replaceChildren(); renderScan(); });
 $('#readBtn').addEventListener('click', readScan);
+let qT = null; $('#q').addEventListener('input', () => { clearTimeout(qT); qT = setTimeout(renderExplore, 150); });
 $('#stopBtn').addEventListener('click', () => { S.scan.ctl && S.scan.ctl.abort(); });
 document.addEventListener('visibilitychange', () => { if (!document.hidden) renderHeader(); });
-setInterval(() => { if (!document.hidden) { const before = $('#title').textContent; renderHeader(); if (S.tab === 'tonight' && $('#title').textContent !== before) { S.pick = null; renderTonight(); } } }, 60000);
+let lastMoment = moment();
+setInterval(() => { if (!document.hidden) { renderHeader(); if (S.tab === 'tonight' && moment() !== lastMoment) { lastMoment = moment(); S.pick = null; renderTonight(); } } }, 60000);
 
 /* Boot: render from this device at once, then connect sync */
 Store.loadLocal();
+function seedCatalogue() { for (const n of CATALOGUE) if (!Store.nodes.has(n.id)) Store.nodes.set(n.id, structuredClone(n)); }
+seedCatalogue();
 for (const n of Store.nodes.values()) indexAlias(n.id, [n.name, ...(n.aliases || [])]);
 renderAll();
+Timer.tick();
 Store.connect();
 </script>

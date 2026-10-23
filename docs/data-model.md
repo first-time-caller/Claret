@@ -378,3 +378,31 @@ The app then: resolves each item to node ids (section 3), writes or updates node
 2. How much of the atlas ships in v1? Proposal: every UK-relevant wine country to region level, France/Italy/Spain/Germany/Austria/Portugal/NZ/Australia/South Africa/USA to appellation level for the main regions, ~150 grapes, ~30 styles, ~40 UK merchants.
 3. Critic scores: store them as claims at all, or leave them out deliberately to keep the app about your own palate?
 4. When the second app (UK prices and stock) exists, do its prices arrive as `sighting` events with `src: "merchant"`, or as a separate feed? Proposal: sightings, so one price history covers both.
+
+---
+
+## 13. Additions (draft 2, 23 Oct 2026)
+
+### Naming convention
+Every wine is shown as **"{vintage} {wine}"** with **"by {producer}, {region}"** beneath, the way merchants such as Berry Bros. & Rudd name a product: `2023 Berry Bros. & Rudd New Zealand Sauvignon Blanc` / `by Isabel Estate, Marlborough`. A wine node's `name` is the wine as it appears on the label without producer or vintage; own-label wines carry a `brand` claim.
+
+### New claims
+| Attribute | Value | Notes |
+|---|---|---|
+| `blend` | `[{ g: "grape:pinot-noir", p: 100 }]` | Percentages when known |
+| `maturity` | `"Ready – mature"` | The source's own wording, kept verbatim; the app also derives a status from `drink-window` |
+| `drink-window` | `[2024, 2027]` | Years, inclusive |
+| `critic` | `{ who, pub, score, scale, date, drink, text }` | One claim per review. `scale` is 20 or 100. `text` is a short paraphrase, never a copy. `src` is `critic` (from a published source), `label` (printed on a label, neck tag or shelf card in a scan) or `user`. Claude is never asked for critic scores |
+| `merchant-note` | `{ text, who, url }` | Paraphrased, credited, linked |
+| `list-price` | `{ price, size, merchant }` | A merchant's listed price (pence); distinct from `sighting` events, which are prices you saw |
+| `typical-price` | pence | Claude's estimate for a suggested bottle, always labelled as an estimate |
+| `food`, `sweetness`, `body`, `subregion`, `vineyards`, `soil`, `winemaker` | text | |
+| `suggested` | `true` | On wines that exist only because Claude suggested them |
+
+`src` gains `critic`. Precedence for facts: `user` > `label` > `critic` > `list` > `merchant` > `atlas` > `claude`. Critic scores are never merged: each review is shown on its own, and a critic's drinking window is drawn beside the merchant's.
+
+### Catalogue
+A small set of real bottles ships inside the page (`CATALOGUE`), like the atlas: nodes with merchant and critic claims and a source link. They join the graph in memory and are written to `db` only when you act on them (log, save, add a score).
+
+### New event
+`saved`: `{ node, removed? }`, your wishlist, shown in Explore.

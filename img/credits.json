@@ -1,0 +1,74 @@
+{
+ "beaujolais": {
+  "file": "img/beaujolais.jpg",
+  "title": "File:DCFC0025.JPG",
+  "artist": "Mundo",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:DCFC0025.JPG",
+  "query": "Beaujolais vineyards"
+ },
+ "burgundy": {
+  "file": "img/burgundy.jpg",
+  "title": "File:Clos de Vougeot Chateau de la Tour (2).JPG",
+  "artist": "© Pierre André",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Clos_de_Vougeot_Chateau_de_la_Tour_(2).JPG",
+  "query": "Clos de Vougeot vineyards"
+ },
+ "barossa": {
+  "file": "img/barossa.jpg",
+  "title": "File:View of Rifle Range Rd, Krondorf, Barossa Valley 20230207.jpg",
+  "artist": "User:DXR",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:View_of_Rifle_Range_Rd,_Krondorf,_Barossa_Valley_20230207.jpg",
+  "query": "Barossa Valley vineyard"
+ },
+ "bordeaux": {
+  "file": "img/bordeaux.jpg",
+  "title": "File:Chateau Margaux Wine Case End.jpg",
+  "artist": "Mikecase00",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Chateau_Margaux_Wine_Case_End.jpg",
+  "query": "Château Margaux"
+ },
+ "northern-rhone": {
+  "file": "img/northern-rhone.jpg",
+  "title": "File:Terrasse de Côte Rôtie en hiver.jpg",
+  "artist": "Karen",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Terrasse_de_C%C3%B4te_R%C3%B4tie_en_hiver.jpg",
+  "query": "Côte-Rôtie vineyards"
+ },
+ "rioja": {
+  "file": "img/rioja.jpg",
+  "title": "File:Viñedos en Rodezno, La Rioja.jpg",
+  "artist": "Nicolás Pérez Gimilio",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Vi%C3%B1edos_en_Rodezno,_La_Rioja.jpg",
+  "query": "Rioja vineyards"
+ },
+ "santorini": {
+  "file": "img/santorini.jpg",
+  "title": "File:Old vines at Domaine Sigalas in Santorini, Greece.jpg",
+  "artist": "Treephoto",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Old_vines_at_Domaine_Sigalas_in_Santorini,_Greece.jpg",
+  "query": "Santorini vineyard Assyrtiko"
+ },
+ "sancerre": {
+  "file": "img/sancerre.jpg",
+  "title": "File:Sancerre - View on vineyards - 2.jpg",
+  "artist": "Benjamin Smith",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Sancerre_-_View_on_vineyards_-_2.jpg",
+  "query": "Sancerre vineyards"
+ }
+}
