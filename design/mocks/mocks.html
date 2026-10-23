@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts-local.css">
+<style>
+:root{
+  --serif:"Newsreader",Georgia,serif;
+  --sans:"Inter","Inter Display",system-ui,sans-serif;
+  --mono:"DM Mono",ui-monospace,monospace;
+  --c-lemon:#ECE08A; --c-straw:#E5CF78; --c-garnet:#7B2B2B; --c-claret:#6E1526; --c-ruby:#8C1530; --c-tawny:#9A5A2E; --c-purple:#4A1238;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#E9E6E6;font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.board{padding:56px 64px 72px;display:flex;flex-direction:column;gap:36px;width:max-content;background:#ECE9E9}
+.board.darkboard{background:#141012;color:#EEE}
+.board-h{display:flex;flex-direction:column;gap:6px;max-width:1300px}
+.board-h .k{font:500 13px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#7A6D71}
+.board-h h1{margin:0;font:600 44px/1.1 var(--serif);letter-spacing:-.01em}
+.board-h p{margin:0;font-size:17px;line-height:1.5;color:#5E5357;max-width:900px}
+.darkboard .board-h p{color:#A99DA1}
+.row{display:flex;gap:56px;align-items:flex-start}
+.cap{font:500 13px var(--mono);letter-spacing:.06em;color:#7A6D71;margin-top:18px;text-align:center;width:393px}
+
+/* Phone */
+.phone{width:393px;height:852px;border-radius:56px;overflow:hidden;position:relative;background:var(--bg);color:var(--ink);
+  box-shadow:0 0 0 9px #0d0d0d,0 0 0 10.5px #3a3a3a,0 40px 80px -20px rgba(0,0,0,.45)}
+.light{--bg:#F3F1F1;--cell:#fff;--ink:#1D1517;--ink2:#6C6064;--line:#E2DCDD;--accent:#6E1526;--on:#fff;--glass:rgba(255,255,255,.55);--glass-b:rgba(255,255,255,.7)}
+.dark{--bg:#0E0A0B;--cell:#1B1517;--ink:#F3EDEE;--ink2:#A5989C;--line:#2E2629;--accent:#E27D8F;--on:#1B0B0F;--glass:rgba(40,30,33,.5);--glass-b:rgba(255,255,255,.14)}
+.sb{position:absolute;top:0;left:0;right:0;height:54px;display:flex;justify-content:space-between;align-items:center;padding:6px 34px 0 52px;z-index:50;font:600 17px var(--sans);color:var(--sbc,var(--ink))}
+.sb svg{height:13px}
+.sb .ic{display:flex;gap:6px;align-items:center}
+.island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:126px;height:37px;border-radius:20px;background:#000;z-index:60}
+.homebar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:139px;height:5px;border-radius:3px;background:var(--hb,var(--ink));opacity:.9;z-index:60}
+
+/* Liquid glass material */
+.lg{background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:inset 0 1px 0 var(--glass-b),inset 0 0 0 .5px var(--glass-b),0 8px 30px rgba(0,0,0,.12)}
+.tabbar{position:absolute;left:20px;right:20px;bottom:30px;display:flex;gap:10px;z-index:40}
+.tabpill{flex:1;height:62px;border-radius:31px;display:grid;grid-template-columns:repeat(3,1fr);align-items:center;padding:0 6px}
+.tabpill .t{display:flex;flex-direction:column;align-items:center;gap:2px;font:500 10px var(--sans);color:var(--ink2)}
+.tabpill .t svg{width:26px;height:26px}
+.tabpill .t.on{color:var(--accent)}
+.tabpill .t.on{background:color-mix(in oklab,var(--ink) 8%,transparent);border-radius:24px;padding:6px 0;margin:0 4px}
+.tabbtn{width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--accent)}
+.tabbtn svg{width:28px;height:28px}
+
+/* ---------- Direction A ---------- */
+.a-hero{position:absolute;inset:0 0 auto;height:520px}
+.a-top{position:absolute;top:66px;left:24px;right:24px;display:flex;flex-direction:column;gap:12px;z-index:5;color:var(--hc)}
+.a-eyebrow{font:500 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;opacity:.85}
+.a-title{font:500 44px/1.04 var(--serif);letter-spacing:-.02em;margin:0}
+.a-why{font:400 17px/1.4 var(--sans);opacity:.88;margin:0;max-width:320px}
+.a-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.a-chip{height:34px;border-radius:17px;padding:0 13px;display:inline-flex;align-items:center;gap:6px;font:500 14px var(--sans);color:var(--hc);
+  background:color-mix(in oklab,var(--hc) 14%,transparent);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:inset 0 0 0 .5px color-mix(in oklab,var(--hc) 30%,transparent)}
+.a-chip svg{width:15px;height:15px}
+.a-card{position:absolute;left:16px;right:16px;top:404px;border-radius:30px;padding:20px;display:flex;flex-direction:column;gap:14px;z-index:6}
+.a-card .eb{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)}
+.a-bottle{display:flex;gap:14px;align-items:center}
+.glass{--c:var(--c-claret);width:46px;height:46px;border-radius:50%;flex:none;background:radial-gradient(circle at 46% 44%,var(--c) 0 50%,color-mix(in oklab,var(--c) 62%,#fff) 78%,color-mix(in oklab,var(--c) 26%,#fff) 100%);box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.dark .glass{background:radial-gradient(circle at 46% 44%,var(--c) 0 50%,color-mix(in oklab,var(--c) 62%,#1B1517) 80%,color-mix(in oklab,var(--c) 30%,#1B1517) 100%)}
+.bt{font:500 19px/1.2 var(--serif)}
+.bs{font:400 14px/1.35 var(--sans);color:var(--ink2)}
+.price{font:500 17px var(--mono);margin-left:auto;align-self:flex-start}
+.serve{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;border-top:.5px solid var(--line);padding-top:14px}
+.serve .k{display:block;font:500 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
+.serve .v{font:400 14px/1.3 var(--mono)}
+.btnrow{display:flex;gap:10px}
+.btn{flex:1;height:50px;border-radius:25px;display:flex;align-items:center;justify-content:center;gap:8px;font:600 16px var(--sans);background:var(--accent);color:var(--on)}
+.btn.sec{background:color-mix(in oklab,var(--ink) 8%,transparent);color:var(--ink)}
+.btn svg{width:18px;height:18px}
+.a-more{position:absolute;left:16px;right:16px;top:744px;display:flex;gap:10px;z-index:6}
+
+/* Scan scene */
+.shelf{position:absolute;inset:0;background:
+  radial-gradient(ellipse 60% 40% at 50% 38%,rgba(255,220,170,.18),transparent 70%),
+  linear-gradient(180deg,#2a2220,#151011 60%,#0c0909)}
+.bottles{position:absolute;top:70px;left:0;right:0;height:560px;display:flex;justify-content:center;align-items:flex-end;gap:14px;filter:blur(1.2px)}
+.bo{width:86px;border-radius:30px 30px 8px 8px;background:linear-gradient(90deg,#1b0d10,#3a1a20 40%,#1b0d10);position:relative}
+.bo::before{content:"";position:absolute;top:-70px;left:50%;transform:translateX(-50%);width:28px;height:80px;border-radius:8px 8px 0 0;background:linear-gradient(90deg,#1b0d10,#3a1a20 50%,#1b0d10)}
+.bo.side{opacity:.55;transform:scale(.86);filter:blur(2.5px)}
+.label{position:absolute;left:50%;transform:translateX(-50%) rotate(-1.5deg);top:250px;width:176px;height:224px;border-radius:4px;
+  background:linear-gradient(180deg,#F4EEE2,#E9E0CF);box-shadow:0 10px 30px rgba(0,0,0,.5);color:#2A1A14;text-align:center;padding:22px 14px;display:flex;flex-direction:column;gap:8px;align-items:center;z-index:2}
+.label .l1{font:600 10px var(--serif);letter-spacing:.24em}
+.label .l2{font:500 21px/1.05 var(--serif);letter-spacing:.02em}
+.label .l3{width:40px;height:1px;background:#8a6a50}
+.label .l4{font:italic 400 12px var(--serif)}
+.label .l5{font:500 24px var(--serif);margin-top:auto}
+.label .l6{font:400 8px var(--sans);letter-spacing:.2em}
+.reticle{position:absolute;left:50%;top:232px;transform:translateX(-50%);width:230px;height:262px;z-index:3}
+.reticle i{position:absolute;width:34px;height:34px;border:3px solid rgba(255,255,255,.95);border-radius:4px}
+.reticle i:nth-child(1){top:0;left:0;border-right:0;border-bottom:0;border-top-left-radius:16px}
+.reticle i:nth-child(2){top:0;right:0;border-left:0;border-bottom:0;border-top-right-radius:16px}
+.reticle i:nth-child(3){bottom:0;left:0;border-right:0;border-top:0;border-bottom-left-radius:16px}
+.reticle i:nth-child(4){bottom:0;right:0;border-left:0;border-top:0;border-bottom-right-radius:16px}
+.sheet{position:absolute;left:8px;right:8px;bottom:8px;border-radius:44px;padding:10px 22px 34px;z-index:20;display:flex;flex-direction:column;gap:14px}
+.grab{width:36px;height:5px;border-radius:3px;background:color-mix(in oklab,var(--ink) 30%,transparent);margin:0 auto 4px}
+.pill{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 11px;border-radius:13px;font:600 13px var(--sans);align-self:flex-start}
+.pill.good{color:#7CC59C;background:rgba(124,197,156,.16)}
+.light .pill.good{color:#2F6B4A;background:rgba(47,107,74,.12)}
+.seen{font:400 13px var(--mono);color:var(--ink2)}
+
+/* ---------- Direction B ---------- */
+.b-wrap{position:absolute;top:54px;left:0;right:0;bottom:0;padding:10px 26px 0;display:flex;flex-direction:column;gap:18px}
+.b-mast{display:flex;justify-content:space-between;align-items:baseline;border-bottom:.5px solid var(--ink);padding-bottom:10px}
+.b-mast h2{margin:0;font:500 38px/1 var(--serif);letter-spacing:-.01em}
+.b-mast .d{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)}
+.b-ctx{font:400 14px var(--sans);color:var(--ink2);display:flex;justify-content:space-between}
+.b-ctx b{font-weight:500;color:var(--ink)}
+.b-ctx span:last-child{color:var(--accent);font-weight:500}
+.b-sec{font:500 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink2);display:flex;align-items:center;gap:10px}
+.b-sec::after{content:"";flex:1;height:.5px;background:var(--line)}
+.b-lead{display:flex;flex-direction:column;gap:8px}
+.b-entry{display:grid;grid-template-columns:18px 1fr auto;column-gap:12px;align-items:baseline}
+.dot{--c:var(--c-claret);width:12px;height:12px;border-radius:50%;background:radial-gradient(circle,var(--c) 0 55%,color-mix(in oklab,var(--c) 50%,var(--bg)) 100%);transform:translateY(-1px)}
+.b-name{font:500 25px/1.15 var(--serif)}
+.b-prod{font:italic 400 17px/1.3 var(--serif);color:var(--ink2);grid-column:2}
+.b-pr{font:400 17px var(--mono);font-variant-numeric:tabular-nums}
+.b-note{grid-column:2/4;font:400 15px/1.5 var(--sans);margin:4px 0 0}
+.b-serve{grid-column:2/4;font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-top:2px}
+.b-list{display:flex;flex-direction:column}
+.b-li{display:grid;grid-template-columns:18px 1fr auto;column-gap:12px;align-items:baseline;padding:11px 0;border-bottom:.5px solid var(--line)}
+.b-li .n{font:500 17px/1.25 var(--serif)}
+.b-li .p{font:italic 400 14px/1.3 var(--serif);color:var(--ink2);grid-column:2}
+.b-li .pr{font:400 15px var(--mono)}
+.b-tabs{position:absolute;left:20px;right:20px;bottom:30px;height:58px;border-radius:29px;display:flex;justify-content:space-around;align-items:center;z-index:40}
+.b-tabs span{font:500 13px var(--sans);color:var(--ink2);letter-spacing:.02em}
+.b-tabs span.on{color:var(--ink);font-weight:600}
+.b-margin{grid-column:2/4;font:italic 400 14px/1.4 var(--serif);color:var(--ink2);margin-top:3px}
+.b-k{font:500 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);grid-column:2/4}
+.cols{display:flex;gap:18px;justify-content:flex-end;font:500 10px var(--mono);letter-spacing:.1em;color:var(--ink2);text-transform:uppercase}
+.pp{display:flex;gap:18px;font:400 15px var(--mono);justify-content:flex-end}
+.pp span{min-width:44px;text-align:right}
+
+/* ---------- Direction C ---------- */
+.c-wrap{position:absolute;top:54px;left:0;right:0;bottom:0;padding:40px 30px 0;display:flex;flex-direction:column}
+.c-glass{--c:var(--c-garnet);width:168px;height:168px;border-radius:50%;background:radial-gradient(circle at 46% 44%,var(--c) 0 50%,color-mix(in oklab,var(--c) 60%,var(--bg)) 80%,color-mix(in oklab,var(--c) 18%,var(--bg)) 100%)}
+.c-when{font:500 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin-top:44px}
+.c-big{font:400 62px/.98 var(--serif);letter-spacing:-.03em;margin:12px 0 0}
+.c-line{font:400 20px/1.4 var(--serif);margin:22px 0 0;color:var(--ink)}
+.c-line+.c-line{margin-top:6px;color:var(--ink2)}
+.c-foot{margin-top:auto;margin-bottom:62px;display:flex;justify-content:space-between;align-items:center}
+.c-foot span{font:500 16px var(--sans);color:var(--ink2)}
+.c-foot .scan{width:64px;height:64px;border-radius:50%;background:var(--ink);color:var(--bg);display:flex;align-items:center;justify-content:center}
+.c-foot .scan svg{width:28px;height:28px}
+.c-hint{position:absolute;left:0;right:0;bottom:30px;text-align:center;font:500 12px var(--mono);letter-spacing:.1em;color:var(--ink2);text-transform:uppercase}
+.c-result{position:absolute;left:0;right:0;bottom:0;padding:26px 30px 60px;z-index:20;background:linear-gradient(180deg,transparent,rgba(0,0,0,.85) 30%);color:#fff;display:flex;flex-direction:column;gap:6px}
+.c-result .b{font:400 46px/1 var(--serif);letter-spacing:-.02em}
+.c-result .s{font:400 18px/1.4 var(--serif);opacity:.8}
+
+/* ---------- Beyond the app ---------- */
+.lock{position:absolute;inset:0;background:radial-gradient(ellipse 90% 60% at 50% 20%,#5a2030,#1c0c12 60%,#0b0608)}
+.lk-date{position:absolute;top:84px;left:0;right:0;text-align:center;color:rgba(255,255,255,.85);font:600 20px var(--sans)}
+.lk-time{position:absolute;top:104px;left:0;right:0;text-align:center;color:rgba(255,255,255,.92);font:600 104px/1 var(--sans);letter-spacing:-.02em}
+.lk-widget{position:absolute;top:232px;left:50%;transform:translateX(-50%);width:170px;color:rgba(255,255,255,.9);display:flex;flex-direction:column;gap:2px}
+.lk-widget .a{font:600 13px var(--sans);display:flex;gap:6px;align-items:center}
+.lk-widget .b{font:400 15px/1.25 var(--sans);opacity:.85}
+.la{position:absolute;left:12px;right:12px;bottom:120px;border-radius:26px;padding:16px 18px;color:#fff;background:rgba(30,18,22,.55);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.18);display:flex;flex-direction:column;gap:12px}
+.la-top{display:flex;gap:12px;align-items:center}
+.la-top .glass{width:40px;height:40px}
+.la-t{font:600 17px/1.2 var(--sans)}
+.la-s{font:400 13px var(--sans);opacity:.7}
+.la-time{margin-left:auto;font:600 30px var(--sans);font-variant-numeric:tabular-nums;color:#F2A7B4}
+.bar{height:6px;border-radius:3px;background:rgba(255,255,255,.16);overflow:hidden}
+.bar i{display:block;height:100%;width:47%;background:#E27D8F;border-radius:3px}
+.la-btns{display:flex;gap:8px}
+.la-btns span{flex:1;height:36px;border-radius:18px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font:600 14px var(--sans)}
+.lk-bottom{position:absolute;bottom:44px;left:46px;right:46px;display:flex;justify-content:space-between}
+.lk-bottom span{width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.14);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+.home{position:absolute;inset:0;background:linear-gradient(160deg,#E9DCDD,#C9B7BB)}
+.isl-c{position:absolute;top:11px;left:50%;transform:translateX(-50%);height:37px;width:206px;border-radius:20px;background:#000;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:0 12px;color:#F2A7B4;font:600 14px var(--sans);font-variant-numeric:tabular-nums}
+.isl-c .glass{width:22px;height:22px;box-shadow:none}
+.isl-x{position:absolute;top:70px;left:12px;right:12px;border-radius:44px;background:#000;color:#fff;padding:20px 22px;display:flex;flex-direction:column;gap:14px;z-index:60}
+.wg{position:absolute;border-radius:24px;background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);padding:16px;display:flex;flex-direction:column;gap:6px;color:#1D1517;box-shadow:0 6px 20px rgba(0,0,0,.08)}
+.wg .k{font:500 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#6C6064}
+.wg .t{font:500 20px/1.1 var(--serif)}
+.wg .s{font:400 13px/1.3 var(--sans);color:#6C6064}
+.appicons{position:absolute;left:28px;right:28px;top:560px;display:grid;grid-template-columns:repeat(4,1fr);gap:26px 0;justify-items:center}
+.appicons span{width:62px;height:62px;border-radius:16px;background:rgba(255,255,255,.5)}
+.appicons span.claret{background:radial-gradient(circle at 50% 50%,#6E1526 0 34%,#A3536A 56%,#F3E4E6 58% 100%);box-shadow:0 4px 12px rgba(110,21,38,.25)}
+.cc{position:absolute;inset:0;background:rgba(20,12,15,.6);-webkit-backdrop-filter:blur(40px);backdrop-filter:blur(40px)}
+.ccbg{position:absolute;inset:0;background:linear-gradient(160deg,#B9A3A8,#5A3A43)}
+.ccgrid{position:absolute;top:96px;left:24px;right:24px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.cct{height:76px;border-radius:38px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;color:#fff}
+.cct.w2{grid-column:span 2;border-radius:28px;justify-content:flex-start;gap:12px;padding:0 16px}
+.cct.big{grid-column:span 2;grid-row:span 2;height:166px;border-radius:30px;flex-direction:column;align-items:flex-start;justify-content:space-between;padding:16px}
+.cct svg{width:28px;height:28px}
+.cct .tt{font:600 15px/1.2 var(--sans)}
+.cct .ts{font:400 12px var(--sans);opacity:.7}
+.cct.claret{background:#6E1526}
+.ab{position:absolute;left:24px;right:24px;bottom:90px;border-radius:30px;background:rgba(255,255,255,.12);color:#fff;padding:18px 20px;display:flex;gap:14px;align-items:center}
+.ab .pillk{width:12px;height:52px;border-radius:6px;background:#E27D8F;flex:none}
+</style></head><body>
+
+<template id="sbt"><div class="sb"><span>19:40</span><span class="ic"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="currentColor"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx="1" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.5l2.4-2.9a3.6 3.6 0 0 0-4.8 0zM3.2 5.7l1.6 1.9a5 5 0 0 1 6.4 0l1.6-1.9a7.6 7.6 0 0 0-9.6 0zM.4 2.6L2 4.5a9.7 9.7 0 0 1 12 0l1.6-1.9a12.2 12.2 0 0 0-15.2 0z" fill="currentColor"/></svg><svg viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="9" rx="2" fill="currentColor"/><rect x="24.5" y="4.5" width="2" height="4" rx="1" fill="currentColor" opacity=".5"/></svg></span></div><div class="island"></div><div class="homebar"></div></template>
+
+<!-- ============ DIRECTION A ============ -->
+<section class="board" id="board-a">
+  <div class="board-h"><span class="k">Direction A</span><h1>The Glass</h1><p>Immersive and built on Liquid Glass. The screen takes the colour of tonight's wine, seen from above with a deep core and a pale rim, so the app looks different every evening. Context floats as glass chips; the tab bar is a floating pill with Scan as its own button.</p></div>
+  <div class="row">
+    <div><div class="phone light" style="--hc:#fff;--sbc:#fff">
+      <div class="a-hero" style="background:radial-gradient(ellipse 125% 82% at 50% 22%,#5A1A1F 0 30%,#7B2B2B 48%,#A0605A 64%,#D9B9B4 78%,#F3F1F1 92%)"></div>
+      <div class="a-top">
+        <span class="a-eyebrow">Tonight · Friday · Autumn</span>
+        <h2 class="a-title">A savoury,<br>medium-bodied red.</h2>
+        <p class="a-why">Warming on a cold, wet night, and right with the lamb.</p>
+        <div class="a-chips">
+          <span class="a-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 15h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.2 8.1 3.5 3.5 0 0 0 7 15z"/><path d="M9 18l-1 3M13 18l-1 3"/></svg>Cold &amp; wet</span>
+          <span class="a-chip">Lamb shoulder</span><span class="a-chip">Just me</span>
+        </div>
+      </div>
+      <div class="a-card lg">
+        <span class="eb">Look for</span>
+        <div class="a-bottle"><div class="glass" style="--c:var(--c-garnet)"></div><div><div class="bt">Crozes-Hermitage 2022</div><div class="bs">Domaine Les Bruyères · Majestic</div></div><span class="price">£21</span></div>
+        <div class="serve"><div><span class="k">Serve</span><span class="v">16°C</span></div><div><span class="k">Glass</span><span class="v">Large</span></div><div><span class="k">Prep</span><span class="v">15 min cool</span></div></div>
+        <div class="btnrow"><span class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg>Fridge timer</span><span class="btn sec">Sideways</span></div>
+      </div>
+      <div class="tabbar"><div class="tabpill lg"><span class="t on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10l-.4 5.2a4.6 4.6 0 0 1-9.2 0z"/><path d="M12 13v7M8.5 21h7"/></svg>Tonight</span><span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3"/></svg>Log</span><span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></svg>You</span></div><div class="tabbtn lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M10 8h4v8h-4z"/></svg></div></div>
+    </div><div class="cap">Tonight · 19:40 · garnet</div></div>
+
+    <div><div class="phone light" style="--hc:#2A2410;--sbc:#2A2410">
+      <div class="a-hero" style="background:radial-gradient(ellipse 125% 82% at 50% 22%,#E6D667 0 30%,#ECE08A 48%,#F1EAB2 64%,#F3EFD8 78%,#F3F1F1 92%)"></div>
+      <div class="a-top">
+        <span class="a-eyebrow">This afternoon · Saturday · Warm</span>
+        <h2 class="a-title">Something crisp<br>and saline.</h2>
+        <p class="a-why">Bright and cold for a warm lunch, and made for the crab.</p>
+        <div class="a-chips"><span class="a-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2"/></svg>Warm</span><span class="a-chip">Crab</span><span class="a-chip">With Sam</span></div>
+      </div>
+      <div class="a-card lg">
+        <span class="eb">Look for</span>
+        <div class="a-bottle"><div class="glass" style="--c:var(--c-lemon)"></div><div><div class="bt">Muscadet Sèvre et Maine sur lie 2023</div><div class="bs">Domaine de la Pépière · Waitrose</div></div><span class="price">£14</span></div>
+        <div class="serve"><div><span class="k">Serve</span><span class="v">9°C</span></div><div><span class="k">Glass</span><span class="v">White</span></div><div><span class="k">Prep</span><span class="v">2 hr fridge</span></div></div>
+        <div class="btnrow"><span class="btn">Drinking this</span><span class="btn sec">Sideways</span></div>
+      </div>
+      <div class="tabbar"><div class="tabpill lg"><span class="t on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10l-.4 5.2a4.6 4.6 0 0 1-9.2 0z"/><path d="M12 13v7M8.5 21h7"/></svg>Today</span><span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3"/></svg>Log</span><span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></svg>You</span></div><div class="tabbtn lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M10 8h4v8h-4z"/></svg></div></div>
+    </div><div class="cap">This afternoon · Saturday · lemon</div></div>
+
+    <div><div class="phone dark" style="--hc:#FBE9DA;--sbc:#FBE9DA">
+      <div class="a-hero" style="background:radial-gradient(ellipse 125% 82% at 50% 22%,#6E3A18 0 30%,#9A5A2E 48%,#7A4A2C 62%,#3A2418 76%,#0E0A0B 92%)"></div>
+      <div class="a-top">
+        <span class="a-eyebrow">Nightcap · 22:40</span>
+        <h2 class="a-title">A small glass<br>of tawny.</h2>
+        <p class="a-why">Nutty and warm, and the last of the Stilton wants it.</p>
+        <div class="a-chips"><span class="a-chip">Stilton</span><span class="a-chip">Just me</span><span class="a-chip">+</span></div>
+      </div>
+      <div class="a-card lg">
+        <span class="eb">From your shelf</span>
+        <div class="a-bottle"><div class="glass" style="--c:var(--c-tawny)"></div><div><div class="bt">10 Year Old Tawny Port</div><div class="bs">Taylor's · opened 9 days ago</div></div><span class="price" style="font-size:14px;color:var(--ink2)">Drink<br>soon</span></div>
+        <div class="serve"><div><span class="k">Serve</span><span class="v">14°C</span></div><div><span class="k">Glass</span><span class="v">Small</span></div><div><span class="k">Pour</span><span class="v">75 ml</span></div></div>
+        <div class="btnrow"><span class="btn">Pouring this</span><span class="btn sec">Sideways</span></div>
+      </div>
+      <div class="tabbar"><div class="tabpill lg"><span class="t on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10l-.4 5.2a4.6 4.6 0 0 1-9.2 0z"/><path d="M12 13v7M8.5 21h7"/></svg>Nightcap</span><span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3"/></svg>Log</span><span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></svg>You</span></div><div class="tabbtn lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M10 8h4v8h-4z"/></svg></div></div>
+    </div><div class="cap">Nightcap · dark · tawny</div></div>
+
+    <div><div class="phone dark" style="--sbc:#fff">
+      <div class="shelf"></div>
+      <div class="bottles"><div class="bo side" style="height:380px"></div><div class="bo" style="height:420px;width:96px"></div><div class="bo side" style="height:370px"></div></div>
+      <div class="label"><span class="l1">DOMAINE</span><span class="l2">LES<br>BRUYÈRES</span><span class="l3"></span><span class="l4">Crozes-Hermitage</span><span class="l6">APPELLATION CROZES-HERMITAGE CONTRÔLÉE</span><span class="l5">2022</span></div>
+      <div class="reticle"><i></i><i></i><i></i><i></i></div>
+      <div class="sheet lg">
+        <div class="grab"></div>
+        <div class="a-bottle"><div class="glass" style="--c:var(--c-garnet)"></div><div><div class="bt">Les Bruyères Crozes-Hermitage 2022</div><div class="bs">Northern Rhône · Syrah · 13%</div></div></div>
+        <span class="pill good">● Good fit</span>
+        <p class="a-why" style="color:var(--ink);opacity:1;margin:0;font-size:16px">Olive, violet and smoked meat. Close to the Jamet you rated 4.5, at a quarter of the price.</p>
+        <div style="display:flex;flex-direction:column;gap:2px"><span class="price" style="margin:0;font-size:22px">£21.00 here</span><span class="seen">Lowest seen £19.50 · The Wine Society · Sep</span></div>
+        <div class="btnrow"><span class="btn">Drinking this</span><span class="btn sec">Compare</span></div>
+      </div>
+    </div><div class="cap">Scan in the aisle · result sheet</div></div>
+  </div>
+</section>
+
+<!-- ============ DIRECTION B ============ -->
+<section class="board" id="board-b">
+  <div class="board-h"><span class="k">Direction B</span><h1>The List</h1><p>Editorial, in the spirit of a merchant's printed list. Type does the work: New York for names, italics for producers, a price column, fine rules. Colour is kept to a small glass beside each wine. Context sits on one line you tap to change.</p></div>
+  <div class="row">
+    <div><div class="phone light">
+      <div class="b-wrap">
+        <div class="b-mast"><h2>Tonight</h2><span class="d">Fri 23 Oct</span></div>
+        <div class="b-ctx"><span><b>Cold &amp; wet</b> · lamb shoulder · just me</span><span>Edit</span></div>
+        <div class="b-sec">We'd pour</div>
+        <div class="b-lead"><div class="b-entry"><span class="dot" style="--c:var(--c-garnet)"></span><span class="b-name">Crozes-Hermitage 2022</span><span class="b-pr">£21</span><span class="b-prod">Domaine Les Bruyères · Majestic</span><p class="b-note">A savoury, medium-bodied Syrah: olive, violet, smoked meat. Warming tonight, and right with the lamb.</p><span class="b-serve">16°C · large glass · 15 min cool</span></div></div>
+        <div class="b-sec">Sideways</div>
+        <div class="b-list">
+          <div class="b-li"><span class="dot" style="--c:var(--c-ruby)"></span><span class="n">Chinon 'Cuvée Terroir' 2022</span><span class="pr">£18</span><span class="p">Charles Joguet · Cabernet Franc</span></div>
+          <div class="b-li"><span class="dot" style="--c:var(--c-garnet)"></span><span class="n">Etna Rosso 2022</span><span class="pr">£24</span><span class="p">Tenuta delle Terre Nere · Nerello Mascalese</span></div>
+          <div class="b-li"><span class="dot" style="--c:var(--c-ruby)"></span><span class="n">Bierzo Mencía 2021</span><span class="pr">£17</span><span class="p">New to you · Castilla y León</span></div>
+        </div>
+      </div>
+      <div class="b-tabs lg"><span class="on">Tonight</span><span>Scan</span><span>Log</span><span>You</span></div>
+    </div><div class="cap">Tonight · light</div></div>
+
+    <div><div class="phone dark">
+      <div class="b-wrap">
+        <div class="b-mast" style="border-color:var(--ink2)"><h2>Nightcap</h2><span class="d">22:40</span></div>
+        <div class="b-ctx"><span><b>Stilton</b> · just me</span><span>Edit</span></div>
+        <div class="b-sec">We'd pour</div>
+        <div class="b-lead"><div class="b-entry"><span class="dot" style="--c:var(--c-tawny)"></span><span class="b-name">10 Year Old Tawny</span><span class="b-pr">Shelf</span><span class="b-prod">Taylor's · opened 9 days ago</span><p class="b-note">Walnut, caramel and orange peel. Drink it this week, while it's at its best.</p><span class="b-serve">14°C · small glass · 75 ml</span></div></div>
+        <div class="b-sec">Sideways</div>
+        <div class="b-list">
+          <div class="b-li"><span class="dot" style="--c:var(--c-tawny)"></span><span class="n">Amontillado 'Napoleón'</span><span class="pr">£12</span><span class="p">Hidalgo · Jerez · half bottle</span></div>
+          <div class="b-li"><span class="dot" style="--c:var(--c-tawny)"></span><span class="n">Rutherglen Muscat</span><span class="pr">£15</span><span class="p">Campbells · New to you</span></div>
+        </div>
+      </div>
+      <div class="b-tabs lg"><span class="on">Nightcap</span><span>Scan</span><span>Log</span><span>You</span></div>
+    </div><div class="cap">Nightcap · dark</div></div>
+
+    <div><div class="phone light">
+      <div class="b-wrap">
+        <div class="b-mast"><h2>Wine list</h2><span class="d">3 pages · 64 wines</span></div>
+        <div class="b-ctx"><span><b>Brasserie, Westbourne Grove</b> · steak</span><span>Retake</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center"><div class="b-sec" style="flex:1">Our picks</div><div class="cols" style="margin-left:12px"><span>175ml</span><span>Btl</span></div></div>
+        <div class="b-list" style="gap:4px">
+          <div class="b-li" style="grid-template-columns:18px 1fr auto"><span class="dot" style="--c:var(--c-ruby)"></span><span class="b-k">Best fit</span><span></span><span></span><span class="n" style="grid-column:2">Ultreia Saint Jacques 2021</span><span class="pp"><span>—</span><span>£58</span></span><span class="p">Raúl Pérez · Bierzo Mencía</span><span></span><span class="b-margin">Peppery and fresh; holds its own with the steak without the weight you said you dislike.</span></div>
+          <div class="b-li"><span class="dot" style="--c:var(--c-lemon)"></span><span class="b-k">Best value</span><span></span><span></span><span class="n" style="grid-column:2">Muscadet 'Clos des Briords' 2022</span><span class="pp"><span>£9.50</span><span>£39</span></span><span class="p">Domaine de la Pépière</span><span></span><span class="b-margin">About 2.4× shop price, the lowest markup here. A glass to start.</span></div>
+          <div class="b-li"><span class="dot" style="--c:var(--c-garnet)"></span><span class="b-k">New to you</span><span></span><span></span><span class="n" style="grid-column:2">Etna Rosso 2022</span><span class="pp"><span>£12</span><span>£52</span></span><span class="p">Tenuta delle Terre Nere</span><span></span><span class="b-margin">Volcanic and red-fruited. Your first Nerello Mascalese.</span></div>
+        </div>
+        <div class="b-ctx" style="border-top:.5px solid var(--line);padding-top:12px"><span><b>Whole list</b> · 64 wines</span><span>Show</span></div>
+      </div>
+      <div class="b-tabs lg"><span>Tonight</span><span class="on">Scan</span><span>Log</span><span>You</span></div>
+    </div><div class="cap">Restaurant list · picks</div></div>
+  </div>
+</section>
+
+<!-- ============ DIRECTION C ============ -->
+<section class="board" id="board-c">
+  <div class="board-h"><span class="k">Direction C</span><h1>Stripped back</h1><p>One answer, nothing else. A single glass, a sentence, where to buy it and how to serve it. Swipe for another; the scan button is the only control. No tab bar: the log and settings sit one swipe down.</p></div>
+  <div class="row">
+    <div><div class="phone light">
+      <div class="c-wrap">
+        <div class="c-glass"></div>
+        <span class="c-when">Tonight · cold &amp; wet · lamb</span>
+        <h2 class="c-big">Savoury<br>red.</h2>
+        <p class="c-line">Crozes-Hermitage, £21 at Majestic.</p>
+        <p class="c-line">16°. Fifteen minutes in the fridge.</p>
+        <div class="c-foot"><span>Swipe for another</span><span class="scan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/></svg></span></div>
+      </div>
+    </div><div class="cap">Tonight · light</div></div>
+
+    <div><div class="phone dark">
+      <div class="c-wrap">
+        <div class="c-glass" style="--c:var(--c-tawny)"></div>
+        <span class="c-when">Nightcap · Stilton</span>
+        <h2 class="c-big">A small<br>tawny.</h2>
+        <p class="c-line">The Taylor's 10 Year, open 9 days.</p>
+        <p class="c-line">14°. A small glass, 75 ml.</p>
+        <div class="c-foot"><span>Swipe for another</span><span class="scan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/></svg></span></div>
+      </div>
+    </div><div class="cap">Nightcap · dark</div></div>
+
+    <div><div class="phone dark" style="--sbc:#fff">
+      <div class="shelf"></div>
+      <div class="bottles"><div class="bo side" style="height:380px"></div><div class="bo" style="height:420px;width:96px"></div><div class="bo side" style="height:370px"></div></div>
+      <div class="label"><span class="l1">DOMAINE</span><span class="l2">LES<br>BRUYÈRES</span><span class="l3"></span><span class="l4">Crozes-Hermitage</span><span class="l6">APPELLATION CROZES-HERMITAGE CONTRÔLÉE</span><span class="l5">2022</span></div>
+      <div class="reticle"><i></i><i></i><i></i><i></i></div>
+      <div class="c-result"><span class="c-when" style="color:#7CC59C;margin:0">Good fit</span><span class="b">Yes. £21.</span><span class="s">Close to the Jamet you loved, at a quarter of the price.</span></div>
+    </div><div class="cap">Scan · one line</div></div>
+  </div>
+</section>
+
+<!-- ============ BEYOND THE APP ============ -->
+<section class="board darkboard" id="board-x">
+  <div class="board-h"><span class="k" style="color:#A99DA1">For the native app</span><h1>Beyond the app</h1><p>A fridge timer as a Live Activity on the Lock Screen and in the Dynamic Island, Tonight as a widget, and Scan one press away from Control Centre or the Action Button. These need the native iPhone app; they shape how short every answer must be.</p></div>
+  <div class="row">
+    <div><div class="phone dark" style="--sbc:#fff;--hb:#fff">
+      <div class="lock"></div>
+      <div class="lk-date">Friday 23 October</div>
+      <div class="lk-time">19:52</div>
+      <div class="lk-widget"><span class="a"><span class="glass" style="--c:var(--c-garnet);width:12px;height:12px;box-shadow:none"></span>Tonight</span><span class="b">Savoury red · 16°C</span></div>
+      <div class="la">
+        <div class="la-top"><div class="glass" style="--c:var(--c-ruby)"></div><div><div class="la-t">Take the Chinon out</div><div class="la-s">Then serve at 16°C, large glass</div></div><span class="la-time">8:00</span></div>
+        <div class="bar"><i></i></div>
+        <div class="la-btns"><span>+5 min</span><span>It's out</span></div>
+      </div>
+      <div class="lk-bottom"><span></span><span></span></div>
+    </div><div class="cap" style="color:#A99DA1">Lock Screen · Live Activity + widget</div></div>
+
+    <div><div class="phone light" style="--sbc:#1D1517">
+      <div class="home"></div>
+      <div class="isl-c" style="width:126px;opacity:0"></div>
+      <div class="isl-x">
+        <div class="la-top"><div class="glass" style="--c:var(--c-ruby)"></div><div><div class="la-t">Chinon is chilling</div><div class="la-s">Charles Joguet 'Cuvée Terroir' 2022</div></div><span class="la-time">8:00</span></div>
+        <div class="bar"><i></i></div>
+      </div>
+      <div class="wg" style="top:250px;left:22px;right:22px;height:160px"><span class="k">Claret · Tonight</span><span class="t">A savoury, medium-bodied red</span><span class="s">Look for Crozes-Hermitage, Chinon or Etna Rosso</span><span class="s" style="margin-top:auto;font-family:var(--mono)">16°C · large glass</span></div>
+      <div class="wg" style="top:426px;left:22px;width:166px;height:118px"><span class="k">Drink next</span><span class="t" style="font-size:17px">Jamet Côte-Rôtie 2019</span><span class="s">Window opens this winter</span></div>
+      <div class="wg" style="top:426px;right:22px;width:166px;height:118px"><span class="k">Last logged</span><span class="t" style="font-size:17px">Pépière Muscadet</span><span class="s">●●●●○ · with Sam</span></div>
+      <div class="appicons" style="top:574px"><span></span><span class="claret"></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    </div><div class="cap">Dynamic Island expanded · Home widgets</div></div>
+
+    <div><div class="phone dark" style="--sbc:#fff;--hb:#fff">
+      <div class="ccbg"></div><div class="cc"></div>
+      <div class="ccgrid">
+        <div class="cct big claret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M10 8h4v8h-4z"/></svg><div><div class="tt">Scan a label</div><div class="ts">Claret</div></div></div>
+        <div class="cct"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M3 12h18"/></svg></div>
+        <div class="cct"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/></svg></div>
+        <div class="cct"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a9 9 0 1 0 9 9"/></svg></div>
+        <div class="cct" style="background:#6E1526"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg></div>
+        <div class="cct w2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10l-.4 5.2a4.6 4.6 0 0 1-9.2 0z"/><path d="M12 13v7M8.5 21h7"/></svg><div><div class="tt">Tonight</div><div class="ts">Savoury red</div></div></div>
+        <div class="cct"></div><div class="cct"></div>
+      </div>
+      <div class="ab"><span class="pillk"></span><div><div class="tt" style="font:600 16px var(--sans)">Action Button</div><div class="ts" style="font:400 14px var(--sans);opacity:.75;margin-top:2px">Press and hold to scan with Claret</div></div></div>
+    </div><div class="cap" style="color:#A99DA1">Control Centre · Action Button</div></div>
+  </div>
+</section>
+
+<script>
+document.querySelectorAll('.phone').forEach(p => p.prepend(document.getElementById('sbt').content.cloneNode(true)));
+document.querySelector('#board-x .phone .sb span').textContent='';
+</script>
+</body></html>
