@@ -1,0 +1,26 @@
+[
+ {
+  "id": "mosel",
+  "name": "Mosel",
+  "country": "Germany",
+  "grapes": "Riesling, Elbling",
+  "blurb": "Slate slopes so steep they are worked by hand. Riesling, often light and off-dry.",
+  "lettering": {
+   "t": "Mosel",
+   "f": "\"UnifrakturMaguntia\",serif",
+   "size": 78,
+   "card": 46,
+   "tone": "#29313C"
+  },
+  "places": [
+   "place:de/mosel"
+  ],
+  "keywords": "germany riesling",
+  "map": {
+   "window": "DE",
+   "admin1": [
+    "Rheinland-Pfalz"
+   ]
+  }
+ }
+]

@@ -1,0 +1,28 @@
+[
+ {
+  "id": "mendoza",
+  "name": "Mendoza",
+  "country": "Argentina",
+  "grapes": "Malbec, Cabernet Sauvignon, Bonarda",
+  "blurb": "Vineyards at the foot of the Andes, some above 1,500 metres. Argentina’s home of Malbec.",
+  "lettering": {
+   "t": "MENDOZA",
+   "f": "Cinzel,serif",
+   "w": 500,
+   "size": 52,
+   "card": 30,
+   "tone": "#4A2A22",
+   "ls": ".14em"
+  },
+  "places": [
+   "place:ar/mendoza"
+  ],
+  "photo": "catena-zapata",
+  "map": {
+   "window": "AR",
+   "admin1": [
+    "Mendoza"
+   ]
+  }
+ }
+]

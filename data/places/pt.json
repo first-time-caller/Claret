@@ -1,0 +1,30 @@
+[
+ {
+  "id": "douro",
+  "name": "Douro Valley",
+  "country": "Portugal",
+  "grapes": "Touriga Nacional, Touriga Franca, Tinta Roriz",
+  "blurb": "Schist terraces cut by hand. The home of Port, and now of superb dry reds.",
+  "lettering": {
+   "t": "DOURO",
+   "f": "Cinzel,serif",
+   "w": 500,
+   "size": 56,
+   "card": 34,
+   "tone": "#3A2416",
+   "ls": ".16em"
+  },
+  "places": [
+   "place:pt/douro"
+  ],
+  "map": {
+   "window": "PT",
+   "admin1": [
+    "Vila Real",
+    "Viseu",
+    "Bragança",
+    "Guarda"
+   ]
+  }
+ }
+]

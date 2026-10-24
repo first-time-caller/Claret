@@ -1,0 +1,668 @@
+[
+ {
+  "id": "northern-rhone",
+  "name": "Côte-Rôtie & Hermitage",
+  "country": "France",
+  "grapes": "Syrah, Viognier, Marsanne, Roussanne",
+  "blurb": "Steep granite terraces above the Rhône, where Syrah is at its most perfumed and savoury.",
+  "lettering": {
+   "t": "Côte-Rôtie",
+   "f": "\"Pinyon Script\",cursive",
+   "size": 66,
+   "card": 40,
+   "tone": "#3E1A1E"
+  },
+  "places": [
+   "place:fr/cornas",
+   "place:fr/cote-rotie",
+   "place:fr/crozes-hermitage",
+   "place:fr/hermitage",
+   "place:fr/rhone",
+   "place:fr/saint-joseph"
+  ],
+  "keywords": "rhone cote rotie hermitage",
+  "map": {
+   "window": "FR",
+   "admin1": [
+    "Rhône",
+    "Drôme",
+    "Ardèche"
+   ]
+  }
+ },
+ {
+  "id": "beaujolais",
+  "name": "Beaujolais",
+  "country": "France",
+  "grapes": "Gamay, Chardonnay",
+  "blurb": "Granite hills north of Lyon. Gamay, and ten crus such as Morgon, Fleurie and Moulin-à-Vent.",
+  "lettering": {
+   "t": "Beaujolais",
+   "f": "\"Great Vibes\",cursive",
+   "size": 70,
+   "card": 42,
+   "tone": "#4A1428"
+  },
+  "places": [
+   "place:fr/beaujolais"
+  ],
+  "map": {
+   "window": "FR",
+   "admin1": [
+    "Rhône"
+   ]
+  }
+ },
+ {
+  "id": "burgundy",
+  "name": "Clos de Vougeot",
+  "country": "Burgundy, France",
+  "grapes": "Pinot Noir, Chardonnay",
+  "blurb": "Planted by Cistercian monks in the 12th century, in the heart of Pinot Noir country.",
+  "lettering": {
+   "t": "Clos de Vougeot",
+   "f": "\"IM Fell English SC\",serif",
+   "size": 40,
+   "card": 26,
+   "tone": "#332720",
+   "ls": ".02em"
+  },
+  "places": [
+   "place:fr/burgundy",
+   "place:fr/chablis"
+  ],
+  "keywords": "bourgogne chablis cote d or",
+  "map": {
+   "window": "FR",
+   "admin1": [
+    "Côte-d'Or",
+    "Saône-et-Loire",
+    "Yonne",
+    "Nièvre"
+   ]
+  }
+ },
+ {
+  "id": "bordeaux",
+  "name": "Bordeaux",
+  "level": "Region",
+  "country": "France",
+  "grapes": "Cabernet Sauvignon, Merlot, Cabernet Franc, Petit Verdot",
+  "blurb": "Left-bank gravel and Cabernet-led blends, right-bank Merlot, and sweet Sauternes. The 1855 classification still shapes how the wines are named and priced.",
+  "lettering": {
+   "t": "BORDEAUX",
+   "f": "Cinzel,serif",
+   "w": 500,
+   "size": 46,
+   "card": 28,
+   "tone": "#2A0E16",
+   "ls": ".14em"
+  },
+  "places": [
+   "place:fr/bordeaux"
+  ],
+  "keywords": "claret medoc",
+  "map": {
+   "window": "FR",
+   "admin1": [
+    "Gironde"
+   ]
+  }
+ },
+ {
+  "id": "sancerre",
+  "name": "Sancerre",
+  "country": "Loire, France",
+  "grapes": "Sauvignon Blanc, Pinot Noir",
+  "blurb": "A hilltop town above the Loire. Sauvignon Blanc on flint and limestone.",
+  "lettering": {
+   "t": "Sancerre",
+   "f": "Italianno,cursive",
+   "size": 84,
+   "card": 50,
+   "tone": "#36422F"
+  },
+  "places": [
+   "place:fr/pouilly-fume",
+   "place:fr/sancerre"
+  ],
+  "map": {
+   "window": "FR",
+   "admin1": [
+    "Cher"
+   ]
+  }
+ },
+ {
+  "id": "cote-de-beaune",
+  "name": "Meursault",
+  "country": "Burgundy, France",
+  "grapes": "Chardonnay, Pinot Noir",
+  "blurb": "Chardonnay country: Meursault, Puligny-Montrachet and Chassagne-Montrachet.",
+  "lettering": {
+   "t": "Meursault",
+   "f": "\"Pinyon Script\",cursive",
+   "size": 66,
+   "card": 40,
+   "tone": "#4A3E22"
+  },
+  "places": [
+   "place:fr/beaune",
+   "place:fr/chassagne-montrachet",
+   "place:fr/meursault",
+   "place:fr/pommard",
+   "place:fr/puligny-montrachet"
+  ],
+  "keywords": "burgundy bourgogne montrachet puligny chassagne",
+  "map": {
+   "window": "FR",
+   "admin1": [
+    "Côte-d'Or"
+   ]
+  }
+ },
+ {
+  "id": "provence",
+  "name": "Provence",
+  "country": "France",
+  "grapes": "Grenache, Cinsault, Mourvèdre, Rolle",
+  "blurb": "The home of pale, dry rosé, made from Grenache, Cinsault and Mourvèdre.",
+  "lettering": {
+   "t": "Provence",
+   "f": "\"Dancing Script\",cursive",
+   "w": 500,
+   "size": 64,
+   "card": 38,
+   "tone": "#5E3B4A"
+  },
+  "places": [
+   "place:fr/provence"
+  ],
+  "map": {
+   "window": "FR",
+   "admin1": [
+    "Bouches-du-Rhône",
+    "Var",
+    "Vaucluse",
+    "Alpes-Maritimes"
+   ]
+  }
+ },
+ {
+  "id": "champagne",
+  "name": "Hautvillers",
+  "country": "Champagne, France",
+  "grapes": "Chardonnay, Pinot Noir, Pinot Meunier",
+  "blurb": "The abbey where Dom Pérignon was cellarmaster, on chalk slopes above the Marne.",
+  "lettering": {
+   "t": "CHAMPAGNE",
+   "f": "Limelight,serif",
+   "size": 40,
+   "card": 25,
+   "tone": "#3E3826",
+   "ls": ".04em"
+  },
+  "places": [
+   "place:fr/champagne"
+  ],
+  "keywords": "reims epernay",
+  "map": {
+   "window": "FR",
+   "admin1": [
+    "Marne",
+    "Aube"
+   ]
+  }
+ },
+ {
+  "id": "sauternes",
+  "name": "Sauternes",
+  "level": "Appellation",
+  "parent": "bordeaux",
+  "country": "France",
+  "grapes": "Sémillon, Sauvignon Blanc",
+  "blurb": "Misty mornings on the Ciron bring noble rot to Sémillon and Sauvignon Blanc: sweet wines that last a century.",
+  "lettering": {
+   "t": "Sauternes",
+   "f": "\"Great Vibes\",cursive",
+   "size": 76,
+   "card": 46,
+   "tone": "#4A3A18"
+  },
+  "places": [
+   "place:fr/sauternes"
+  ],
+  "photo": "chateau-yquem",
+  "map": {
+   "window": "BDX",
+   "blob": [
+    -0.34,
+    44.54,
+    0.07,
+    0.06,
+    0
+   ]
+  }
+ },
+ {
+  "id": "loire",
+  "name": "Loire Valley",
+  "country": "France",
+  "grapes": "Chenin Blanc, Cabernet Franc, Sauvignon Blanc, Melon de Bourgogne",
+  "blurb": "The long river valley of Chenin, Cabernet Franc and Sauvignon Blanc: Muscadet, Vouvray, Chinon, and Sancerre at the eastern end.",
+  "lettering": {
+   "t": "Loire",
+   "f": "\"Pinyon Script\",cursive",
+   "size": 84,
+   "card": 52,
+   "tone": "#33402E"
+  },
+  "places": [
+   "place:fr/anjou",
+   "place:fr/chinon",
+   "place:fr/loire",
+   "place:fr/muscadet",
+   "place:fr/saumur",
+   "place:fr/vouvray"
+  ],
+  "photo": "sancerre",
+  "map": {
+   "window": "FR",
+   "admin1": [
+    "Loire-Atlantique",
+    "Maine-et-Loire",
+    "Indre-et-Loire",
+    "Loir-et-Cher",
+    "Cher",
+    "Loiret"
+   ]
+  }
+ },
+ {
+  "id": "alsace",
+  "name": "Alsace",
+  "country": "France",
+  "grapes": "Riesling, Gewürztraminer, Pinot Gris, Pinot Blanc",
+  "blurb": "A dry, sunny strip against the Vosges where grapes are named on the label: Riesling, Gewürztraminer, Pinot Gris.",
+  "lettering": {
+   "t": "Alsace",
+   "f": "\"UnifrakturMaguntia\",serif",
+   "size": 68,
+   "card": 40,
+   "tone": "#40382A"
+  },
+  "places": [
+   "place:fr/alsace"
+  ],
+  "map": {
+   "window": "FR",
+   "admin1": [
+    "Bas-Rhin",
+    "Haute-Rhin"
+   ]
+  }
+ },
+ {
+  "id": "languedoc",
+  "name": "Languedoc",
+  "country": "France",
+  "grapes": "Grenache, Syrah, Carignan, Mourvèdre",
+  "blurb": "France’s largest vineyard, from everyday value to serious old-vine Carignan and Grenache.",
+  "lettering": {
+   "t": "Languedoc",
+   "f": "\"Great Vibes\",cursive",
+   "size": 66,
+   "card": 40,
+   "tone": "#5A3A28"
+  },
+  "places": [
+   "place:fr/languedoc"
+  ],
+  "map": {
+   "window": "FR",
+   "admin1": [
+    "Hérault",
+    "Aude",
+    "Gard",
+    "Pyrénées-Orientales"
+   ]
+  }
+ },
+ {
+  "id": "south-west",
+  "name": "South West France",
+  "country": "France",
+  "grapes": "Tannat, Petit Manseng, Gros Manseng, Colombard",
+  "blurb": "Madiran, Saint-Mont and Gascony: robust Tannat reds, Pacherenc whites and some of France’s best-value wines.",
+  "lettering": {
+   "t": "Sud-Ouest",
+   "f": "\"Pinyon Script\",cursive",
+   "size": 76,
+   "card": 46,
+   "tone": "#4A2E22"
+  },
+  "places": [
+   "place:fr/cahors",
+   "place:fr/cotes-de-gascogne",
+   "place:fr/gascony",
+   "place:fr/jurancon",
+   "place:fr/madiran",
+   "place:fr/saint-mont",
+   "place:fr/south-west"
+  ],
+  "keywords": "madiran saint mont gascony cahors",
+  "map": {
+   "window": "FR",
+   "admin1": [
+    "Gers",
+    "Landes",
+    "Pyrénées-Atlantiques",
+    "Hautes-Pyrénées"
+   ]
+  }
+ },
+ {
+  "id": "bergerac",
+  "name": "Bergerac & Monbazillac",
+  "country": "France",
+  "grapes": "Merlot, Cabernet Sauvignon, Sémillon, Sauvignon Blanc",
+  "blurb": "Bordeaux’s eastern neighbour on the Dordogne: Merlot-led reds, dry whites and the honeyed sweet wines of Monbazillac.",
+  "lettering": {
+   "t": "Bergerac",
+   "f": "\"IM Fell English SC\",serif",
+   "size": 56,
+   "card": 32,
+   "tone": "#4A3A22"
+  },
+  "places": [
+   "place:fr/bergerac",
+   "place:fr/monbazillac"
+  ],
+  "map": {
+   "window": "FR",
+   "admin1": [
+    "Dordogne"
+   ]
+  }
+ },
+ {
+  "id": "medoc",
+  "name": "Médoc",
+  "level": "Appellation",
+  "parent": "bordeaux",
+  "country": "France",
+  "grapes": "Cabernet Sauvignon, Merlot, Cabernet Franc, Petit Verdot",
+  "blurb": "The long gravel peninsula north-west of Bordeaux, between the Gironde and the Atlantic. Cabernet Sauvignon-led reds; the northern half carries the plain Médoc appellation.",
+  "lettering": {
+   "t": "Médoc",
+   "f": "Cinzel,serif",
+   "w": 500,
+   "size": 52,
+   "card": 30,
+   "tone": "#2A0E16",
+   "ls": ".16em"
+  },
+  "places": [
+   "place:fr/medoc"
+  ],
+  "map": {
+   "window": "BDX",
+   "blob": [
+    -0.95,
+    45.33,
+    0.2,
+    0.07,
+    125
+   ]
+  }
+ },
+ {
+  "id": "haut-medoc",
+  "name": "Haut-Médoc",
+  "level": "Appellation",
+  "parent": "medoc",
+  "country": "France",
+  "grapes": "Cabernet Sauvignon, Merlot, Cabernet Franc, Petit Verdot",
+  "blurb": "The southern, higher-ground half of the Médoc. It holds the great commune appellations of Margaux, Saint-Julien, Pauillac and Saint-Estèphe, and carries its own appellation around them.",
+  "lettering": {
+   "t": "Haut-Médoc",
+   "f": "Cinzel,serif",
+   "w": 500,
+   "size": 44,
+   "card": 24,
+   "tone": "#2A0E16",
+   "ls": ".1em"
+  },
+  "places": [
+   "place:fr/haut-medoc"
+  ],
+  "map": {
+   "window": "BDX",
+   "blob": [
+    -0.8,
+    45.1,
+    0.25,
+    0.06,
+    125
+   ]
+  }
+ },
+ {
+  "id": "margaux",
+  "name": "Margaux",
+  "level": "Appellation",
+  "parent": "haut-medoc",
+  "country": "France",
+  "grapes": "Cabernet Sauvignon, Merlot",
+  "blurb": "The most southerly of the great Haut-Médoc communes. Gravelly soils and Cabernet Sauvignon-led reds known for perfume and finesse. Home to Château Margaux and many classed growths.",
+  "lettering": {
+   "t": "Margaux",
+   "f": "Cinzel,serif",
+   "w": 500,
+   "size": 56,
+   "card": 32,
+   "tone": "#2A0E16",
+   "ls": ".16em"
+  },
+  "places": [
+   "place:fr/margaux"
+  ],
+  "photo": "bordeaux",
+  "map": {
+   "window": "BDX",
+   "blob": [
+    -0.68,
+    45.04,
+    0.06,
+    0.04,
+    125
+   ]
+  }
+ },
+ {
+  "id": "saint-julien",
+  "name": "Saint-Julien",
+  "level": "Appellation",
+  "parent": "haut-medoc",
+  "country": "France",
+  "grapes": "Cabernet Sauvignon, Merlot",
+  "blurb": "Between Margaux and Pauillac, with no first growths but a dense run of second and third growths. Balanced, classic claret.",
+  "lettering": {
+   "t": "Saint-Julien",
+   "f": "Cinzel,serif",
+   "w": 500,
+   "size": 44,
+   "card": 24,
+   "tone": "#2A0E16",
+   "ls": ".1em"
+  },
+  "places": [
+   "place:fr/saint-julien"
+  ],
+  "map": {
+   "window": "BDX",
+   "blob": [
+    -0.745,
+    45.15,
+    0.035,
+    0.03,
+    125
+   ]
+  }
+ },
+ {
+  "id": "pauillac",
+  "name": "Pauillac",
+  "level": "Appellation",
+  "parent": "haut-medoc",
+  "country": "France",
+  "grapes": "Cabernet Sauvignon, Merlot",
+  "blurb": "Gravelly ground with three of the five 1855 first growths: Lafite Rothschild, Latour and Mouton Rothschild. Powerful, long-lived Cabernet Sauvignon.",
+  "lettering": {
+   "t": "Pauillac",
+   "f": "Cinzel,serif",
+   "w": 500,
+   "size": 54,
+   "card": 30,
+   "tone": "#2A0E16",
+   "ls": ".16em"
+  },
+  "places": [
+   "place:fr/pauillac"
+  ],
+  "map": {
+   "window": "BDX",
+   "blob": [
+    -0.77,
+    45.2,
+    0.06,
+    0.03,
+    125
+   ]
+  }
+ },
+ {
+  "id": "saint-estephe",
+  "name": "Saint-Estèphe",
+  "level": "Appellation",
+  "parent": "haut-medoc",
+  "country": "France",
+  "grapes": "Cabernet Sauvignon, Merlot",
+  "blurb": "The most northerly of the four big communes. More clay in the soil gives firmer, more structured reds.",
+  "lettering": {
+   "t": "Saint-Estèphe",
+   "f": "Cinzel,serif",
+   "w": 500,
+   "size": 40,
+   "card": 22,
+   "tone": "#2A0E16",
+   "ls": ".08em"
+  },
+  "places": [
+   "place:fr/saint-estephe"
+  ],
+  "map": {
+   "window": "BDX",
+   "blob": [
+    -0.78,
+    45.265,
+    0.05,
+    0.03,
+    125
+   ]
+  }
+ },
+ {
+  "id": "saint-emilion",
+  "name": "Saint-Émilion",
+  "level": "Appellation",
+  "parent": "bordeaux",
+  "country": "France",
+  "grapes": "Merlot, Cabernet Franc",
+  "blurb": "A hillside town on the Right Bank, on limestone and clay. Merlot and Cabernet Franc, with a classification of its own.",
+  "lettering": {
+   "t": "Saint-Émilion",
+   "f": "Cinzel,serif",
+   "w": 500,
+   "size": 42,
+   "card": 24,
+   "tone": "#2A1A12",
+   "ls": ".08em"
+  },
+  "places": [
+   "place:fr/saint-emilion"
+  ],
+  "map": {
+   "window": "BDX",
+   "blob": [
+    -0.15,
+    44.895,
+    0.06,
+    0.04,
+    0
+   ]
+  }
+ },
+ {
+  "id": "pomerol",
+  "name": "Pomerol",
+  "level": "Appellation",
+  "parent": "bordeaux",
+  "country": "France",
+  "grapes": "Merlot, Cabernet Franc",
+  "blurb": "A small Right Bank appellation of mostly Merlot on clay and gravel, with no official classification. Home to Pétrus.",
+  "lettering": {
+   "t": "Pomerol",
+   "f": "Cinzel,serif",
+   "w": 500,
+   "size": 54,
+   "card": 30,
+   "tone": "#2A1A12",
+   "ls": ".16em"
+  },
+  "places": [
+   "place:fr/pomerol"
+  ],
+  "map": {
+   "window": "BDX",
+   "blob": [
+    -0.2,
+    44.935,
+    0.03,
+    0.025,
+    0
+   ]
+  }
+ },
+ {
+  "id": "pessac-leognan",
+  "name": "Pessac-Léognan",
+  "level": "Appellation",
+  "parent": "bordeaux",
+  "country": "France",
+  "grapes": "Cabernet Sauvignon, Merlot, Sauvignon Blanc, Sémillon",
+  "blurb": "Gravel just south of the city. Home to Château Haut-Brion, a 1855 first growth, and the one Bordeaux area known for both red and dry white.",
+  "lettering": {
+   "t": "Pessac-Léognan",
+   "f": "Cinzel,serif",
+   "w": 500,
+   "size": 38,
+   "card": 20,
+   "tone": "#2A1A12",
+   "ls": ".06em"
+  },
+  "places": [
+   "place:fr/pessac-leognan"
+  ],
+  "map": {
+   "window": "BDX",
+   "blob": [
+    -0.62,
+    44.74,
+    0.09,
+    0.05,
+    90
+   ]
+  }
+ }
+]

@@ -1,0 +1,463 @@
+[
+ {
+  "id": "barossa",
+  "name": "Barossa Valley",
+  "level": "Region",
+  "parent": "south-australia",
+  "country": "Australia",
+  "grapes": "Shiraz, Grenache, Mourvèdre, Riesling",
+  "blurb": "A warm valley with some of the world’s oldest Shiraz vines, planted from the 1840s.",
+  "lettering": {
+   "t": "Barossa",
+   "f": "\"Abril Fatface\",serif",
+   "size": 62,
+   "card": 38,
+   "tone": "#5A321A"
+  },
+  "places": [
+   "place:au/barossa",
+   "place:au/barossa-valley"
+  ],
+  "keywords": "australia shiraz",
+  "map": {
+   "window": "AUS",
+   "blob": [
+    138.95,
+    -34.55,
+    0.25,
+    0.18,
+    0
+   ],
+   "ctx": [
+    "South Australia"
+   ]
+  }
+ },
+ {
+  "id": "australia",
+  "name": "Australia",
+  "level": "Country",
+  "country": "Australia",
+  "grapes": "Shiraz, Cabernet Sauvignon, Chardonnay, Riesling, Semillon",
+  "blurb": "A huge country of wine regions, from warm South Australia to cool Tasmania. Shiraz, Cabernet, Chardonnay, Riesling and Semillon lead, and the best-known regions cluster in the south.",
+  "lettering": {
+   "t": "AUSTRALIA",
+   "f": "\"Josefin Sans\",sans-serif",
+   "w": 300,
+   "size": 40,
+   "card": 22,
+   "tone": "#4A2E22",
+   "ls": ".22em"
+  },
+  "photo": "barossa",
+  "map": {
+   "window": "AU",
+   "admin1": [
+    "New South Wales",
+    "Victoria",
+    "Queensland",
+    "South Australia",
+    "Western Australia",
+    "Tasmania",
+    "Northern Territory",
+    "Australian Capital Territory"
+   ]
+  }
+ },
+ {
+  "id": "south-australia",
+  "name": "South Australia",
+  "level": "State",
+  "parent": "australia",
+  "country": "Australia",
+  "grapes": "Shiraz, Grenache, Riesling, Cabernet Sauvignon",
+  "blurb": "Australia’s biggest wine state, home to Barossa, McLaren Vale, Eden Valley, Clare Valley and Coonawarra.",
+  "lettering": {
+   "t": "South Australia",
+   "f": "\"DM Serif Display\",serif",
+   "size": 46,
+   "card": 26,
+   "tone": "#4A2A22"
+  },
+  "places": [
+   "place:au/south-australia"
+  ],
+  "photo": "barossa",
+  "map": {
+   "window": "AU",
+   "admin1": [
+    "South Australia"
+   ]
+  }
+ },
+ {
+  "id": "victoria",
+  "name": "Victoria",
+  "level": "State",
+  "parent": "australia",
+  "country": "Australia",
+  "grapes": "Pinot Noir, Chardonnay, Shiraz",
+  "blurb": "A varied state, from the cool Yarra Valley and Mornington Peninsula to the fortified wines of Rutherglen.",
+  "lettering": {
+   "t": "VICTORIA",
+   "f": "Cinzel,serif",
+   "w": 500,
+   "size": 46,
+   "card": 26,
+   "tone": "#2E3A2A",
+   "ls": ".16em"
+  },
+  "places": [
+   "place:au/victoria"
+  ],
+  "map": {
+   "window": "AU",
+   "admin1": [
+    "Victoria"
+   ]
+  }
+ },
+ {
+  "id": "new-south-wales",
+  "name": "New South Wales",
+  "level": "State",
+  "parent": "australia",
+  "country": "Australia",
+  "grapes": "Semillon, Shiraz, Chardonnay",
+  "blurb": "Home of the Hunter Valley, Australia’s oldest wine region, plus large inland areas.",
+  "lettering": {
+   "t": "New South Wales",
+   "f": "\"IM Fell English SC\",serif",
+   "size": 44,
+   "card": 24,
+   "tone": "#4A3A22"
+  },
+  "places": [
+   "place:au/new-south-wales"
+  ],
+  "map": {
+   "window": "AU",
+   "admin1": [
+    "New South Wales"
+   ]
+  }
+ },
+ {
+  "id": "western-australia",
+  "name": "Western Australia",
+  "level": "State",
+  "parent": "australia",
+  "country": "Australia",
+  "grapes": "Cabernet Sauvignon, Chardonnay",
+  "blurb": "A remote western state. Margaret River’s Cabernet blends and Chardonnay lead.",
+  "lettering": {
+   "t": "Western Australia",
+   "f": "\"Cormorant SC\",serif",
+   "w": 500,
+   "size": 44,
+   "card": 24,
+   "tone": "#4A2E2A",
+   "ls": ".08em"
+  },
+  "places": [
+   "place:au/western-australia"
+  ],
+  "map": {
+   "window": "AU",
+   "admin1": [
+    "Western Australia"
+   ]
+  }
+ },
+ {
+  "id": "tasmania",
+  "name": "Tasmania",
+  "level": "State",
+  "parent": "australia",
+  "country": "Australia",
+  "grapes": "Pinot Noir, Chardonnay, Riesling, Pinot Gris",
+  "blurb": "Australia’s coolest wine island. Pinot Noir, Chardonnay and some of the country’s best sparkling wine.",
+  "lettering": {
+   "t": "Tasmania",
+   "f": "\"Cormorant SC\",serif",
+   "w": 500,
+   "size": 56,
+   "card": 32,
+   "tone": "#26363A",
+   "ls": ".14em"
+  },
+  "places": [
+   "place:au/tasmania"
+  ],
+  "map": {
+   "window": "AUS",
+   "admin1": [
+    "Tasmania"
+   ]
+  }
+ },
+ {
+  "id": "mclaren-vale",
+  "name": "McLaren Vale",
+  "level": "Region",
+  "parent": "south-australia",
+  "country": "Australia",
+  "grapes": "Shiraz, Grenache, Cabernet Sauvignon, Mourvèdre",
+  "blurb": "Hills and coast south of Adelaide, with a Mediterranean climate. Generous Shiraz and Grenache, with old bush vines among them.",
+  "lettering": {
+   "t": "McLaren Vale",
+   "f": "\"DM Serif Display\",serif",
+   "size": 56,
+   "card": 32,
+   "tone": "#4A2A22"
+  },
+  "places": [
+   "place:au/mclaren-vale"
+  ],
+  "map": {
+   "window": "AUS",
+   "blob": [
+    138.55,
+    -35.22,
+    0.2,
+    0.12,
+    30
+   ],
+   "ctx": [
+    "South Australia"
+   ]
+  }
+ },
+ {
+  "id": "eden-valley",
+  "name": "Eden Valley",
+  "level": "Region",
+  "parent": "south-australia",
+  "country": "Australia",
+  "grapes": "Riesling, Shiraz, Cabernet Sauvignon",
+  "blurb": "High, cooler hills east of the Barossa. Known for Riesling and elegant Shiraz.",
+  "lettering": {
+   "t": "Eden Valley",
+   "f": "\"Great Vibes\",cursive",
+   "size": 70,
+   "card": 42,
+   "tone": "#3A3A26"
+  },
+  "places": [
+   "place:au/eden-valley"
+  ],
+  "map": {
+   "window": "AUS",
+   "blob": [
+    139.1,
+    -34.65,
+    0.2,
+    0.15,
+    0
+   ],
+   "ctx": [
+    "South Australia"
+   ]
+  }
+ },
+ {
+  "id": "clare-valley",
+  "name": "Clare Valley",
+  "level": "Region",
+  "parent": "south-australia",
+  "country": "Australia",
+  "grapes": "Riesling, Shiraz, Cabernet Sauvignon",
+  "blurb": "Cool nights and high vineyards north of Adelaide. Famed for dry, limey Riesling, plus structured Shiraz and Cabernet.",
+  "lettering": {
+   "t": "CLARE VALLEY",
+   "f": "\"Josefin Sans\",sans-serif",
+   "w": 300,
+   "size": 38,
+   "card": 21,
+   "tone": "#2E3A2A",
+   "ls": ".2em"
+  },
+  "places": [
+   "place:au/clare-valley"
+  ],
+  "map": {
+   "window": "AUS",
+   "blob": [
+    138.6,
+    -33.85,
+    0.15,
+    0.35,
+    0
+   ],
+   "ctx": [
+    "South Australia"
+   ]
+  }
+ },
+ {
+  "id": "coonawarra",
+  "name": "Coonawarra",
+  "level": "Region",
+  "parent": "south-australia",
+  "country": "Australia",
+  "grapes": "Cabernet Sauvignon, Shiraz",
+  "blurb": "A narrow strip of red terra rossa soil over limestone in the far south-east of South Australia. Famous for Cabernet Sauvignon.",
+  "lettering": {
+   "t": "Coonawarra",
+   "f": "\"Playfair Display SC\",serif",
+   "size": 48,
+   "card": 27,
+   "tone": "#4A2A22"
+  },
+  "places": [
+   "place:au/coonawarra"
+  ],
+  "map": {
+   "window": "AUS",
+   "blob": [
+    140.83,
+    -37.28,
+    0.1,
+    0.3,
+    90
+   ],
+   "ctx": [
+    "South Australia"
+   ]
+  }
+ },
+ {
+  "id": "yarra-valley",
+  "name": "Yarra Valley",
+  "level": "Region",
+  "parent": "victoria",
+  "country": "Australia",
+  "grapes": "Pinot Noir, Chardonnay, Shiraz, Cabernet Sauvignon",
+  "blurb": "Victoria’s first wine region, an hour east of Melbourne. Cool-climate Pinot Noir and Chardonnay, with elegant Shiraz and sparkling wine.",
+  "lettering": {
+   "t": "Yarra Valley",
+   "f": "\"Josefin Sans\",sans-serif",
+   "w": 300,
+   "size": 40,
+   "card": 22,
+   "tone": "#2E3A2A",
+   "ls": ".16em"
+  },
+  "places": [
+   "place:au/yarra-valley"
+  ],
+  "map": {
+   "window": "AUS",
+   "blob": [
+    145.55,
+    -37.7,
+    0.35,
+    0.2,
+    0
+   ],
+   "ctx": [
+    "Victoria"
+   ]
+  }
+ },
+ {
+  "id": "mornington-peninsula",
+  "name": "Mornington Peninsula",
+  "level": "Region",
+  "parent": "victoria",
+  "country": "Australia",
+  "grapes": "Pinot Noir, Chardonnay, Pinot Gris",
+  "blurb": "A cool, sea-moderated peninsula south-east of Melbourne. Pinot Noir, Chardonnay and Pinot Gris.",
+  "lettering": {
+   "t": "Mornington",
+   "f": "\"Cormorant SC\",serif",
+   "w": 500,
+   "size": 52,
+   "card": 28,
+   "tone": "#26363A",
+   "ls": ".1em"
+  },
+  "places": [
+   "place:au/mornington-peninsula"
+  ],
+  "map": {
+   "window": "AUS",
+   "blob": [
+    145.05,
+    -38.35,
+    0.25,
+    0.12,
+    30
+   ],
+   "ctx": [
+    "Victoria"
+   ]
+  }
+ },
+ {
+  "id": "hunter-valley",
+  "name": "Hunter Valley",
+  "level": "Region",
+  "parent": "new-south-wales",
+  "country": "Australia",
+  "grapes": "Semillon, Shiraz, Chardonnay",
+  "blurb": "Australia’s oldest wine region, warm and humid. Famous for long-lived, low-alcohol Semillon, and for Shiraz and Chardonnay.",
+  "lettering": {
+   "t": "Hunter Valley",
+   "f": "\"IM Fell English SC\",serif",
+   "size": 48,
+   "card": 28,
+   "tone": "#4A3A22"
+  },
+  "places": [
+   "place:au/hunter-valley"
+  ],
+  "map": {
+   "window": "AUS",
+   "blob": [
+    151.2,
+    -32.75,
+    0.3,
+    0.2,
+    0
+   ],
+   "ctx": [
+    "New South Wales"
+   ]
+  }
+ },
+ {
+  "id": "margaret-river",
+  "name": "Margaret River",
+  "level": "Region",
+  "parent": "western-australia",
+  "country": "Australia",
+  "grapes": "Cabernet Sauvignon, Chardonnay",
+  "blurb": "A maritime region at the south-west tip of Western Australia. Elegant Cabernet Sauvignon blends and Chardonnay.",
+  "lettering": {
+   "t": "Margaret River",
+   "f": "\"Josefin Sans\",sans-serif",
+   "w": 300,
+   "size": 36,
+   "card": 20,
+   "tone": "#26363A",
+   "ls": ".14em"
+  },
+  "places": [
+   "place:au/margaret-river"
+  ],
+  "map": {
+   "window": "AUW",
+   "blob": [
+    115.05,
+    -33.95,
+    0.18,
+    0.5,
+    90
+   ],
+   "ctx": [
+    "Western Australia"
+   ]
+  }
+ }
+]

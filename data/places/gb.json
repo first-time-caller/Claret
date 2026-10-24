@@ -1,0 +1,28 @@
+[
+ {
+  "id": "sussex",
+  "name": "Sussex",
+  "country": "England",
+  "grapes": "Chardonnay, Pinot Noir, Pinot Meunier",
+  "blurb": "Chalk downs on the same seam as Champagne. England’s sparkling wine heartland, planted with Chardonnay, Pinot Noir and Pinot Meunier.",
+  "lettering": {
+   "t": "Sussex",
+   "f": "\"IM Fell English SC\",serif",
+   "size": 56,
+   "card": 34,
+   "tone": "#2E3C34"
+  },
+  "places": [
+   "place:gb/sussex"
+  ],
+  "keywords": "england uk english",
+  "photo": "nyetimber",
+  "map": {
+   "window": "GB",
+   "admin1": [
+    "East Sussex",
+    "West Sussex"
+   ]
+  }
+ }
+]

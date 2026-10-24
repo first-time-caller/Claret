@@ -1,0 +1,20 @@
+{
+ "places": [
+  "places/fr.json",
+  "places/it.json",
+  "places/es.json",
+  "places/pt.json",
+  "places/de.json",
+  "places/gb.json",
+  "places/us.json",
+  "places/au.json",
+  "places/nz.json",
+  "places/ar.json",
+  "places/za.json",
+  "places/gr.json",
+  "places/ge.json"
+ ],
+ "producers": "producers.json",
+ "countries": "countries.json",
+ "windows": "map-windows.json"
+}

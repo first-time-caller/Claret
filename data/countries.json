@@ -1,0 +1,106 @@
+{
+ "fr": {
+  "lettering": {
+   "font": "\"Pinyon Script\",cursive",
+   "tone": "#33402E",
+   "scale": 1.5
+  },
+  "photo": "burgundy"
+ },
+ "it": {
+  "lettering": {
+   "font": "\"IM Fell English SC\",serif",
+   "tone": "#4E3A22",
+   "scale": 1
+  },
+  "photo": "valdobbiadene"
+ },
+ "es": {
+  "lettering": {
+   "font": "Cinzel,serif",
+   "tone": "#5A2E22",
+   "scale": 0.9
+  },
+  "photo": "rioja"
+ },
+ "pt": {
+  "lettering": {
+   "font": "\"Great Vibes\",cursive",
+   "tone": "#3A2A3A",
+   "scale": 1.4
+  },
+  "photo": "douro"
+ },
+ "de": {
+  "lettering": {
+   "font": "\"UnifrakturMaguntia\",serif",
+   "tone": "#40382A",
+   "scale": 1.2
+  },
+  "photo": "mosel"
+ },
+ "au": {
+  "lettering": {
+   "font": "\"DM Serif Display\",serif",
+   "tone": "#5A3A28",
+   "scale": 1
+  },
+  "photo": "barossa"
+ },
+ "nz": {
+  "lettering": {
+   "font": "\"Josefin Sans\",sans-serif",
+   "tone": "#2E3A2A",
+   "scale": 0.8
+  },
+  "photo": "marlborough"
+ },
+ "us": {
+  "lettering": {
+   "font": "\"Playfair Display SC\",serif",
+   "tone": "#3A2E22",
+   "scale": 1
+  }
+ },
+ "za": {
+  "lettering": {
+   "font": "\"Josefin Sans\",sans-serif",
+   "tone": "#4A3322",
+   "scale": 0.8
+  }
+ },
+ "ar": {
+  "lettering": {
+   "font": "\"Cormorant SC\",serif",
+   "tone": "#4A2A2A",
+   "scale": 1
+  }
+ },
+ "cl": {
+  "lettering": {
+   "font": "\"Cormorant SC\",serif",
+   "tone": "#2E3A3A",
+   "scale": 1
+  }
+ },
+ "at": {
+  "lettering": {
+   "font": "\"Bodoni Moda\",serif",
+   "tone": "#33302A",
+   "scale": 1
+  }
+ },
+ "gb": {
+  "lettering": {
+   "font": "\"Bodoni Moda\",serif",
+   "tone": "#2E3A2E",
+   "scale": 1
+  }
+ },
+ "gr": {
+  "photo": "santorini"
+ },
+ "ge": {
+  "photo": "kakheti"
+ }
+}

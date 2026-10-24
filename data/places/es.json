@@ -1,0 +1,78 @@
+[
+ {
+  "id": "rioja",
+  "name": "Rioja",
+  "country": "Spain",
+  "grapes": "Tempranillo, Garnacha, Graciano, Viura",
+  "blurb": "Spain’s classic red, Tempranillo aged in oak, from young Joven to long-aged Gran Reserva.",
+  "lettering": {
+   "t": "RIOJA",
+   "f": "\"Cinzel Decorative\",serif",
+   "w": 700,
+   "size": 60,
+   "card": 36,
+   "tone": "#4E2618",
+   "ls": ".06em"
+  },
+  "places": [
+   "place:es/rioja"
+  ],
+  "map": {
+   "window": "ES",
+   "admin1": [
+    "La Rioja"
+   ]
+  }
+ },
+ {
+  "id": "jerez",
+  "name": "Jerez",
+  "country": "Andalucía, Spain",
+  "grapes": "Palomino, Pedro Ximénez, Moscatel",
+  "blurb": "Sherry ages under a layer of flor yeast in solera barrels that are never emptied.",
+  "lettering": {
+   "t": "Jerez",
+   "f": "\"Great Vibes\",cursive",
+   "size": 74,
+   "card": 44,
+   "tone": "#4A3A1E"
+  },
+  "places": [
+   "place:es/jerez"
+  ],
+  "map": {
+   "window": "ES",
+   "admin1": [
+    "Cádiz"
+   ]
+  }
+ },
+ {
+  "id": "ribera-del-duero",
+  "name": "Ribera del Duero",
+  "country": "Spain",
+  "grapes": "Tempranillo (Tinto Fino)",
+  "blurb": "A high, cold plateau on the Duero river. Tempranillo, locally Tinto Fino, with power and a long finish.",
+  "lettering": {
+   "t": "Ribera del Duero",
+   "f": "\"Cinzel Decorative\",serif",
+   "w": 700,
+   "size": 34,
+   "card": 20,
+   "tone": "#3E2418",
+   "ls": ".04em"
+  },
+  "places": [
+   "place:es/ribera-del-duero"
+  ],
+  "map": {
+   "window": "ES",
+   "admin1": [
+    "Burgos",
+    "Valladolid",
+    "Segovia",
+    "Soria"
+   ]
+  }
+ }
+]

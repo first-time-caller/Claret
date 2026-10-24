@@ -1,0 +1,27 @@
+[
+ {
+  "id": "stellenbosch",
+  "name": "Stellenbosch",
+  "country": "South Africa",
+  "grapes": "Cabernet Sauvignon, Chenin Blanc, Pinotage",
+  "blurb": "Mountains meeting the sea near Cape Town. Cabernet blends, Chenin, and some of the Cape’s oldest estates.",
+  "lettering": {
+   "t": "STELLENBOSCH",
+   "f": "\"Josefin Sans\",sans-serif",
+   "w": 300,
+   "size": 32,
+   "card": 18,
+   "tone": "#2E3A2A",
+   "ls": ".2em"
+  },
+  "places": [
+   "place:za/stellenbosch"
+  ],
+  "map": {
+   "window": "ZA",
+   "admin1": [
+    "Western Cape"
+   ]
+  }
+ }
+]

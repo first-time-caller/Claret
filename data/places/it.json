@@ -1,0 +1,140 @@
+[
+ {
+  "id": "valdobbiadene",
+  "name": "Valdobbiadene",
+  "country": "Veneto, Italy",
+  "grapes": "Glera",
+  "blurb": "Steep hills of Prosecco Superiore, a UNESCO World Heritage site since 2019.",
+  "lettering": {
+   "t": "Valdobbiadene",
+   "f": "Italianno,cursive",
+   "size": 66,
+   "card": 40,
+   "tone": "#2E3E2A"
+  },
+  "places": [
+   "place:it/veneto"
+  ],
+  "keywords": "prosecco veneto",
+  "map": {
+   "window": "IT",
+   "admin1": [
+    "Treviso"
+   ]
+  }
+ },
+ {
+  "id": "etna",
+  "name": "Mount Etna",
+  "country": "Sicily, Italy",
+  "grapes": "Nerello Mascalese, Carricante",
+  "blurb": "Old vines on black volcanic soil, up to about 1,000 metres.",
+  "lettering": {
+   "t": "Etna",
+   "f": "\"Abril Fatface\",serif",
+   "size": 70,
+   "card": 42,
+   "tone": "#231C1C"
+  },
+  "places": [
+   "place:it/etna"
+  ],
+  "map": {
+   "window": "IT",
+   "admin1": [
+    "Catania"
+   ]
+  }
+ },
+ {
+  "id": "bolgheri",
+  "name": "Bolgheri",
+  "country": "Tuscany, Italy",
+  "grapes": "Cabernet Sauvignon, Merlot, Cabernet Franc, Sangiovese",
+  "blurb": "A cypress-lined coastal strip of Tuscany and the home of the Super Tuscans: Cabernet and Merlot blends that broke the rules of Chianti.",
+  "lettering": {
+   "t": "Bolgheri",
+   "f": "Italianno,cursive",
+   "size": 84,
+   "card": 50,
+   "tone": "#2E3A2A"
+  },
+  "places": [
+   "place:it/bolgheri"
+  ],
+  "photo": "tenuta-san-guido",
+  "map": {
+   "window": "IT",
+   "admin1": [
+    "Livorno"
+   ]
+  }
+ },
+ {
+  "id": "tuscany",
+  "name": "Tuscany",
+  "country": "Italy",
+  "grapes": "Sangiovese, Cabernet Sauvignon, Merlot",
+  "blurb": "Sangiovese country: Chianti Classico, Brunello di Montalcino, Vino Nobile, and the coastal Super Tuscans.",
+  "lettering": {
+   "t": "Tuscany",
+   "f": "\"IM Fell English SC\",serif",
+   "size": 56,
+   "card": 34,
+   "tone": "#4E3A22"
+  },
+  "places": [
+   "place:it/tuscany"
+  ],
+  "keywords": "toscana chianti",
+  "map": {
+   "window": "IT",
+   "admin1": [
+    "Firenze",
+    "Siena",
+    "Arezzo",
+    "Grosseto",
+    "Livorno",
+    "Pisa",
+    "Lucca",
+    "Pistoia",
+    "Prato",
+    "Massa-Carrara"
+   ]
+  }
+ },
+ {
+  "id": "piedmont",
+  "name": "Piedmont",
+  "country": "Italy",
+  "grapes": "Nebbiolo, Barbera, Dolcetto, Moscato",
+  "blurb": "Foothill fog and Nebbiolo: Barolo and Barbaresco, plus everyday Barbera, Dolcetto and Moscato.",
+  "lettering": {
+   "t": "PIEDMONT",
+   "f": "Cinzel,serif",
+   "w": 500,
+   "size": 46,
+   "card": 26,
+   "tone": "#3A2A3A",
+   "ls": ".14em"
+  },
+  "places": [
+   "place:it/barolo",
+   "place:it/piedmont"
+  ],
+  "keywords": "piemonte barolo barbaresco",
+  "map": {
+   "window": "IT",
+   "admin1": [
+    "Turin",
+    "Cuneo",
+    "Asti",
+    "Alessandria",
+    "Biella",
+    "Novara",
+    "Vercelli",
+    "Verbano-Cusio-Ossola"
+   ]
+  }
+ }
+]

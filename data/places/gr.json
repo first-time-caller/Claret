@@ -1,0 +1,27 @@
+[
+ {
+  "id": "santorini",
+  "name": "Santorini",
+  "country": "Greece",
+  "grapes": "Assyrtiko, Athiri, Aidani",
+  "blurb": "Volcanic island vines trained into low baskets, kouloura, to shelter them from the wind.",
+  "lettering": {
+   "t": "SANTORINI",
+   "f": "Marcellus,serif",
+   "size": 46,
+   "card": 28,
+   "tone": "#1C3A55",
+   "ls": ".16em",
+   "local": "Σαντορίνη"
+  },
+  "places": [
+   "place:gr/santorini"
+  ],
+  "map": {
+   "window": "GR",
+   "admin1": [
+    "Notio Aigaio"
+   ]
+  }
+ }
+]

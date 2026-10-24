@@ -1,0 +1,330 @@
+[
+ {
+  "id": "central-otago",
+  "name": "Central Otago",
+  "level": "Region",
+  "parent": "south-island",
+  "country": "New Zealand",
+  "grapes": "Pinot Noir, Riesling",
+  "blurb": "The world’s southernmost wine region. A ring of alpine mountains and a continental climate give intensely concentrated, muscular Pinot Noir with dark cherry, herbs and spice.",
+  "lettering": {
+   "t": "CENTRAL OTAGO",
+   "f": "\"Josefin Sans\",sans-serif",
+   "w": 300,
+   "size": 32,
+   "card": 20,
+   "tone": "#2A3444",
+   "ls": ".2em"
+  },
+  "places": [
+   "place:nz/central-otago"
+  ],
+  "map": {
+   "window": "NZ",
+   "admin1": [
+    "Otago"
+   ]
+  }
+ },
+ {
+  "id": "marlborough",
+  "name": "Marlborough",
+  "level": "Region",
+  "parent": "south-island",
+  "country": "New Zealand",
+  "grapes": "Sauvignon Blanc, Pinot Noir",
+  "blurb": "The crown jewel of New Zealand. Alluvial soils and high sunshine hours produce explosive, intensely aromatic whites with pungent gooseberry, passionfruit and cut-grass notes.",
+  "lettering": {
+   "t": "MARLBOROUGH",
+   "f": "\"Josefin Sans\",sans-serif",
+   "w": 300,
+   "size": 36,
+   "card": 22,
+   "tone": "#24402F",
+   "ls": ".22em"
+  },
+  "places": [
+   "place:nz/marlborough"
+  ],
+  "map": {
+   "window": "NZ",
+   "admin1": [
+    "Marlborough District"
+   ]
+  }
+ },
+ {
+  "id": "north-canterbury",
+  "name": "Canterbury / Waipara Valley",
+  "level": "Region",
+  "parent": "south-island",
+  "country": "New Zealand",
+  "grapes": "Riesling, Pinot Noir, Chardonnay",
+  "blurb": "Sheltered by coastal hills, this dry, sunny region makes mineral, bright and taut aromatic whites alongside elegant Pinot Noir.",
+  "lettering": {
+   "t": "CANTERBURY",
+   "f": "\"Josefin Sans\",sans-serif",
+   "w": 300,
+   "size": 40,
+   "card": 22,
+   "tone": "#2C3E3A",
+   "ls": ".2em"
+  },
+  "places": [
+   "place:nz/canterbury",
+   "place:nz/north-canterbury",
+   "place:nz/waipara",
+   "place:nz/waipara-valley"
+  ],
+  "map": {
+   "window": "NZ",
+   "admin1": [
+    "Canterbury"
+   ]
+  }
+ },
+ {
+  "id": "hawkes-bay",
+  "name": "Hawke’s Bay",
+  "level": "Region",
+  "parent": "north-island",
+  "country": "New Zealand",
+  "grapes": "Merlot, Cabernet Sauvignon, Syrah, Chardonnay",
+  "blurb": "A warmer, sun-drenched region famous for the Gimblett Gravels. Stony riverbed soils hold the heat for elegant Bordeaux-style blends and peppery Syrah.",
+  "lettering": {
+   "t": "Hawke’s Bay",
+   "f": "\"Dancing Script\",cursive",
+   "w": 500,
+   "size": 56,
+   "card": 34,
+   "tone": "#4A3A2A"
+  },
+  "places": [
+   "place:nz/hawke-s-bay",
+   "place:nz/hawkes-bay"
+  ],
+  "keywords": "hawkes bay",
+  "map": {
+   "window": "NZ",
+   "admin1": [
+    "Hawke's Bay"
+   ]
+  }
+ },
+ {
+  "id": "new-zealand",
+  "name": "New Zealand",
+  "level": "Country",
+  "country": "New Zealand",
+  "grapes": "Sauvignon Blanc, Pinot Noir, Chardonnay, Syrah, Riesling",
+  "blurb": "Two long, narrow, maritime islands at the bottom of the world, with a wine region on almost every coast. Marlborough Sauvignon Blanc made the name; Pinot Noir, Chardonnay, Riesling and Bordeaux-style reds follow.",
+  "lettering": {
+   "t": "NEW ZEALAND",
+   "f": "\"Josefin Sans\",sans-serif",
+   "w": 300,
+   "size": 36,
+   "card": 20,
+   "tone": "#24363A",
+   "ls": ".22em"
+  },
+  "photo": "central-otago",
+  "map": {
+   "window": "NZ",
+   "admin1": [
+    "Northland",
+    "Auckland",
+    "Waikato",
+    "Bay of Plenty",
+    "Gisborne District",
+    "Hawke's Bay",
+    "Taranaki",
+    "Manawatu-Wanganui",
+    "Wellington",
+    "Tasman District",
+    "Nelson City",
+    "Marlborough District",
+    "West Coast",
+    "Canterbury",
+    "Otago",
+    "Southland"
+   ]
+  }
+ },
+ {
+  "id": "north-island",
+  "name": "North Island",
+  "level": "Island",
+  "parent": "new-zealand",
+  "country": "New Zealand",
+  "grapes": "Merlot, Cabernet Sauvignon, Syrah, Pinot Noir, Chardonnay",
+  "blurb": "Warmer and more varied: from Auckland and Waiheke down through Hawke’s Bay to Martinborough and Wairarapa at the southern tip. Bordeaux-style reds, Syrah and Chardonnay do well, with Pinot Noir in the south.",
+  "lettering": {
+   "t": "North Island",
+   "f": "\"Cormorant SC\",serif",
+   "w": 500,
+   "size": 52,
+   "card": 30,
+   "tone": "#2E3A2A",
+   "ls": ".1em"
+  },
+  "photo": "hawkes-bay",
+  "map": {
+   "window": "NZ",
+   "admin1": [
+    "Northland",
+    "Auckland",
+    "Waikato",
+    "Bay of Plenty",
+    "Gisborne District",
+    "Hawke's Bay",
+    "Taranaki",
+    "Manawatu-Wanganui",
+    "Wellington"
+   ]
+  }
+ },
+ {
+  "id": "south-island",
+  "name": "South Island",
+  "level": "Island",
+  "parent": "new-zealand",
+  "country": "New Zealand",
+  "grapes": "Sauvignon Blanc, Pinot Noir, Riesling, Chardonnay",
+  "blurb": "Cooler and drier, with the Southern Alps behind. Home of Marlborough Sauvignon Blanc, Central Otago and Canterbury Pinot Noir, and crisp aromatic whites.",
+  "lettering": {
+   "t": "South Island",
+   "f": "\"Cormorant SC\",serif",
+   "w": 500,
+   "size": 52,
+   "card": 30,
+   "tone": "#24323C",
+   "ls": ".1em"
+  },
+  "photo": "marlborough",
+  "map": {
+   "window": "NZ",
+   "admin1": [
+    "Tasman District",
+    "Nelson City",
+    "Marlborough District",
+    "West Coast",
+    "Canterbury",
+    "Otago",
+    "Southland"
+   ]
+  }
+ },
+ {
+  "id": "gimblett-gravels",
+  "name": "Gimblett Gravels",
+  "level": "Appellation",
+  "parent": "hawkes-bay",
+  "country": "New Zealand",
+  "grapes": "Merlot, Cabernet Sauvignon, Syrah",
+  "blurb": "A district on an old stony riverbed in Hawke’s Bay. The gravel retains heat, ripening Bordeaux-style blends and Syrah.",
+  "lettering": {
+   "t": "GIMBLETT GRAVELS",
+   "f": "Cinzel,serif",
+   "w": 500,
+   "size": 34,
+   "card": 19,
+   "tone": "#3A3426",
+   "ls": ".12em"
+  },
+  "places": [
+   "place:nz/gimblett-gravels"
+  ],
+  "map": {
+   "window": "NZ",
+   "blob": [
+    176.82,
+    -39.58,
+    0.2,
+    0.14,
+    0
+   ]
+  }
+ },
+ {
+  "id": "gisborne",
+  "name": "Gisborne",
+  "level": "Region",
+  "parent": "north-island",
+  "country": "New Zealand",
+  "grapes": "Chardonnay, Gewürztraminer, Pinot Gris, Viognier",
+  "blurb": "A sunny east-coast region where the sun first rises each day. Known as New Zealand’s Chardonnay capital, with generous aromatic whites from fertile alluvial plains.",
+  "lettering": {
+   "t": "Gisborne",
+   "f": "\"Great Vibes\",cursive",
+   "size": 76,
+   "card": 46,
+   "tone": "#4A3A22"
+  },
+  "places": [
+   "place:nz/gisborne"
+  ],
+  "map": {
+   "window": "NZ",
+   "admin1": [
+    "Gisborne District"
+   ]
+  }
+ },
+ {
+  "id": "martinborough",
+  "name": "Martinborough / Wairarapa",
+  "level": "Region",
+  "parent": "north-island",
+  "country": "New Zealand",
+  "grapes": "Pinot Noir, Sauvignon Blanc",
+  "blurb": "A boutique, wind-swept region at the southern tip of the North Island. Deep gravel terraces give complex, savoury, structured Pinot Noir often compared with Burgundy.",
+  "lettering": {
+   "t": "Martinborough",
+   "f": "\"IM Fell English SC\",serif",
+   "size": 52,
+   "card": 28,
+   "tone": "#3A3228"
+  },
+  "places": [
+   "place:nz/martinborough",
+   "place:nz/wairarapa"
+  ],
+  "map": {
+   "window": "NZ",
+   "blob": [
+    175.5,
+    -41.15,
+    0.35,
+    0.25,
+    0
+   ]
+  }
+ },
+ {
+  "id": "waiheke-auckland",
+  "name": "Waiheke Island & Auckland",
+  "level": "Region",
+  "parent": "north-island",
+  "country": "New Zealand",
+  "grapes": "Cabernet Sauvignon, Merlot, Syrah, Chardonnay",
+  "blurb": "A maritime paradise a short ferry ride from Auckland. Volcanic and clay soils bake in the heat, giving small batches of velvety premium reds and rich Chardonnay.",
+  "lettering": {
+   "t": "Waiheke",
+   "f": "\"Great Vibes\",cursive",
+   "size": 76,
+   "card": 46,
+   "tone": "#26363A"
+  },
+  "places": [
+   "place:nz/auckland",
+   "place:nz/waiheke",
+   "place:nz/waiheke-island"
+  ],
+  "map": {
+   "window": "NZ",
+   "admin1": [
+    "Auckland"
+   ]
+  }
+ }
+]

@@ -1,0 +1,411 @@
+[
+ {
+  "name": "Château Margaux",
+  "place": "Margaux, Bordeaux",
+  "region": "margaux",
+  "blurb": "One of the four original 1855 first growths, on the gravel of the Médoc. Cabernet Sauvignon-led reds of perfume and finesse, and a dry white, Pavillon Blanc.",
+  "photo": "chateau-margaux",
+  "lettering": {
+   "t": "Château Margaux",
+   "short": "Margaux",
+   "f": "Cinzel,serif",
+   "w": 500,
+   "size": 40,
+   "card": 26,
+   "ls": ".12em",
+   "up": true
+  },
+  "photoFrom": "bordeaux"
+ },
+ {
+  "name": "Domaine de la Romanée-Conti",
+  "place": "Vosne-Romanée, Burgundy",
+  "region": "burgundy",
+  "blurb": "The stone cross marks the Romanée-Conti vineyard itself: under two hectares of Pinot Noir, and the most sought-after wine in Burgundy.",
+  "photo": "romanee-conti",
+  "lettering": {
+   "t": "Romanée-Conti",
+   "short": "Romanée-Conti",
+   "f": "Cinzel,serif",
+   "w": 500,
+   "size": 40,
+   "card": 22,
+   "ls": ".1em",
+   "up": true
+  }
+ },
+ {
+  "name": "Château d’Yquem",
+  "place": "Sauternes, Bordeaux",
+  "region": "sauternes",
+  "blurb": "The only Sauternes ranked Premier Cru Supérieur in the 1855 classification. Botrytised Sémillon and Sauvignon Blanc that lasts a century.",
+  "photo": "chateau-yquem",
+  "bottle": "yquem-bottle",
+  "lettering": {
+   "t": "Château d’Yquem",
+   "short": "Yquem",
+   "f": "\"Playfair Display SC\",serif",
+   "size": 46,
+   "card": 34,
+   "ls": ".06em"
+  }
+ },
+ {
+  "name": "R. López de Heredia",
+  "place": "Haro, Rioja",
+  "region": "rioja",
+  "blurb": "Founded in 1877 and famous for Viña Tondonia, released only after many years in old oak. The ornate pavilion was made for the 1910 Brussels World Fair.",
+  "photo": "lopez-de-heredia",
+  "lettering": {
+   "t": "López de Heredia",
+   "short": "López de Heredia",
+   "f": "\"Poiret One\",sans-serif",
+   "w": 400,
+   "size": 46,
+   "card": 26,
+   "ls": ".04em"
+  }
+ },
+ {
+  "name": "Marqués de Riscal",
+  "place": "Elciego, Rioja",
+  "region": "rioja",
+  "blurb": "One of Rioja’s oldest houses, founded in 1858. Its hotel, wrapped in titanium ribbons, is by Frank Gehry.",
+  "photo": "marques-de-riscal",
+  "lettering": {
+   "t": "Marqués de Riscal",
+   "short": "Marqués de Riscal",
+   "f": "\"Playfair Display\",serif",
+   "w": 700,
+   "size": 40,
+   "card": 22,
+   "ls": "0"
+  }
+ },
+ {
+  "name": "Tenuta San Guido",
+  "place": "Bolgheri, Tuscany",
+  "region": "bolgheri",
+  "blurb": "The cypress avenue of Bolgheri leads past the estate that made Sassicaia, the first \"Super Tuscan\" Cabernet.",
+  "photo": "tenuta-san-guido",
+  "bottle": "sassicaia-bottle"
+ },
+ {
+  "name": "Dom Pérignon",
+  "place": "Épernay, Champagne",
+  "region": "champagne",
+  "blurb": "Moët & Chandon’s prestige cuvée, named after the Benedictine monk who was cellarmaster at the Abbey of Hautvillers.",
+  "photo": "dom-perignon",
+  "bottle": "dom-perignon-bottle",
+  "lettering": {
+   "t": "Dom Pérignon",
+   "f": "Italiana,serif",
+   "size": 58,
+   "card": 32,
+   "ls": ".14em",
+   "up": true
+  }
+ },
+ {
+  "name": "Scharzhofberg",
+  "place": "Wiltingen, Saar",
+  "region": "mosel",
+  "blurb": "A steep slate slope above the Saar and one of Germany’s great Riesling sites, best known through Egon Müller.",
+  "photo": "scharzhofberg"
+ },
+ {
+  "name": "Penfolds",
+  "place": "Magill Estate, Adelaide",
+  "region": "barossa",
+  "blurb": "Home of Grange, first made experimentally in 1951 and now Australia’s most famous red.",
+  "photo": "penfolds",
+  "lettering": {
+   "t": "Penfolds",
+   "f": "\"DM Serif Display\",serif",
+   "size": 66,
+   "card": 38,
+   "ls": "0"
+  }
+ },
+ {
+  "name": "Cloudy Bay",
+  "place": "Marlborough, New Zealand",
+  "region": "marlborough",
+  "blurb": "Its first Sauvignon Blanc, in 1985, did more than any other wine to put Marlborough on the map.",
+  "photo": "cloudy-bay",
+  "lettering": {
+   "t": "Cloudy Bay",
+   "f": "Jost,sans-serif",
+   "w": 300,
+   "size": 48,
+   "card": 28,
+   "ls": ".32em",
+   "up": true
+  }
+ },
+ {
+  "name": "Catena Zapata",
+  "place": "Mendoza, Argentina",
+  "region": "mendoza",
+  "blurb": "A winery built as a Mayan-style pyramid, and the pioneer of high-altitude Malbec in the Andes.",
+  "photo": "catena-zapata"
+ },
+ {
+  "name": "Opus One",
+  "place": "Oakville, Napa Valley",
+  "region": "napa-valley",
+  "blurb": "Founded in 1979 by Robert Mondavi and Baron Philippe de Rothschild of Mouton: Bordeaux blending in Napa.",
+  "photo": "opus-one",
+  "lettering": {
+   "t": "Opus One",
+   "f": "\"Cormorant SC\",serif",
+   "w": 500,
+   "size": 60,
+   "card": 34,
+   "ls": ".22em",
+   "up": true
+  }
+ },
+ {
+  "name": "Nyetimber",
+  "place": "West Sussex, England",
+  "region": "sussex",
+  "blurb": "A pioneer of English sparkling wine, planting Champagne’s grapes in Sussex from 1988.",
+  "photo": "nyetimber",
+  "lettering": {
+   "t": "Nyetimber",
+   "f": "\"Bodoni Moda\",serif",
+   "w": 500,
+   "size": 52,
+   "card": 30,
+   "ls": ".16em",
+   "up": true
+  }
+ },
+ {
+  "name": "Vega Sicilia",
+  "place": "Ribera del Duero, Spain",
+  "region": "ribera-del-duero",
+  "blurb": "Único is released after a decade or more of ageing, and is Spain’s most celebrated red.",
+  "photo": "vega-sicilia-bottle",
+  "lettering": {
+   "t": "Vega Sicilia",
+   "f": "\"Cormorant SC\",serif",
+   "w": 500,
+   "size": 54,
+   "card": 30,
+   "ls": ".12em",
+   "up": true
+  }
+ },
+ {
+  "name": "Mission Estate Winery",
+  "place": "Hawke’s Bay, New Zealand",
+  "region": "hawkes-bay",
+  "blurb": "New Zealand’s oldest winery, founded in 1851 by French Marist missionaries at Taradale near Napier. Chardonnay, Syrah and Bordeaux-style reds.",
+  "country": "nz"
+ },
+ {
+  "name": "Brookfields",
+  "place": "Hawke’s Bay, New Zealand",
+  "region": "hawkes-bay",
+  "blurb": "A Hawke’s Bay family winery founded in 1937. Known for Bordeaux-style reds, Syrah and Chardonnay.",
+  "country": "nz"
+ },
+ {
+  "name": "Church Road",
+  "place": "Hawke’s Bay, New Zealand",
+  "region": "hawkes-bay",
+  "blurb": "One of Hawke’s Bay’s oldest names, founded in 1897 at Taradale. Chardonnay, Syrah and Bordeaux-style blends.",
+  "country": "nz"
+ },
+ {
+  "name": "Trinity Hill",
+  "place": "Hawke’s Bay, New Zealand",
+  "region": "hawkes-bay",
+  "blurb": "A Gimblett Gravels pioneer, founded in 1993. Known for Syrah (Homage), Bordeaux-style blends and Chardonnay.",
+  "country": "nz"
+ },
+ {
+  "name": "Paritua",
+  "place": "Hawke’s Bay, New Zealand",
+  "region": "hawkes-bay",
+  "blurb": "A boutique Hawke’s Bay estate making Syrah and Bordeaux-style blends.",
+  "country": "nz"
+ },
+ {
+  "name": "Torbreck",
+  "place": "Barossa Valley, South Australia",
+  "region": "barossa",
+  "blurb": "Rhône-style Barossa reds, from Shiraz, Grenache and Mataro. Known for The Laird, RunRig and Descendant.",
+  "country": "au"
+ },
+ {
+  "name": "Yalumba",
+  "place": "Barossa Valley, South Australia",
+  "region": "barossa",
+  "blurb": "Founded in 1849, Australia’s oldest family-owned winery. Known for Viognier, Shiraz and the Signature cabernet-shiraz.",
+  "country": "au"
+ },
+ {
+  "name": "Peter Lehmann",
+  "place": "Barossa Valley, South Australia",
+  "region": "barossa",
+  "blurb": "Founded in 1979 by the “Baron of the Barossa”, who bought fruit from growers when others would not. Generous, good-value Barossa Shiraz.",
+  "country": "au"
+ },
+ {
+  "name": "Grant Burge",
+  "place": "Barossa Valley, South Australia",
+  "region": "barossa",
+  "blurb": "A Barossa family estate honouring the 1865 pioneer John Burge. Known for Shiraz, including Meshach.",
+  "country": "au"
+ },
+ {
+  "name": "Ministry of Clouds",
+  "place": "McLaren Vale, South Australia",
+  "region": "mclaren-vale",
+  "blurb": "A boutique McLaren Vale producer making Grenache, Shiraz and other expressive reds and whites.",
+  "country": "au"
+ },
+ {
+  "name": "Yering Station",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "Victoria’s oldest vineyard, established in 1838, with a heritage cellar door and a modern restaurant. Chardonnay, Pinot Noir and Shiraz Viognier.",
+  "country": "au"
+ },
+ {
+  "name": "De Bortoli Yarra Valley",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A family-owned pioneer of premium cool-climate styles, with an Italian restaurant. Noble One Botrytis Semillon, Chardonnay and Pinot Noir.",
+  "country": "au"
+ },
+ {
+  "name": "TarraWarra Estate",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "An architectural property with an underground cellar door and a public art museum. Estate Chardonnay, Pinot Noir and Barbera.",
+  "country": "au"
+ },
+ {
+  "name": "Oakridge Wines",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "Precise single-block Chardonnay and Pinot Noir, with a locally sourced fine-dining menu.",
+  "country": "au"
+ },
+ {
+  "name": "Dominique Portet Winery",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "Founded by a 10th-generation French winemaking family, with a Bordeaux-inspired touch. Rosé, Cabernet Sauvignon and sparkling.",
+  "country": "au"
+ },
+ {
+  "name": "Levantine Hill",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A luxury boutique producer of low-yield wines on an upscale estate. Premium Cabernet blends and Syrah.",
+  "country": "au"
+ },
+ {
+  "name": "Giant Steps",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A celebrated modern producer focused on single-vineyard Pinot Noir and Chardonnay, expressing specific sub-regional microclimates.",
+  "country": "au"
+ },
+ {
+  "name": "Coldstream Hills",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "Established by the critic James Halliday in 1985. Elegant, structured Pinot Noir, Chardonnay and Merlot.",
+  "country": "au"
+ },
+ {
+  "name": "Yarra Yering",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "One of the region’s most iconic historic estates. Dry Red No. 1 is a Bordeaux blend and Dry Red No. 2 a Rhône blend, among Australia’s highest-rated reds.",
+  "country": "au"
+ },
+ {
+  "name": "Rochford Wines",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A large, lively estate that hosts concerts and festivals as well as alfresco dining. Chardonnay, Pinot Noir and Syrah.",
+  "country": "au"
+ },
+ {
+  "name": "Medhurst Wines",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A modern boutique winery built into a hillside, making small-batch, low-intervention Pinot Noir, Chardonnay and Shiraz.",
+  "country": "au"
+ },
+ {
+  "name": "Soumah of Yarra Valley",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "Northern Italian varieties beside valley staples, with a trattoria. Savagnin, Nebbiolo and Pinot Noir.",
+  "country": "au"
+ },
+ {
+  "name": "Mac Forbes",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A leader of the minimal-intervention, new-wave movement, focused on freshness, acidity and raw terroir. Sub-regional Pinot Noir and experimental whites.",
+  "country": "au"
+ },
+ {
+  "name": "Maddens Rise",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A certified organic and biodynamic producer focused on soil health and additive-free fruit. Pinot Noir, Chardonnay and Viognier.",
+  "country": "au"
+ },
+ {
+  "name": "Seville Estate",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "An upper-Yarra pioneer established in 1972, known for long-lived, cool and elegant Shiraz, Pinot Noir and Chardonnay.",
+  "country": "au"
+ },
+ {
+  "name": "Innocent Bystander",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A relaxed urban-style cellar door and pizzeria in Healesville. Moscato, Pinot Noir and Gamay.",
+  "country": "au"
+ },
+ {
+  "name": "Warramunda Estate",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A family-run boutique vineyard using traditional hand-crafted methods. Viognier, Syrah and Marsanne.",
+  "country": "au"
+ },
+ {
+  "name": "Helen & Joey Estate",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A modern, picturesque estate with playful branding and great views. Cabernet, Pinot Noir and sparkling.",
+  "country": "au"
+ },
+ {
+  "name": "Coombe Yarra Valley",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "The historic former home of Dame Nellie Melba, with century-old gardens. Chardonnay, Pinot Noir and sparkling.",
+  "country": "au"
+ },
+ {
+  "name": "Punt Road Wines",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "Down-to-earth estate-grown wines, a relaxed tasting room and on-site cider. Pinot Noir, Pinot Gris and Gamay.",
+  "country": "au"
+ }
+]

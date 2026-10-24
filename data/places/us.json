@@ -1,0 +1,51 @@
+[
+ {
+  "id": "napa-valley",
+  "name": "Napa Valley",
+  "country": "California, USA",
+  "grapes": "Cabernet Sauvignon, Merlot, Chardonnay",
+  "blurb": "Cabernet country in northern California: Oakville, Rutherford and Stags Leap, a short valley with a very long reputation.",
+  "lettering": {
+   "t": "Napa Valley",
+   "f": "\"Abril Fatface\",serif",
+   "size": 48,
+   "card": 28,
+   "tone": "#3A2A3A"
+  },
+  "places": [
+   "place:us/napa"
+  ],
+  "keywords": "california usa america",
+  "photo": "opus-one",
+  "map": {
+   "window": "US",
+   "admin1": [
+    "California"
+   ]
+  }
+ },
+ {
+  "id": "willamette-valley",
+  "name": "Willamette Valley",
+  "country": "Oregon, USA",
+  "grapes": "Pinot Noir, Chardonnay, Pinot Gris",
+  "blurb": "Cool, green Oregon and the New World’s answer to Burgundy: Pinot Noir and Chardonnay.",
+  "lettering": {
+   "t": "Willamette",
+   "f": "Italianno,cursive",
+   "size": 78,
+   "card": 46,
+   "tone": "#2A3A34"
+  },
+  "places": [
+   "place:us/willamette"
+  ],
+  "keywords": "oregon usa america",
+  "map": {
+   "window": "US",
+   "admin1": [
+    "Oregon"
+   ]
+  }
+ }
+]

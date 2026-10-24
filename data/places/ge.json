@@ -1,0 +1,28 @@
+[
+ {
+  "id": "kakheti",
+  "name": "Kakheti",
+  "country": "Georgia",
+  "grapes": "Rkatsiteli, Saperavi, Mtsvane",
+  "blurb": "Some 8,000 years of winemaking in buried clay qvevri, the origin of amber wine.",
+  "lettering": {
+   "t": "KAKHETI",
+   "f": "Marcellus,serif",
+   "size": 46,
+   "card": 28,
+   "tone": "#4E321A",
+   "ls": ".16em",
+   "local": "კახეთი",
+   "lf": "\"Noto Serif Georgian\",serif"
+  },
+  "places": [
+   "place:ge/kakheti"
+  ],
+  "map": {
+   "window": "GE",
+   "admin1": [
+    "Kakheti"
+   ]
+  }
+ }
+]
