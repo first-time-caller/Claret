@@ -904,7 +904,7 @@ const REGIONS = {
   'beaujolais': { name: 'Beaujolais', country: 'France', blurb: 'Granite hills north of Lyon. Gamay, and ten crus such as Morgon, Fleurie and Moulin-à-Vent.', grapes: 'Gamay, Chardonnay' },
   'burgundy': { name: 'Clos de Vougeot', country: 'Burgundy, France', blurb: 'Planted by Cistercian monks in the 12th century, in the heart of Pinot Noir country.', grapes: 'Pinot Noir, Chardonnay' },
   'barossa': { name: 'Barossa Valley', country: 'South Australia', blurb: 'Warm valley with some of the world’s oldest Shiraz vines, planted from the 1840s.', grapes: 'Shiraz, Grenache, Mourvèdre, Riesling' },
-  'bordeaux': { name: 'Margaux, Médoc', country: 'Bordeaux, France', blurb: 'Left-bank gravel and Cabernet-led blends. Château Margaux is one of the four original 1855 first growths.', grapes: 'Cabernet Sauvignon, Merlot, Cabernet Franc, Petit Verdot' },
+  'bordeaux': { name: 'Bordeaux', country: 'France', blurb: 'Left-bank gravel and Cabernet-led blends, right-bank Merlot, and sweet Sauternes. The 1855 classification still shapes how the wines are named and priced.', grapes: 'Cabernet Sauvignon, Merlot, Cabernet Franc, Petit Verdot' },
   'rioja': { name: 'Rioja', country: 'Spain', blurb: 'Spain’s classic red, Tempranillo aged in oak, from young Joven to long-aged Gran Reserva.', grapes: 'Tempranillo, Garnacha, Graciano, Viura' },
   'santorini': { name: 'Santorini', country: 'Greece', blurb: 'Volcanic island vines trained into low baskets, kouloura, to shelter them from the wind.', grapes: 'Assyrtiko, Athiri, Aidani' },
   'sancerre': { name: 'Sancerre', country: 'Loire, France', blurb: 'A hilltop town above the Loire. Sauvignon Blanc on flint and limestone.', grapes: 'Sauvignon Blanc, Pinot Noir' },
@@ -938,8 +938,9 @@ const STYLE_BOTTLE = { 'style:red/full-warm': 'bordeaux', 'style:red/classic': '
   'style:sparkling/traditional': 'champagne', 'style:sparkling/easy': 'champagne', 'style:sweet/fortified': 'port', 'style:sweet/fino': 'port' };
 const PALE = new Set(['water-white', 'lemon', 'straw', 'gold', 'salmon', 'onion-skin', 'pink']);
 let CREDITS = {};
-Promise.all(['img/credits.json', 'img/producers.json'].map(u => fetch(u).then(r => r.ok ? r.json() : {}).catch(() => ({}))))
-  .then(([a, b]) => { CREDITS = Object.assign({}, a, b); for (const [k, from] of Object.entries(REGION_PHOTO_ALIAS)) if (CREDITS[from]) CREDITS[k] = CREDITS[from]; renderAll(); });
+let REGION_MAPS = null;
+Promise.all(['img/credits.json', 'img/producers.json', 'img/maps.json'].map(u => fetch(u).then(r => r.ok ? r.json() : {}).catch(() => ({}))))
+  .then(([a, b, m]) => { CREDITS = Object.assign({}, a, b); REGION_MAPS = m && m.reg ? m : null; for (const [k, from] of Object.entries(REGION_PHOTO_ALIAS)) if (CREDITS[from]) CREDITS[k] = CREDITS[from]; renderAll(); });
 const hasPhoto = k => !!(CREDITS[k] && CREDITS[k].file);
 function regionPhoto(k) { return CREDITS[k].file; }
 function creditLine(k) { const c = CREDITS[k]; return c ? 'Photo: ' + c.artist + ' · ' + c.license : ''; }
@@ -982,7 +983,7 @@ const LETTERING = {
   'cote-de-beaune': { t: 'Meursault', f: '"Pinyon Script",cursive', size: 66, card: 40, tone: '#4A3E22' },
   'beaujolais': { t: 'Beaujolais', f: '"Great Vibes",cursive', size: 70, card: 42, tone: '#4A1428' },
   'burgundy': { t: 'Clos de Vougeot', f: '"IM Fell English SC",serif', size: 40, card: 26, tone: '#332720', ls: '.02em' },
-  'bordeaux': { t: 'MARGAUX', f: 'Cinzel,serif', w: 500, size: 50, card: 30, tone: '#2A0E16', ls: '.14em' },
+  'bordeaux': { t: 'BORDEAUX', f: 'Cinzel,serif', w: 500, size: 46, card: 28, tone: '#2A0E16', ls: '.14em' },
   'rioja': { t: 'RIOJA', f: '"Cinzel Decorative",serif', w: 700, size: 60, card: 36, tone: '#4E2618', ls: '.06em' },
   'santorini': { t: 'SANTORINI', f: 'Marcellus,serif', size: 46, card: 28, tone: '#1C3A55', ls: '.16em', local: 'Σαντορίνη' },
   'sancerre': { t: 'Sancerre', f: 'Italianno,cursive', size: 84, card: 50, tone: '#36422F' },
@@ -1035,6 +1036,14 @@ function openEntity(kind, key) { pushNav(); S.entity = { kind, key }; go('place'
 function openRegion(k) { openEntity('region', k); }
 function openProducer(pId) { openEntity('producer', pId); }
 function openGrape(gId) { openEntity('grape', gId); }
+/* A rough map: the country in context and the region's political area picked out (img/maps.json, built from Natural Earth) */
+function regionMap(k) {
+  const m = REGION_MAPS && REGION_MAPS.reg[k]; if (!m) return null; const w = REGION_MAPS.win[m.w]; if (!w) return null;
+  const NS = 'http://www.w3.org/2000/svg'; const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', '0 0 300 ' + w.h); svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', 'Map showing where ' + REGIONS[k].name + ' is'); svg.style.cssText = 'width:100%;max-height:340px;display:block;border-radius:var(--r);background:rgba(255,255,255,.06)';
+  const mk = (d, fill, stroke, sw) => { const p = document.createElementNS(NS, 'path'); p.setAttribute('d', d); p.setAttribute('fill', fill); p.setAttribute('stroke', stroke); p.setAttribute('stroke-width', sw); p.setAttribute('stroke-linejoin', 'round'); return p; };
+  svg.append(mk(w.land, 'rgba(255,255,255,.16)', 'rgba(255,255,255,.35)', '.6'), mk(m.hi, '#E7A9B6', '#fff', '1'));
+  return svg;
+}
 function renderPlace() {
   const E = S.entity || { kind: 'region', key: S.place };
   if (E.kind === 'producer') return renderProducerPage(E.key);
@@ -1070,6 +1079,7 @@ function renderPlace() {
       el('div', { id: 'phFind', class: 'sec', 'aria-live': 'polite' }),
       ...mn.nodes,
       wines.filter(v => !mn.shown.has(v.id)).length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: mn.shown.size ? 'Also in the catalogue' : 'Wines from here' })), el('div', { class: 'group' }, ...wines.filter(v => !mn.shown.has(v.id)).map(v => wineRow(v.id)))) : null,
+      regionMap(k) ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Where it is' })), regionMap(k), el('p', { class: 'foot', style: 'color:rgba(255,255,255,.6);margin:0', text: 'Rough area, drawn from political boundaries.' })) : null,
       el('div', { class: 'sec', id: 'phAbout' }, el('div', { class: 'sec-h' }, el('h2', { text: 'About' })), el('p', { class: 'ph-blurb', text: r.blurb }), el('div', { class: 'group' }, el('div', { class: 'row' }, el('span', { class: 'lab', style: 'color:#fff', text: 'Grapes' }), el('span', { class: 'row-main row-s', text: r.grapes })), el('div', { class: 'row' }, el('span', { class: 'lab', style: 'color:#fff', text: 'Where' }), el('span', { class: 'row-main row-s', text: r.country })))),
       c ? el('p', { class: 'ph-credit' }, 'Photo: ' + c.artist + ' · ' + c.license + ' · ', el('a', { href: c.source, target: '_blank', rel: 'noopener' }, 'Source')) : null));
   fitLetters(box);
@@ -1266,7 +1276,7 @@ REGIONS['south-west'] = { name: 'South West France', country: 'France', blurb: '
 REGIONS['bergerac'] = { name: 'Bergerac & Monbazillac', country: 'France', blurb: 'Bordeaux’s eastern neighbour on the Dordogne: Merlot-led reds, dry whites and the honeyed sweet wines of Monbazillac.', grapes: 'Merlot, Cabernet Sauvignon, Sémillon, Sauvignon Blanc' };
 LETTERING['south-west'] = { t: 'Sud-Ouest', f: '"Pinyon Script",cursive', size: 76, card: 46, tone: '#4A2E22' };
 LETTERING['bergerac'] = { t: 'Bergerac', f: '"IM Fell English SC",serif', size: 56, card: 32, tone: '#4A3A22' };
-const REGION_PHOTO_ALIAS = { 'loire': 'sancerre', 'bolgheri': 'tenuta-san-guido', 'mendoza': 'catena-zapata', 'napa-valley': 'opus-one', 'sussex': 'nyetimber', 'sauternes': 'chateau-yquem' };
+const REGION_PHOTO_ALIAS = { 'chateau-margaux': 'bordeaux', 'loire': 'sancerre', 'bolgheri': 'tenuta-san-guido', 'mendoza': 'catena-zapata', 'napa-valley': 'opus-one', 'sussex': 'nyetimber', 'sauternes': 'chateau-yquem' };
 const PLACE_REGION = { 'place:fr/loire': 'loire', 'place:fr/chinon': 'loire', 'place:fr/vouvray': 'loire', 'place:fr/saumur': 'loire', 'place:fr/anjou': 'loire', 'place:fr/muscadet': 'loire', 'place:it/tuscany': 'tuscany', 'place:it/piedmont': 'piedmont', 'place:it/barolo': 'piedmont', 'place:fr/alsace': 'alsace', 'place:fr/languedoc': 'languedoc', 'place:za/stellenbosch': 'stellenbosch', 'place:us/willamette': 'willamette-valley', 'place:nz/hawke-s-bay': 'hawkes-bay', 'place:it/bolgheri': 'bolgheri', 'place:ar/mendoza': 'mendoza', 'place:us/napa': 'napa-valley', 'place:gb/sussex': 'sussex', 'place:es/ribera-del-duero': 'ribera-del-duero', 'place:nz/marlborough': 'marlborough', 'place:nz/north-canterbury': 'north-canterbury', 'place:nz/central-otago': 'central-otago', 'place:fr/burgundy': 'burgundy',
   'place:fr/bordeaux': 'bordeaux', 'place:fr/beaujolais': 'beaujolais', 'place:fr/rhone': 'northern-rhone', 'place:fr/champagne': 'champagne', 'place:fr/provence': 'provence',
   'place:es/rioja': 'rioja', 'place:es/jerez': 'jerez', 'place:pt/douro': 'douro', 'place:de/mosel': 'mosel', 'place:gr/santorini': 'santorini', 'place:it/etna': 'etna', 'place:it/veneto': 'valdobbiadene',
@@ -1343,6 +1353,7 @@ const CATALOGUE = [
 ];
 /* Famous names: estates and bottles with openly licensed photos (img/producers.json has the credits) */
 const FAMOUS = [
+  { k: 'chateau-margaux', name: 'Château Margaux', place: 'Margaux, Bordeaux', blurb: 'One of the four original 1855 first growths, on the gravel of the Médoc. Cabernet Sauvignon-led reds of perfume and finesse, and a dry white, Pavillon Blanc.' },
   { k: 'romanee-conti', name: 'Domaine de la Romanée-Conti', place: 'Vosne-Romanée, Burgundy', blurb: 'The stone cross marks the Romanée-Conti vineyard itself: under two hectares of Pinot Noir, and the most sought-after wine in Burgundy.' },
   { k: 'chateau-yquem', name: 'Château d’Yquem', place: 'Sauternes, Bordeaux', blurb: 'The only Sauternes ranked Premier Cru Supérieur in the 1855 classification. Botrytised Sémillon and Sauvignon Blanc that lasts a century.', bottle: 'yquem-bottle' },
   { k: 'lopez-de-heredia', name: 'R. López de Heredia', place: 'Haro, Rioja', blurb: 'Founded in 1877 and famous for Viña Tondonia, released only after many years in old oak. The ornate pavilion was made for the 1910 Brussels World Fair.' },
@@ -1357,9 +1368,10 @@ const FAMOUS = [
   { k: 'nyetimber', name: 'Nyetimber', place: 'West Sussex, England', blurb: 'A pioneer of English sparkling wine, planting Champagne’s grapes in Sussex from 1988.' },
   { k: 'vega-sicilia-bottle', name: 'Vega Sicilia', place: 'Ribera del Duero, Spain', blurb: 'Único is released after a decade or more of ageing, and is Spain’s most celebrated red.' }
 ];
-const FAMOUS_REGION = { 'tenuta-san-guido': 'bolgheri', 'catena-zapata': 'mendoza', 'opus-one': 'napa-valley', 'nyetimber': 'sussex', 'vega-sicilia-bottle': 'ribera-del-duero', 'romanee-conti': 'burgundy', 'chateau-yquem': 'sauternes', 'lopez-de-heredia': 'rioja', 'marques-de-riscal': 'rioja', 'dom-perignon': 'champagne', 'scharzhofberg': 'mosel', 'penfolds': 'barossa', 'cloudy-bay': 'marlborough' };
+const FAMOUS_REGION = { 'chateau-margaux': 'bordeaux', 'tenuta-san-guido': 'bolgheri', 'catena-zapata': 'mendoza', 'opus-one': 'napa-valley', 'nyetimber': 'sussex', 'vega-sicilia-bottle': 'ribera-del-duero', 'romanee-conti': 'burgundy', 'chateau-yquem': 'sauternes', 'lopez-de-heredia': 'rioja', 'marques-de-riscal': 'rioja', 'dom-perignon': 'champagne', 'scharzhofberg': 'mosel', 'penfolds': 'barossa', 'cloudy-bay': 'marlborough' };
 /* Titles in the spirit of each house's own lettering (the logos themselves are trademarks, so these are evocations in open fonts) */
 const PRODUCER_LETTERING = {
+  'chateau-margaux': { t: 'Château Margaux', short: 'Margaux', f: 'Cinzel,serif', w: 500, size: 40, card: 26, ls: '.12em', up: true },
   'dom-perignon': { t: 'Dom Pérignon', f: 'Italiana,serif', size: 58, card: 32, ls: '.14em', up: true },
   'penfolds': { t: 'Penfolds', f: '"DM Serif Display",serif', size: 66, card: 38, ls: '0' },
   'opus-one': { t: 'Opus One', f: '"Cormorant SC",serif', w: 500, size: 60, card: 34, ls: '.22em', up: true },

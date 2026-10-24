@@ -160,5 +160,23 @@
   "licenseUrl": "https://creativecommons.org/licenses/",
   "source": "",
   "query": "valdobbiadene"
+ },
+ "central-otago": {
+  "file": "img/central-otago.jpg",
+  "title": "Supplied by the project owner",
+  "artist": "Creative Commons photographer (attribution to be added)",
+  "license": "Creative Commons",
+  "licenseUrl": "https://creativecommons.org/licenses/",
+  "source": "",
+  "query": "central-otago"
+ },
+ "hawkes-bay": {
+  "file": "img/hawkes-bay.jpg",
+  "title": "Supplied by the project owner",
+  "artist": "Creative Commons photographer (attribution to be added)",
+  "license": "Creative Commons",
+  "licenseUrl": "https://creativecommons.org/licenses/",
+  "source": "",
+  "query": "hawkes-bay"
  }
 }
