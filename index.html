@@ -943,8 +943,8 @@ const STYLE_BOTTLE = { 'style:red/full-warm': 'bordeaux', 'style:red/classic': '
 const PALE = new Set(['water-white', 'lemon', 'straw', 'gold', 'salmon', 'onion-skin', 'pink']);
 let CREDITS = {};
 let REGION_MAPS = null;
-Promise.all(['img/credits.json', 'img/producers.json', 'img/maps.json'].map(u => fetch(u).then(r => r.ok ? r.json() : {}).catch(() => ({}))))
-  .then(([a, b, m]) => { CREDITS = Object.assign({}, a, b); REGION_MAPS = m && m.reg ? m : null; for (const [k, from] of Object.entries(REGION_PHOTO_ALIAS)) if (CREDITS[from]) CREDITS[k] = CREDITS[from]; renderAll(); });
+Promise.all(['img/credits.json', 'img/producers.json', 'img/maps.json', 'img/logos/index.json'].map(u => fetch(u).then(r => r.ok ? r.json() : {}).catch(() => ({}))))
+  .then(([a, b, m, lg]) => { CREDITS = Object.assign({}, a, b); REGION_MAPS = m && m.reg ? m : null; LOGOS = Object.assign(LOGOS, lg || {}); for (const [k, from] of Object.entries(REGION_PHOTO_ALIAS)) if (CREDITS[from]) CREDITS[k] = CREDITS[from]; renderAll(); });
 const photoKeyOf = k => (CREDITS[k] && CREDITS[k].file ? k : null);
 const hasPhoto = k => !!photoKeyOf(k);
 function regionPhoto(k) { return CREDITS[photoKeyOf(k)].file; }
@@ -1467,7 +1467,7 @@ const PRODUCER_LETTERING = {
   'vega-sicilia': { t: 'Vega Sicilia', f: '"Cormorant SC",serif', w: 500, size: 54, card: 30, ls: '.12em', up: true }
 };
 /* Real wordmarks (transparent PNGs in img/logos), drawn as a mask so they take the card's white */
-const LOGOS = { 'dom-perignon': 4.369, 'nyetimber': 5.66, 'cloudy-bay': 5.844, 'domaine-de-la-romanee-conti': 4.555, 'chateau-d-yquem': 3.422,
+let LOGOS = { 'dom-perignon': 4.369, 'nyetimber': 5.66, 'cloudy-bay': 5.844, 'domaine-de-la-romanee-conti': 4.555, 'chateau-d-yquem': 3.422,
   'chateau-arricau-bordes': 2.525, 'chateau-de-sabazan': 2.234, 'quinta-de-la-rosa': 1.219, 'beaumont-des-crayeres': 2.55, 'penfolds': 1.925, 'opus-one': 0.848, 'torbreck': 3.237, 'yalumba': 8.806, 'peter-lehmann': 2.196, 'ministry-of-clouds': 0.899, 'grant-burge': 2.138 };
 /* Producers the way they are really named; matched on the folded name, so older entries such as "De La Rosa" are corrected */
 const PRODUCER_CANON = [[/^(quinta )?de la rosa$/, 'Quinta De La Rosa', 'quinta-de-la-rosa'], [/arricau/, 'Château Arricau-Bordes', 'chateau-arricau-bordes'], [/sabazan/, 'Château de Sabazan', 'chateau-de-sabazan'], [/beaumont des crayeres/, 'Beaumont des Crayères', 'beaumont-des-crayeres']];
@@ -1490,6 +1490,11 @@ function producerLetter(pe, where) {
   return el('span', { style: 'display:block;width:100%' }, el('span', { class: 'letter', style: 'font-family:' + L.f + ';font-weight:' + (L.w || 400) + ';letter-spacing:' + (L.ls || '0') + ';font-size:' + size + 'px;' + (L.up ? 'text-transform:uppercase;' : '') }, where === 'page' ? L.t : (L.short || L.t)));
 }
 const ESTATES = [
+  { name: "Mission Estate Winery", place: "Hawke’s Bay, New Zealand", region: 'hawkes-bay', blurb: "New Zealand’s oldest winery, founded in 1851 by French Marist missionaries at Taradale near Napier. Chardonnay, Syrah and Bordeaux-style reds.", nz: 1 },
+  { name: "Brookfields", place: "Hawke’s Bay, New Zealand", region: 'hawkes-bay', blurb: "A Hawke’s Bay family winery founded in 1937. Known for Bordeaux-style reds, Syrah and Chardonnay.", nz: 1 },
+  { name: "Church Road", place: "Hawke’s Bay, New Zealand", region: 'hawkes-bay', blurb: "One of Hawke’s Bay’s oldest names, founded in 1897 at Taradale. Chardonnay, Syrah and Bordeaux-style blends.", nz: 1 },
+  { name: "Trinity Hill", place: "Hawke’s Bay, New Zealand", region: 'hawkes-bay', blurb: "A Gimblett Gravels pioneer, founded in 1993. Known for Syrah (Homage), Bordeaux-style blends and Chardonnay.", nz: 1 },
+  { name: "Paritua", place: "Hawke’s Bay, New Zealand", region: 'hawkes-bay', blurb: "A boutique Hawke’s Bay estate making Syrah and Bordeaux-style blends.", nz: 1 },
  {
   "name": "Torbreck",
   "place": "Barossa Valley, South Australia",
@@ -1643,7 +1648,7 @@ const ESTATES = [
 ];
 function producerEntities() {
   const out = FAMOUS.map(f => ({ id: 'producer:' + slug(f.name), name: f.name, place: f.place, blurb: f.blurb, photo: hasPhoto(f.k) ? f.k : null, bottle: f.bottle && hasPhoto(f.bottle) ? f.bottle : null, region: FAMOUS_REGION[f.k] || null, famous: true }));
-  for (const e of ESTATES) out.push({ id: 'producer:' + slug(e.name), name: e.name, place: e.place, blurb: e.blurb, placeId: 'place:au', photo: null, bottle: null, region: e.region, famous: true });
+  for (const e of ESTATES) out.push({ id: 'producer:' + slug(e.name), name: e.name, place: e.place, blurb: e.blurb, placeId: e.nz ? 'place:nz' : 'place:au', photo: null, bottle: null, region: e.region, famous: true });
   const have = new Set(out.map(o => o.id));
   const wineRegion = new Map(); for (const w of nodesOf('wine')) { const pid = w.links && w.links.producer, pl = w.links && w.links.place; if (pid && pl && !wineRegion.has(pid)) wineRegion.set(pid, regionKeyOf(pl)); }
   for (const n of Store.nodes.values()) {
