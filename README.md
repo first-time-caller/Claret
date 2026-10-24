@@ -25,3 +25,9 @@ See [`docs/data-model.md`](docs/data-model.md). In short: small nodes with reada
 
 - **As a Claude artifact** (the main way): label scanning, wine lists and bottle suggestions use Claude, and your data syncs privately to your Claude account.
 - **Anywhere else**: Tonight, the log and limits work fully, and data stays in that browser.
+
+## Specs
+
+- [`docs/data-model.md`](docs/data-model.md): the graph, claims, events and derived views.
+- [`docs/journey-and-cellar.md`](docs/journey-and-cellar.md): where you are (home, shop, out), the cellar, and the Journey trail and passport.
+- [`docs/roadmap.md`](docs/roadmap.md): what ships next.

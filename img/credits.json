@@ -28,12 +28,12 @@
  },
  "bordeaux": {
   "file": "img/bordeaux.jpg",
-  "title": "File:Chateau Margaux Wine Case End.jpg",
-  "artist": "Mikecase00",
-  "license": "CC BY-SA 4.0",
-  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-  "source": "https://commons.wikimedia.org/wiki/File:Chateau_Margaux_Wine_Case_End.jpg",
-  "query": "Château Margaux"
+  "title": "File:Château Margaux.jpg",
+  "artist": "Benjamin Zingg",
+  "license": "CC BY-SA 2.5",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+  "source": "https://commons.wikimedia.org/wiki/File:Ch%C3%A2teau_Margaux.jpg",
+  "query": "chosen by the owner"
  },
  "northern-rhone": {
   "file": "img/northern-rhone.jpg",
