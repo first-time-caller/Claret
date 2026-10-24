@@ -406,3 +406,11 @@ A small set of real bottles ships inside the page (`CATALOGUE`), like the atlas:
 
 ### New event
 `saved`: `{ node, removed? }`, your wishlist, shown in Explore.
+
+## Places: levels and the name-twin rule
+
+A `place` node has a **Level**: Country, Region, or Appellation (commune and sub-regional appellations such as Médoc, Haut-Médoc, Margaux). `parent` links each place to the one above it, so Margaux sits under Haut-Médoc, Médoc, Bordeaux, France. A wine is recorded against its most specific place and counts toward every ancestor (a Margaux bottle also counts as Bordeaux).
+
+An estate that shares a name with its appellation is a separate **producer** row, never the same node: *Margaux* (appellation, a place) and *Château Margaux* (Premier Grand Cru Classé 1855, a producer based in that appellation). The same split applies to Pauillac, Saint-Émilion, Pomerol and others; Château Pétrus and Château Lafite are producers, and the communes they are named after are places.
+
+In the artifact, `REGIONS` carries `level` and `parent`; Explore lists top-level regions only (search finds the appellations), and a region page shows its breadcrumb and the appellations inside it. Region maps (`img/maps.json`) use political boundaries where available and a rough ellipse for appellations.
