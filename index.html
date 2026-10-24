@@ -397,6 +397,8 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
 .crumbs button{color:#fff;text-decoration:underline;text-underline-offset:3px;min-height:28px}
 .crumbs .here{color:#fff}
 .crumbs .level{margin-left:auto;padding:2px 8px;border-radius:var(--r);background:rgba(255,255,255,.14);font-size:12px;letter-spacing:.04em}
+.wide-place .place{width:100%;height:176px}
+.wide-place .place-s{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .ph-below .sec-h h2{color:rgba(255,255,255,.7)}
 .ph-below .group{background:rgba(255,255,255,.1)}
 .ph-below .row+.row::before{background:rgba(255,255,255,.12)}
@@ -518,21 +520,17 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
           <h1 class="hero-title" id="heroTitle"></h1>
           <p class="hero-why" id="heroWhy"></p>
           <div class="ctx-chips" id="ctxChips"></div>
+        <button class="btn" id="findBtn" style="margin-top:14px;align-self:flex-start;width:auto;padding-inline:20px" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Find bottles for this</button>
         </div>
       </div>
 
       <article class="look-card lgm" id="pick" aria-live="polite"></article>
 
-      <div class="sec" id="openNow" hidden></div>
-
-      <div class="sec">
-        <button class="btn" id="findBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Find bottles for this</button>
-        <div id="bottles" class="sec" aria-live="polite"></div>
-      </div>
+      <div id="bottles" class="sec" aria-live="polite"></div>
 
       <div class="sec" id="placesSec">
         <div class="sec-h"><h2>Where it's from</h2></div>
-        <div class="strip" id="places"></div>
+        <div class="wide-place" id="places"></div>
       </div>
 
       <div class="sec">
@@ -541,6 +539,8 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
       </div>
 
       <div class="chips" id="limitsLine" aria-label="Your limits"></div>
+
+      <div class="sec" id="openNow" hidden></div>
 
       <div class="sec" id="recentSec" hidden>
         <div class="sec-h"><h2>Lately</h2><button class="link" type="button" data-go="log">See all</button></div>
@@ -2032,6 +2032,7 @@ function renderTonight() {
   hero.style.setProperty('--hc', PALE.has(s.col) ? '#241A10' : '#FFFFFF');
   setTitle($('#heroTitle'), STYLE_HEAD[s.id] || s.name + '.');
   setWhy($('#heroWhy'), why);
+  $('#heroWhy').hidden = !!cand;
   // hero photo: the first region for this style that has one
   const regs = STYLE_REGIONS[s.id] || [];
   const candRegion = cand ? regionKeyOf(cand.d.place) : null;
@@ -2063,7 +2064,7 @@ function renderTonight() {
   if (inCat.length) card.append(el('div', { class: 'group', style: 'background:transparent' }, ...inCat.slice(0, 2).map(v => wineRow(v.id, 'In the catalogue'))));
   // sideways
   const alts = $('#alts'); alts.replaceChildren();
-  const altList = ranked.filter(r => r.style.id !== S.pick).slice(0, 3);
+  const altList = ranked.filter(r => r.style.id !== S.pick).slice(0, 2);
   for (const r of altList) {
     alts.append(el('button', { class: 'row has-glass', type: 'button', onclick: () => { S.pick = r.style.id; $('#bottles').replaceChildren(); renderTonight(); window.scrollTo({ top: 0, behavior: 'smooth' }); } },
       el('div', { class: 'glass' + (r.style.sparkle ? ' sparkle' : ''), style: '--c:var(--c-' + r.style.col + ')', 'aria-hidden': 'true' }),
@@ -2071,10 +2072,10 @@ function renderTonight() {
       chev()));
   }
   // where it's from: the bottle's own region first, then the regions that make this style
-  const keys = [...new Set([candRegion, ...regs].filter(Boolean))].slice(0, 5);
+  const keys = [...new Set([candRegion, ...regs].filter(Boolean))].slice(0, 1);
   $('#placesSec').hidden = !keys.length;
   $('#placesSec h2').textContent = candRegion ? 'Where it\u2019s from' : 'Where this style comes from';
-  $('#places').replaceChildren(...keys.map(k => regionCard(k, [232, 290], { blurb: true })));
+  $('#places').replaceChildren(...keys.map(k => regionCard(k, null, { blurb: true })));
   renderLimitsLine();
   renderRecent();
   fitLetters($('#places'));
