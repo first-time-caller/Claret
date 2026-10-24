@@ -296,3 +296,23 @@ Each grape has a colour from the tasting scale, a one-line description, classic 
 
 ### Navigation
 Detail pages keep a back stack, so region → grape → region → wine → back returns step by step, and tapping a bottom tab resets it.
+
+---
+
+## 12. Built so far (24 Oct 2026)
+
+**Where you are.** A chip on Tonight (At home / In a shop / Out) switches the first screen. Shop and Out last three hours and are also set by starting a scan.
+
+**Cellar.**
+- Tab bar is now Tonight · Cellar · Explore · Journey, plus Scan. Journey holds the log; limits and settings sit behind a link at the top of it.
+- Add bottles by typing a wine in, or from any wine page ("Add to cellar"), or from a scan result. A lot has a quantity, size, price paid, where it's kept, a tier (set from the price and changeable), an optional drinking window, a note, and optionally **Track each bottle** (switched on automatically for the Special tier or £80 and over).
+- **Gifts:** switch "It was a gift" and say who gave it and why; it is stored against a person and shows as "From Sam, Birthday". **Give it away** records who got it.
+- **Open it** reduces the count, creates an open bottle, and starts the fridge timer when the style needs chilling. **Still open** asks how much is left (Finished, a quarter, half, three quarters); Finished offers to log it.
+- **Tonight at home** picks a style from the moment, weather and food as before, then leads with the best bottle you own for that style: open bottles that are fading first, then lots past or at the end of their window, then your palate, with a penalty when the tier is too grand for the occasion and for anything drunk in the last three days. Price limits never stop you opening what you own; taste limits always apply.
+- **Cellar tab:** counts, paid total (gifts excluded), Ready / Hold / Ending / Open, a drinking-window bar per lot, and "Short of" styles that nothing in the cellar covers. In a shop, Scan shows the same gaps.
+
+**Journey recording (the part that cannot be rebuilt later).** Every tasting now stores `firsts` (the grapes, places, producer and style that were new to you at that moment) and `from` (what led to it: a recommendation, a suggestion, a scan, the cellar, or manual). Opening a wine from "More like this" records a `lead` event with its role.
+
+**Not built yet.** The Journey screens (trail, passport, firsts, year in the glass), the forecast chart, delivery-note reading, and Journey's "comfort vs new ground" prompt.
+
+Also in this round: the maturity vocabulary is *Not ready yet · Ready – youthful · Ready – at best · Ready – mature · Past its best* (thirds of the window), and a wine whose name already contains its producer no longer repeats it in the "by" line. See `catalogue-learnings.md`.

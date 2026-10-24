@@ -9,7 +9,8 @@ Claret opens on an answer. It reads the moment (Today, This afternoon, Tonight o
 - **Tonight**: moment-aware style suggestion from a local engine that works with no network, three "sideways" alternatives, serving temperature, glass and prep, and "Find bottles for this" (Claude, limits enforced).
 - **Scan**: Label, Compare and Wine list modes. Each read creates wine nodes, a scan event and a price sighting per price, so your own UK price history builds as you go.
 - **Log**: producer, wine, vintage, origin, grapes, a rating in half steps, the tasting colour in the glass, structure, tags, notes, food, company, where and what you paid.
-- **You**: bottles, grapes and countries so far, best-rated grapes, never-tried countries, hard limits, how adventurous suggestions should be, the Tonight and Nightcap switch times, and export.
+- **Cellar**: what you own, what is open and fading, and what to open tonight. At home, Tonight leads with it.
+- **You** (under Journey): bottles, grapes and countries so far, best-rated grapes, never-tried countries, hard limits, how adventurous suggestions should be, the Tonight and Nightcap switch times, and export.
 
 ## Design
 
@@ -30,4 +31,5 @@ See [`docs/data-model.md`](docs/data-model.md). In short: small nodes with reada
 
 - [`docs/data-model.md`](docs/data-model.md): the graph, claims, events and derived views.
 - [`docs/journey-and-cellar.md`](docs/journey-and-cellar.md): where you are (home, shop, out), the cellar, and the Journey trail and passport.
+- [`docs/catalogue-learnings.md`](docs/catalogue-learnings.md): what BBR and Hedonism's bestsellers say about building a catalogue.
 - [`docs/roadmap.md`](docs/roadmap.md): what ships next.

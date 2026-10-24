@@ -425,11 +425,45 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
 .mini-strip::-webkit-scrollbar{display:none}
 .mini-strip .place{width:150px;height:190px;border-radius:18px;flex:none}
 .chips.on-dark .chip{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.2)}
+input[type=number]{-moz-appearance:textfield;appearance:textfield}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+/* Squarer system: crisp tiles, small radii, hairlines in place of soft shadows */
+:root{--r:4px;--r2:6px}
+.group,.empty,.stat,.score,.search,.seg,.pick,.shutter,.timerbar,.feat,.look-card,.place,.tiles .place,.mini-strip .place,.thumb,.sheet-photo,.wine-hero img.label,.labelthumb,.photo-view img,.note,.srcline{border-radius:var(--r)}
+.btn,.pillbtns .btn,.chip,.gchip,.tags span,.verdict,.savebtn,.pv-more,.toast,.credit-old,.cbtn,.cbtn.big,.scanbtn,.backbtn,.ph-back,.feat .plus,.tabpill,.tabpill .tab,.thumb-x{border-radius:var(--r)}
+.seg{border-radius:var(--r)} .seg button,.scale button{border-radius:3px}
+.sheet{border-radius:var(--r2) var(--r2) 0 0}
+.ph,.hero{border-radius:0}
+@media (min-width:560px){.ph{border-radius:var(--r) var(--r) 0 0}}
+.group{box-shadow:0 0 0 1px var(--line)}
+.ph-below .group,.ph-below .feat{box-shadow:none}
+.lgm{box-shadow:inset 0 0 0 .5px color-mix(in oklab,var(--ink) 16%,transparent),0 1px 3px rgba(0,0,0,.10)}
+.chip{border-width:1px}
+.tiles{gap:8px}
+.tiles .place{height:176px}
+.pick,.look-card{box-shadow:0 0 0 1px var(--line)}
+.btn{min-height:48px}
+.cbtn.big{border-radius:var(--r2)}
+.tabpill{min-height:56px}
+.tabpill .tab[aria-current="page"]{background:color-mix(in oklab,var(--ink) 9%,transparent)}
+/* Cellar */
+.look-name{font:500 20px/1.25 var(--serif);text-align:left;color:var(--ink)}
+.qty{display:flex;align-items:center;gap:16px}
+.qty button{width:44px;height:44px;border:1px solid var(--line);border-radius:var(--r);font-size:22px;line-height:1;color:var(--accent)}
+.qty .mono{font-size:20px;min-width:28px;text-align:center}
+.open-row{background:transparent}
+.tag-line{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.tag-line span{font:500 12px var(--sans);padding:2px 8px;border-radius:var(--r);background:color-mix(in oklab,var(--ink) 7%,transparent);color:var(--ink2)}
+.bar-mini{position:relative;height:4px;background:color-mix(in oklab,var(--ink) 10%,transparent);border-radius:2px;margin-top:6px;width:100%}
+.bar-mini i{position:absolute;top:0;bottom:0;border-radius:2px;background:var(--accent)}
+.bar-mini b{position:absolute;top:-3px;width:2px;height:10px;background:var(--ink)}
+.empty .btn{margin-top:8px}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
 <div class="shell">
   <header class="top">
+    <button class="link" id="topBack" type="button" hidden style="margin-left:-4px">‹ Journey</button>
     <div class="moment"><h1 id="title">Scan</h1></div>
     <p class="sub mono" id="sub"></p>
   </header>
@@ -450,6 +484,8 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
       </div>
 
       <article class="look-card lgm" id="pick" aria-live="polite"></article>
+
+      <div class="sec" id="openNow" hidden></div>
 
       <div class="sec">
         <button class="btn" id="findBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Find bottles for this</button>
@@ -474,6 +510,10 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
       </div>
     </section>
 
+    <section class="view" id="v-cellar" hidden aria-label="Cellar">
+      <div id="cellarOut" class="sec" style="gap:20px"></div>
+    </section>
+
     <section class="view" id="v-explore" hidden>
       <label class="search" for="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><input class="input" id="q" type="search" autocomplete="off" placeholder="Wines, producers, places, grapes"></label>
       <div id="exploreOut" class="sec" style="gap:22px"></div>
@@ -490,6 +530,7 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
         <button type="button" role="radio" data-m="list" aria-checked="false">Wine list</button>
       </div>
       <p class="foot" id="scanHint"></p>
+      <div class="chips" id="gapsLine" hidden></div>
       <label class="shutter" id="shutter">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.2l1.5-2h5.6l1.5 2h1.2A2.5 2.5 0 0 1 20 8.5v8A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5z"/><circle cx="12" cy="12.5" r="3.5"/></svg>
         <span id="shutterText">Take a photo of the label</span>
@@ -507,6 +548,7 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
     </section>
 
     <section class="view" id="v-log" hidden>
+      <button class="link" type="button" data-go="you" style="align-self:flex-end">Limits &amp; settings ›</button>
       <button class="btn" type="button" id="addLog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Log a bottle</button>
       <div id="logList" class="sec"></div>
     </section>
@@ -572,9 +614,9 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
     <div class="tabs-inner">
       <div class="tabpill lgm four">
         <button class="tab" type="button" data-tab="tonight" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h10l-.4 5.2a4.6 4.6 0 0 1-9.2 0z"/><path d="M12 13v7M8.5 21h7"/><path d="M7.3 7h9.4"/></svg><span id="tabMoment">Tonight</span></button>
+        <button class="tab" type="button" data-tab="cellar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10a8 8 0 0 1 16 0v10"/><path d="M3 20h18"/><path d="M9 20v-6h6v6"/></svg>Cellar</button>
         <button class="tab" type="button" data-tab="explore"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>Explore</button>
-        <button class="tab" type="button" data-tab="log"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3"/><path d="M9 7h6M9 10.5h4"/></svg>Log</button>
-        <button class="tab" type="button" data-tab="you"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></svg>You</button>
+        <button class="tab" type="button" data-tab="log"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18c4-9 7 2 11-6 2-4 4-6 7-7"/><circle cx="5" cy="18" r="1.4" fill="currentColor"/><circle cx="14" cy="12" r="1.4" fill="currentColor"/><circle cx="21" cy="5" r="1.4" fill="currentColor"/></svg>Journey</button>
       </div>
       <button class="scanbtn lgm tab" type="button" data-tab="scan" aria-label="Scan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M10 8h4v8h-4z"/></svg></button>
     </div>
@@ -863,7 +905,7 @@ const STYLE_BOTTLE = { 'style:red/full-warm': 'bordeaux', 'style:red/classic': '
 const PALE = new Set(['water-white', 'lemon', 'straw', 'gold', 'salmon', 'onion-skin', 'pink']);
 let CREDITS = {};
 Promise.all(['img/credits.json', 'img/producers.json'].map(u => fetch(u).then(r => r.ok ? r.json() : {}).catch(() => ({}))))
-  .then(([a, b]) => { CREDITS = Object.assign({}, a, b); renderAll(); });
+  .then(([a, b]) => { CREDITS = Object.assign({}, a, b); for (const [k, from] of Object.entries(REGION_PHOTO_ALIAS)) if (CREDITS[from]) CREDITS[k] = CREDITS[from]; renderAll(); });
 const hasPhoto = k => !!(CREDITS[k] && CREDITS[k].file);
 function regionPhoto(k) { return CREDITS[k].file; }
 function creditLine(k) { const c = CREDITS[k]; return c ? 'Photo: ' + c.artist + ' · ' + c.license : ''; }
@@ -888,6 +930,12 @@ function bottleSVG(shape, col) {
 }
 /* Each region's lettering: the face, how it is set, the page's tone, and the name in the local script where it has one */
 const LETTERING = {
+  'bolgheri': { t: 'Bolgheri', f: 'Italianno,cursive', size: 84, card: 50, tone: '#2E3A2A' },
+  'mendoza': { t: 'MENDOZA', f: 'Cinzel,serif', w: 500, size: 52, card: 30, tone: '#4A2A22', ls: '.14em' },
+  'napa-valley': { t: 'Napa Valley', f: '"Abril Fatface",serif', size: 48, card: 28, tone: '#3A2A3A' },
+  'sussex': { t: 'Sussex', f: '"IM Fell English SC",serif', size: 56, card: 34, tone: '#2E3C34' },
+  'ribera-del-duero': { t: 'Ribera del Duero', f: '"Cinzel Decorative",serif', w: 700, size: 34, card: 20, tone: '#3E2418', ls: '.04em' },
+  'sauternes': { t: 'Sauternes', f: '"Great Vibes",cursive', size: 76, card: 46, tone: '#4A3A18' },
   'northern-rhone': { t: 'Côte-Rôtie', f: '"Pinyon Script",cursive', size: 66, card: 40, tone: '#3E1A1E' },
   'cote-de-beaune': { t: 'Meursault', f: '"Pinyon Script",cursive', size: 66, card: 40, tone: '#4A3E22' },
   'beaujolais': { t: 'Beaujolais', f: '"Great Vibes",cursive', size: 70, card: 42, tone: '#4A1428' },
@@ -1012,6 +1060,12 @@ async function askBottles(subject, extra) {
   } catch (e) { out.replaceChildren(el('p', { class: 'ph-credit', style: 'font-size:14px', text: sampleError(e) })); }
 }
 function backButton() { return el('button', { class: 'ph-back', type: 'button', 'aria-label': 'Back', onclick: goBack }, svgIcon('<path d="M15 5l-7 7 7 7"/>')); }
+/* Neighbouring regions worth a look: same country first */
+function relatedRegions(k) {
+  const here = REGIONS[k]; if (!here) return [];
+  const country = fold(here.country.split(',').pop());
+  return Object.keys(REGIONS).filter(o => o !== k && fold(REGIONS[o].country.split(',').pop()) === country).slice(0, 3);
+}
 function renderProducerPage(id) {
   const box = $('#v-place'); box.replaceChildren();
   const pe = producerEntities().find(p => p.id === id);
@@ -1024,8 +1078,7 @@ function renderProducerPage(id) {
       photo ? el('button', { class: 'credit', type: 'button', style: 'height:60%', 'aria-label': 'View the photo full screen', onclick: () => openPhotoKey(photo, pe.name, pe.place) }) : null,
       el('div', { class: 'ph-in' }, el('h1', { class: 'ph-name' }, ...words(pe.name)), el('p', { class: 'ph-sub', text: pe.place }), pageButtons(null, () => askBottles('made by ' + pe.name + ' (' + pe.place + ')'), 'producer', id, pe.name))),
     el('div', { class: 'ph-below', style: '--tone:' + L.tone },
-      rk && REGIONS[rk] ? el('button', { class: 'feat', type: 'button', onclick: () => openRegion(rk) }, el('span', { class: 'glass', style: '--c:var(--c-claret)', 'aria-hidden': 'true' }),
-        el('span', { style: 'display:flex;flex-direction:column;gap:2px;min-width:0' }, el('span', { class: 'k', text: 'The region' }), el('span', { class: 't', text: REGIONS[rk].name }), el('span', { class: 's', text: REGIONS[rk].country })), el('span', { class: 'plus', 'aria-hidden': 'true' }, svgIcon('<path d="M9 6l6 6-6 6"/>'))) : null,
+      rk && REGIONS[rk] ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Where it\u2019s made' })), el('div', { class: 'mini-strip' }, regionCard(rk, [170, 210]), ...relatedRegions(rk).map(k => regionCard(k, [170, 210])))) : null,
       el('div', { id: 'phFind', class: 'sec', 'aria-live': 'polite' }),
       wines.length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Their wines' })), el('div', { class: 'group' }, ...wines.map(v => wineRow(v.id)))) : null,
       el('div', { class: 'sec', id: 'phAbout' }, el('div', { class: 'sec-h' }, el('h2', { text: 'About' })), el('p', { class: 'ph-blurb', text: pe.blurb })),
@@ -1143,7 +1196,14 @@ setInterval(() => Timer.tick(), 1000);
 /* Wine naming convention: "{vintage} {wine} by {producer}, {region}" (BBR style) */
 REGIONS['marlborough'] = { name: 'Marlborough', country: 'New Zealand', blurb: 'Sunny, cool and dry at the top of the South Island. The Wairau Valley made New Zealand Sauvignon Blanc famous.', grapes: 'Sauvignon Blanc, Pinot Noir, Chardonnay' };
 REGIONS['north-canterbury'] = { name: 'North Canterbury', country: 'New Zealand', blurb: 'Limestone hills of the Waipara Valley, sheltered by the Teviotdale range. Pinot Noir, Riesling and Chardonnay.', grapes: 'Pinot Noir, Riesling, Chardonnay' };
-const PLACE_REGION = { 'place:nz/marlborough': 'marlborough', 'place:nz/north-canterbury': 'north-canterbury', 'place:nz/central-otago': 'central-otago', 'place:fr/burgundy': 'burgundy',
+REGIONS['bolgheri'] = { name: 'Bolgheri', country: 'Tuscany, Italy', blurb: 'A cypress-lined coastal strip of Tuscany and the home of the Super Tuscans: Cabernet and Merlot blends that broke the rules of Chianti.', grapes: 'Cabernet Sauvignon, Merlot, Cabernet Franc, Sangiovese' };
+REGIONS['mendoza'] = { name: 'Mendoza', country: 'Argentina', blurb: 'Vineyards at the foot of the Andes, some above 1,500 metres. Argentina\u2019s home of Malbec.', grapes: 'Malbec, Cabernet Sauvignon, Bonarda' };
+REGIONS['napa-valley'] = { name: 'Napa Valley', country: 'California, USA', blurb: 'Cabernet country in northern California: Oakville, Rutherford and Stags Leap, a short valley with a very long reputation.', grapes: 'Cabernet Sauvignon, Merlot, Chardonnay' };
+REGIONS['sussex'] = { name: 'Sussex', country: 'England', blurb: 'Chalk downs on the same seam as Champagne. England\u2019s sparkling wine heartland, planted with Chardonnay, Pinot Noir and Pinot Meunier.', grapes: 'Chardonnay, Pinot Noir, Pinot Meunier' };
+REGIONS['ribera-del-duero'] = { name: 'Ribera del Duero', country: 'Spain', blurb: 'A high, cold plateau on the Duero river. Tempranillo, locally Tinto Fino, with power and a long finish.', grapes: 'Tempranillo (Tinto Fino)' };
+REGIONS['sauternes'] = { name: 'Sauternes', country: 'Bordeaux, France', blurb: 'Misty mornings on the Ciron bring noble rot to Sémillon and Sauvignon Blanc: sweet wines that last a century.', grapes: 'Sémillon, Sauvignon Blanc' };
+const REGION_PHOTO_ALIAS = { 'bolgheri': 'tenuta-san-guido', 'mendoza': 'catena-zapata', 'napa-valley': 'opus-one', 'sussex': 'nyetimber', 'sauternes': 'chateau-yquem' };
+const PLACE_REGION = { 'place:it/bolgheri': 'bolgheri', 'place:ar/mendoza': 'mendoza', 'place:us/napa': 'napa-valley', 'place:gb/sussex': 'sussex', 'place:es/ribera-del-duero': 'ribera-del-duero', 'place:nz/marlborough': 'marlborough', 'place:nz/north-canterbury': 'north-canterbury', 'place:nz/central-otago': 'central-otago', 'place:fr/burgundy': 'burgundy',
   'place:fr/bordeaux': 'bordeaux', 'place:fr/beaujolais': 'beaujolais', 'place:fr/rhone': 'northern-rhone', 'place:fr/champagne': 'champagne', 'place:fr/provence': 'provence', 'place:fr/loire': 'sancerre',
   'place:es/rioja': 'rioja', 'place:es/jerez': 'jerez', 'place:pt/douro': 'douro', 'place:de/mosel': 'mosel', 'place:gr/santorini': 'santorini', 'place:it/etna': 'etna', 'place:it/veneto': 'valdobbiadene',
   'place:au/barossa': 'barossa', 'place:ge/kakheti': 'kakheti' };
@@ -1228,7 +1288,7 @@ const FAMOUS = [
   { k: 'nyetimber', name: 'Nyetimber', place: 'West Sussex, England', blurb: 'A pioneer of English sparkling wine, planting Champagne’s grapes in Sussex from 1988.' },
   { k: 'vega-sicilia-bottle', name: 'Vega Sicilia', place: 'Ribera del Duero, Spain', blurb: 'Único is released after a decade or more of ageing, and is Spain’s most celebrated red.' }
 ];
-const FAMOUS_REGION = { 'romanee-conti': 'burgundy', 'chateau-yquem': 'bordeaux', 'lopez-de-heredia': 'rioja', 'marques-de-riscal': 'rioja', 'dom-perignon': 'champagne', 'scharzhofberg': 'mosel', 'penfolds': 'barossa', 'cloudy-bay': 'marlborough' };
+const FAMOUS_REGION = { 'tenuta-san-guido': 'bolgheri', 'catena-zapata': 'mendoza', 'opus-one': 'napa-valley', 'nyetimber': 'sussex', 'vega-sicilia-bottle': 'ribera-del-duero', 'romanee-conti': 'burgundy', 'chateau-yquem': 'sauternes', 'lopez-de-heredia': 'rioja', 'marques-de-riscal': 'rioja', 'dom-perignon': 'champagne', 'scharzhofberg': 'mosel', 'penfolds': 'barossa', 'cloudy-bay': 'marlborough' };
 function producerEntities() {
   const out = FAMOUS.map(f => ({ id: 'producer:' + slug(f.name), name: f.name, place: f.place, blurb: f.blurb, photo: hasPhoto(f.k) ? f.k : null, bottle: f.bottle && hasPhoto(f.bottle) ? f.bottle : null, region: FAMOUS_REGION[f.k] || null, famous: true }));
   const have = new Set(out.map(o => o.id));
@@ -1388,6 +1448,8 @@ function recordWine(w, src) {
   const vint = /^\d{4}$/.test(String(w.vintage || '').trim()) ? String(w.vintage).trim() : 'nv';
   const vId = 'vintage:' + slug(producer || 'unknown') + '/' + slug(cuvee) + '/' + vint;
   const place = resolvePlace(w.region || w.place, w.country);
+  const regionText = (w.region || w.place || '').trim();
+  if (place && regionText && !Store.nodes.has(place) && !ALIAS.has(fold(regionText)) && place.includes('/')) Store.saveNode(upsertNode(place, 'place', regionText, { parent: place.split('/')[0] }, [regionText]));
   const grapes = (Array.isArray(w.grapes) ? w.grapes : String(w.grapes || '').split(/[,&\/]+/)).map(s => s.trim()).filter(Boolean);
   const grapeIds = grapes.map(g => resolveGrape(g) || 'grape:' + slug(g));
   if (producer) { const p = upsertNode(pId, 'producer', producer, place ? { place: place.split('/')[0] } : null, [producer]); Store.saveNode(p); }
@@ -1413,8 +1475,8 @@ function describeVintage(vId) {
   const vint = v.name && v.name !== 'NV' ? v.name : (v.name === 'NV' ? 'NV' : '');
   return {
     title: [vint, w.name].filter(Boolean).join(' '),
-    by: [p ? 'by ' + p.name : '', region].filter(Boolean).join(', '),
-    sub: [p ? 'by ' + p.name : '', region].filter(Boolean).join(', '),
+    by: [p && !fold(w.name || '').includes(fold(p.name)) && !fold(p.name).includes(fold(w.name || '~')) ? 'by ' + p.name : '', region].filter(Boolean).join(', '),
+    sub: [p && !fold(w.name || '').includes(fold(p.name)) && !fold(p.name).includes(fold(w.name || '~')) ? 'by ' + p.name : '', region].filter(Boolean).join(', '),
     place, placeName,
     colour: best(v, 'appearance') || 'claret',
     family: best(v, 'family'),
@@ -1444,13 +1506,13 @@ function setLim(field, op, value, per) {
 }
 function limPrice(per) { return Store.profile.limits.find(l => l.field === 'price' && l.per === per && l.on !== false); }
 /* Check one candidate against every hard limit. Returns the broken rules in plain words. */
-function breaks(w) {
+function breaks(w, opts) {
   const out = [];
   const fam = w.family || (w.colour && COLOUR[w.colour] && COLOUR[w.colour].family);
   const col = lim('colour');
   if (col && fam && !col.value.includes(fam)) out.push(FAMILY_NAME[fam] + ' is off your list');
   const pb = limPrice('bottle'), pg = limPrice('glass');
-  for (const p of w.prices || []) {
+  for (const p of (opts && opts.owned ? [] : (w.prices || []))) {
     const pence = Math.round((+p.amount || 0) * 100);
     if (!pence) continue;
     if ((p.per || 'bottle') === 'glass') { if (pg && pence > pg.value) out.push('Over your ' + gbp(pg.value) + ' a glass'); }
@@ -1585,6 +1647,7 @@ function renderTonight() {
   const chips = $('#ctxChips'); chips.replaceChildren();
   const wName = { warm: 'Warm', mild: 'Mild', 'cold-wet': 'Cold & wet' }[S.weather];
   const moodName = (MOODS.find(m => m[0] === S.mood) || [])[1];
+  chips.append(el('button', { class: 'gchip', type: 'button', onclick: openWhere }, svgIcon('<path d="M4 11l8-7 8 7v9H4z"/>'), WHERE_NAME[where()]));
   for (const label of [wName || 'Weather?', S.food ? S.food.trim() : 'Pairing', S.withWho ? 'With ' + S.withWho.trim() : 'Just me', moodName].filter(Boolean))
     chips.append(el('button', { class: 'gchip', type: 'button', onclick: openContext }, label));
   if (!ranked.length) {
@@ -1593,8 +1656,10 @@ function renderTonight() {
     $('#alts').replaceChildren(); $('#places').replaceChildren(); card.hidden = true; return;
   }
   card.hidden = false;
-  if (!S.pick || !ranked.find(r => r.style.id === S.pick)) S.pick = ranked[0].style.id;
+  const cands = where() === 'home' ? scoreCellar(ranked) : [];
+  if (!S.pick || !ranked.find(r => r.style.id === S.pick)) S.pick = cands.length ? cands[0].styleId : ranked[0].style.id;
   const cur = ranked.find(r => r.style.id === S.pick);
+  const cand = cands.find(c => c.styleId === S.pick) || null;
   const s = cur.style;
   const why = cur.why.length ? cur.why.slice(0, 3) : ['a good match for the moment'];
   hero.style.setProperty('--wine', 'var(--c-' + s.col + ')');
@@ -1614,18 +1679,19 @@ function renderTonight() {
   } else { hero.classList.add('noimg'); img.hidden = true; $('#heroCredit').hidden = true; $('#heroRegion').textContent = ''; }
   // the glass card
   const mins = prepMinutes(s.serve[2]);
-  $('#findBtn').hidden = !mins; // the card already offers Find bottles unless it is showing the fridge timer
+  $('#findBtn').hidden = !cand && !mins; // the card already offers Find bottles unless it is showing the fridge timer or a cellar bottle
   card.append(
-    el('div', { class: 'look-top' }, bottleSVG(STYLE_BOTTLE[s.id] || 'burgundy', s.col),
+    cand ? cellarPick(cand) : el('div', { class: 'look-top' }, bottleSVG(STYLE_BOTTLE[s.id] || 'burgundy', s.col),
       el('div', { class: 'look-main' }, el('span', { class: 'eyebrow', text: 'Look for · ' + FAMILY_NAME[s.fam] + ' · ' + COLOUR[s.col].name }), el('p', { class: 'look-list', text: s.look.slice(0, 4).join(' · ') }))),
     el('div', { class: 'serve' },
       el('div', null, el('span', { class: 'k', text: 'Serve' }), el('span', { class: 'v', text: s.serve[0] })),
       el('div', null, el('span', { class: 'k', text: 'Glass' }), el('span', { class: 'v', text: s.serve[1] })),
       el('div', null, el('span', { class: 'k', text: 'Prep' }), el('span', { class: 'v', text: s.serve[2] }))),
     el('div', { class: 'pillbtns' },
-      mins ? el('button', { class: 'btn', type: 'button', onclick: () => Timer.start(s.look[0].split(' ')[0], mins) }, 'Fridge timer') : el('button', { class: 'btn', type: 'button', onclick: () => { findBottles(); $('#bottles').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } }, 'Find bottles'),
+      cand ? (cand.kind === 'lot' ? el('button', { class: 'btn', type: 'button', onclick: () => openFromLot(cand.node.id) }, 'Open it') : el('button', { class: 'btn', type: 'button', onclick: () => openLog(wineToForm(cand.d), { cellar: true }) }, 'Drinking this')) : mins ? el('button', { class: 'btn', type: 'button', onclick: () => Timer.start(s.look[0].split(' ')[0], mins) }, 'Fridge timer') : el('button', { class: 'btn', type: 'button', onclick: () => { findBottles(); $('#bottles').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } }, 'Find bottles'),
       el('button', { class: 'btn ghost', type: 'button', style: 'background:color-mix(in oklab,var(--ink) 8%,transparent);color:var(--ink)', onclick: () => $('#alts').scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 'Sideways')));
-  const inCat = [...Store.nodes.values()].filter(n => n.type === 'vintage' && n.catalogue).filter(v => { const w = Store.nodes.get(v.links.wine); return w && w.links.style === s.id; }).filter(v => !breaks({ family: best(v, 'family'), colour: best(v, 'appearance'), abv: best(v, 'abv'), prices: claimsOf(v, 'list-price').map(c => ({ amount: c.v.price / 100, per: 'bottle', size: c.v.size })) }).length);
+  renderOpenNow();
+  const inCat = cand ? [] : [...Store.nodes.values()].filter(n => n.type === 'vintage' && n.catalogue).filter(v => { const w = Store.nodes.get(v.links.wine); return w && w.links.style === s.id; }).filter(v => !breaks({ family: best(v, 'family'), colour: best(v, 'appearance'), abv: best(v, 'abv'), prices: claimsOf(v, 'list-price').map(c => ({ amount: c.v.price / 100, per: 'bottle', size: c.v.size })) }).length);
   if (inCat.length) card.append(el('div', { class: 'group', style: 'background:transparent' }, ...inCat.slice(0, 2).map(v => wineRow(v.id, 'In the catalogue'))));
   // sideways
   const alts = $('#alts'); alts.replaceChildren();
@@ -1754,15 +1820,16 @@ function windowOf(v) {
   if (Array.isArray(w) && w.length === 2) return w.map(Number);
   const m = /(\d{4})\D+(\d{4})/.exec(String(w)); return m ? [+m[1], +m[2]] : null;
 }
-function maturityWord(win) {
+/* Ready – youthful / at best / mature: the drinking window split into thirds */
+function maturityWord(win, year) {
   if (!win) return null;
-  const y = new Date().getFullYear();
+  const y = year || (new Date().getFullYear() + new Date().getMonth() / 12 + 0.5 / 12);
   if (y < win[0]) return 'Not ready yet';
-  if (y > win[1]) return 'Past its window';
-  if (win[1] - y <= 0) return 'Drink up';
-  return y - win[0] < (win[1] - win[0]) / 2 ? 'Ready – youthful' : 'Ready – mature';
+  if (y >= win[1] + 1) return 'Past its best';
+  const f = (y - win[0]) / (win[1] + 1 - win[0]);
+  return f < 1 / 3 ? 'Ready – youthful' : f < 2 / 3 ? 'Ready – at best' : 'Ready – mature';
 }
-function openWine(vId) { pushNav(); S.wine = vId; go('wine'); }
+function openWine(vId, lead) { if (lead && lead.from) Store.addEvent({ kind: 'lead', from: lead.from, to: vId, role: lead.role || 'search' }); pushNav(); S.wine = vId; go('wine'); }
 function isSaved(vId) { const s = Store.events('saved').find(e => e.node === vId); return !!(s && !s.removed); }
 function toggleSaved(vId) {
   const s = Store.events('saved').find(e => e.node === vId);
@@ -1850,6 +1917,9 @@ function renderWine() {
     hero,
     el('div', { class: 'sec', style: 'gap:8px' }, crumbs, el('h1', { class: 'wname' }, ...words(d.title)), el('p', { class: 'wby' }, p ? el('button', { type: 'button', onclick: () => openProducer(p.id) }, 'by ' + p.name) : '', d.place ? (p ? ', ' : '') + placeShort(d.place) : ''), fromClaude ? el('span', { class: 'sugg', text: 'Suggested by Claude · check the details' }) : null, tags),
     el('div', { class: 'pillbtns' }, el('button', { class: 'btn', type: 'button', onclick: () => openLog(wineToForm(d), {}) }, 'Drinking this'), el('button', { class: 'btn ghost', type: 'button', style: 'background:color-mix(in oklab,var(--ink) 8%,transparent);color:var(--ink)', onclick: () => findLike(vId) }, 'More like this')),
+    (() => { const mine2 = cellarLots().filter(l => l.links.vintage === vId); const have = mine2.reduce((a, l) => a + lotLeft(l), 0);
+      return el('div', { class: 'pillbtns' }, have ? el('button', { class: 'btn ghost', type: 'button', style: 'background:color-mix(in oklab,var(--ink) 8%,transparent);color:var(--ink)', onclick: () => openLotSheet(mine2[0].id) }, 'In your cellar: ' + have)
+        : el('button', { class: 'btn ghost', type: 'button', style: 'background:color-mix(in oklab,var(--ink) 8%,transparent);color:var(--ink)', onclick: () => openLotForm(vId) }, 'Add to cellar')); })(),
     mat,
     el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Scores' })), scores),
     priceRows.length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Price' })), el('div', { class: 'group' }, ...priceRows)) : null,
@@ -1919,7 +1989,7 @@ async function findLike(vId) {
       if (breaks(w).length) { dropped++; continue; }
       const id = suggestedWine(w, b);
       const dd = describeVintage(id);
-      g.append(el('button', { class: 'row has-glass', type: 'button', style: 'align-items:flex-start', onclick: () => openWine(id) },
+      g.append(el('button', { class: 'row has-glass', type: 'button', style: 'align-items:flex-start', onclick: () => openWine(id, { from: vId, role: b.role }) },
         el('div', { class: 'glass', style: '--c:var(--c-' + (w.colour || 'claret') + ');margin-top:2px', 'aria-hidden': 'true' }),
         el('span', { class: 'row-main' }, el('span', { class: 'rec-k', text: ROLE[b.role] || 'Like this' }), el('span', { class: 'row-t', text: dd.title }), el('span', { class: 'row-s', text: dd.by }), el('span', { class: 'row-s', style: 'color:var(--ink)', text: str(b.why) }),
           el('span', { class: 'row-s mono', text: [w.prices[0] ? '≈ £' + w.prices[0].amount.toFixed(2) : '', str(b.where)].filter(Boolean).join(' · ') })), chev()));
@@ -2045,6 +2115,308 @@ function renderExploreInner() {
 }
 
 /* ============================================================
+   Where you are, and the cellar (docs/journey-and-cellar.md)
+   ============================================================ */
+const WHERE_NAME = { home: 'At home', shop: 'In a shop', out: 'Out' };
+function where() { const w = LS.get('claret.where', null); return w && w.until > Date.now() ? w.v : 'home'; }
+function setWhere(v, hours) { LS.set('claret.where', v === 'home' ? null : { v, until: Date.now() + (hours || 3) * 3600e3 }); }
+function openWhere() {
+  const cur = where();
+  openSheet('Where are you?', [el('div', { class: 'group' }, ...[['home', 'At home', 'Start from your cellar'], ['shop', 'In a shop', 'Scan labels, compare, and see what your cellar is short of'], ['out', 'Out', 'Read the wine list']].map(([k, n, sub]) =>
+    el('button', { class: 'row', type: 'button', onclick: () => { setWhere(k); closeSheet(); if (k === 'shop') { S.scan.mode = 'label'; go('scan'); } else if (k === 'out') { S.scan.mode = 'list'; go('scan'); } else { S.pick = null; go('tonight'); } } },
+      el('span', { class: 'row-main' }, el('span', { class: 'row-t', style: 'font-family:var(--sans);font-size:17px', text: n }), el('span', { class: 'row-s', text: sub })), cur === k ? el('span', { class: 'row-end', style: 'color:var(--accent)', text: '✓' }) : null))),
+    el('p', { class: 'foot', text: 'Shop and Out switch back to At home after three hours.' })]);
+}
+
+const TIERS = ['everyday', 'good', 'treat', 'special'];
+const TIER_NAME = { everyday: 'Everyday', good: 'Good', treat: 'Treat', special: 'Special' };
+const tierFor = pence => pence == null ? 'good' : pence < 1500 ? 'everyday' : pence < 3000 ? 'good' : pence < 8000 ? 'treat' : 'special';
+const SIZES = [[750, '75 cl'], [375, '37.5 cl'], [1500, '150 cl'], [3000, '300 cl'], [500, '50 cl'], [1000, '100 cl']];
+const sizeName = ml => (SIZES.find(x => x[0] === ml) || [ml, ml + ' ml'])[1];
+const LOCATIONS = ['Rack', 'Wine fridge', 'Fridge', 'Garage', 'Under the stairs', 'Kitchen'];
+const nodesOf = type => [...Store.nodes.values()].filter(n => n.type === type && !n.mergedInto);
+function newNode(id, type, name, links, extra) { const now = new Date().toISOString(); return Object.assign({ schema: SCHEMA, id, type, name: name || '', aliases: [], links: links || {}, claims: [], createdAt: now, updatedAt: now }, extra || {}); }
+function lotBottles(lot) { return nodesOf('bottle').filter(b => b.links.lot === lot.id).sort((a, b) => a.n - b.n); }
+function lotLeft(lot) { return lot.individual ? lotBottles(lot).filter(b => b.status === 'cellar').length : (lot.left || 0); }
+function cellarLots() { return nodesOf('lot').filter(l => lotLeft(l) > 0); }
+function openBottles() { return nodesOf('open').filter(o => !o.finished); }
+function dayName(iso) { const d = new Date(iso); const days = (Date.now() - d) / 864e5; return days < 6 ? d.toLocaleDateString('en-GB', { weekday: 'long' }) : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }); }
+function fadeDays(styleId) { if (!styleId) return 4; if (styleId.startsWith('style:sparkling')) return 2; if (styleId === 'style:sweet/fino') return 7; if (styleId === 'style:sweet/fortified') return 30; if (styleId.startsWith('style:white') || styleId === 'style:rose/pale') return 3; return 4; }
+/* Which of the atlas styles a wine belongs to, when nobody has said */
+function inferStyle(d) {
+  const w = d.wine || { links: {} }; const st = w.links && w.links.style; if (st && STYLE[st]) return st;
+  const fam = d.family || (COLOUR[d.colour] || {}).family; const g = ((w.links && w.links.grapes) || [])[0]; const body = fold(best(d.vintage, 'body') || '');
+  if (fam === 'sparkling') return 'style:sparkling/traditional'; if (fam === 'sweet') return 'style:sweet/fortified'; if (fam === 'rose') return 'style:rose/pale'; if (fam === 'orange') return 'style:orange/skin';
+  if (fam === 'white') {
+    if (['grape:riesling', 'grape:gewurztraminer', 'grape:pinot-gris'].includes(g)) return 'style:white/aromatic';
+    if (['grape:chardonnay', 'grape:viognier', 'grape:semillon', 'grape:marsanne', 'grape:roussanne'].includes(g)) return 'style:white/rich';
+    if (['grape:albarino', 'grape:assyrtiko', 'grape:melon-de-bourgogne', 'grape:vermentino', 'grape:picpoul'].includes(g)) return 'style:white/crisp-saline';
+    return 'style:white/zesty';
+  }
+  if (fam === 'red') {
+    if (g === 'grape:pinot-noir') return 'style:red/pinot-fruit'; if (['grape:gamay', 'grape:poulsard', 'grape:frappato'].includes(g)) return 'style:red/light-chilled';
+    if (['grape:syrah', 'grape:grenache', 'grape:cabernet-franc', 'grape:mencia', 'grape:nerello-mascalese', 'grape:mourvedre', 'grape:carignan'].includes(g)) return 'style:red/savoury-medium';
+    if (['grape:malbec', 'grape:zinfandel', 'grape:pinotage'].includes(g) || body.includes('full')) return 'style:red/full-warm';
+    return 'style:red/classic';
+  }
+  return null;
+}
+function lotInfo(lot) {
+  const d = describeVintage(lot.links.vintage); const win = windowOf(d.vintage);
+  return { d, win, status: win ? maturityWord(win) : 'Ready', style: inferStyle(d), left: lotLeft(lot) };
+}
+function personName(id) { const n = Store.nodes.get(id); return n ? n.name : String(id || '').split(':')[1] || 'someone'; }
+
+/* Choosing from the cellar: the style engine's fit, plus urgency, palate, occasion and recency */
+function scoreCellar(ranked) {
+  const c = ctxSnapshot(), P = palate(), now = Date.now(), y = new Date().getFullYear();
+  const byStyle = new Map(ranked.map(r => [r.style.id, r]));
+  const ceil = c.mood === 'celebrating' ? 3 : c.moment === 'tonight' ? 2 : 1;
+  const recent = new Set(Store.events('tasting').filter(t => now - new Date(t.at) < 3 * 864e5).map(t => t.node));
+  const out = [];
+  const consider = (kind, node, vId, tierIdx) => {
+    const d = describeVintage(vId); const styleId = inferStyle(d); const r = styleId && byStyle.get(styleId);
+    if (!r) return;
+    if (breaks(wineToForm(d), { owned: true }).length) return;
+    let score = r.score; const why = [];
+    const win = windowOf(d.vintage);
+    if (kind === 'open') { const days = (now - new Date(node.openedAt)) / 864e5; if (days >= fadeDays(styleId) * .5) { score += 5; why.push('open since ' + dayName(node.openedAt) + ' and fading'); } else { score += 2; why.push('already open'); } }
+    else if (win) {
+      if (y < win[0]) return;
+      if (y > win[1]) { score += 3; why.push('past its window'); } else if (y === win[1]) { score += 2; why.push('in the last year of its window'); }
+      else if (maturityWord(win) === 'Ready – at best') { score += 1; why.push('at its best'); } else { score += .5; why.push('ready now'); }
+    } else { score += .5; why.push('ready now'); }
+    const g = ((d.wine.links && d.wine.links.grapes) || [])[0]; const pg = g && P.grape[g]; if (pg) score += (pg.avg - 3) * .6;
+    if (tierIdx > ceil) score -= 1.5 * (tierIdx - ceil);
+    if (recent.has(vId)) score -= 1.5;
+    if (r.why[0]) why.push(r.why[0]);
+    out.push({ kind, node, vId, styleId, score, why, d });
+  };
+  for (const o of openBottles()) { const lot = Store.nodes.get(o.links.lot); consider('open', o, o.links.vintage, TIERS.indexOf((lot && lot.tier) || 'good')); }
+  for (const lot of cellarLots()) consider('lot', lot, lot.links.vintage, TIERS.indexOf(lot.tier || 'good'));
+  return out.sort((a, b) => b.score - a.score);
+}
+function cellarGaps(n) {
+  const have = new Set(cellarLots().filter(l => { const i = lotInfo(l); return !i.status.startsWith('Not ready') && i.status !== 'Past its best'; }).map(l => inferStyle(describeVintage(l.links.vintage))));
+  return scoreStyles().filter(r => !have.has(r.style.id)).slice(0, n || 3).map(r => r.style);
+}
+
+/* The card on Tonight */
+function cellarPick(cand) {
+  const d = cand.d, isOpen = cand.kind === 'open'; const lot = isOpen ? Store.nodes.get(cand.node.links.lot) : cand.node;
+  const win = windowOf(d.vintage);
+  const status = isOpen ? 'Open since ' + dayName(cand.node.openedAt) : (win ? maturityWord(win) : 'Ready');
+  const reason = cand.why.slice(0, 2).join(', ').replace(/^\w/, m => m.toUpperCase()) + '.';
+  return el('div', { class: 'look-top' }, bottleSVG(bottleFor(d), d.colour),
+    el('div', { class: 'look-main' }, el('span', { class: 'eyebrow', text: 'From your cellar' }),
+      el('button', { class: 'look-name', type: 'button', onclick: () => openWine(cand.vId) }, ...words(d.title)), el('span', { class: 'row-s', text: d.by }),
+      el('span', { class: 'row-s', text: [status, isOpen ? null : lotLeft(lot) + ' left', lot && lot.location].filter(Boolean).join(' · ') }), el('span', { class: 'row-s', style: 'color:var(--ink)', text: reason })));
+}
+function renderOpenNow() {
+  const box = $('#openNow'); box.replaceChildren();
+  const opens = where() === 'home' ? openBottles() : [];
+  const empty = where() === 'home' && !nodesOf('lot').length && !opens.length;
+  box.hidden = !opens.length && !empty;
+  if (empty) { box.append(el('div', { class: 'empty' }, el('h3', { text: 'Your cellar is empty' }), el('p', { text: 'Add the bottles you own and Tonight will start with them: what is ready, what is fading, and what suits the evening.' }), el('button', { class: 'btn', type: 'button', onclick: () => openLotForm() }, 'Add bottles'))); return; }
+  if (opens.length) box.append(el('div', { class: 'sec-h' }, el('h2', { text: 'Still open' })), el('div', { class: 'group' }, ...opens.map(openRowEl)));
+}
+function openRowEl(o) {
+  const d = describeVintage(o.links.vintage); const hrs = (Date.now() - new Date(o.openedAt)) / 36e5;
+  return el('div', { class: 'row open-row', style: 'flex-direction:column;align-items:stretch;gap:10px' },
+    el('div', { style: 'display:flex;gap:12px;align-items:center' }, el('div', { class: 'glass', style: '--c:var(--c-' + d.colour + ')', 'aria-hidden': 'true' }),
+      el('div', { class: 'row-main' }, el('button', { class: 'row-t', type: 'button', style: 'text-align:left', onclick: () => openWine(o.links.vintage) }, ...words(d.title)), el('span', { class: 'row-s', text: 'Opened ' + dayName(o.openedAt) + (o.fadesBy ? ' · best by ' + dayName(o.fadesBy) : '') }))),
+    el('span', { class: 'row-s', text: hrs >= 6 ? 'How much is left?' : 'Tell Claret how much is left when you are done' }),
+    el('div', { class: 'chips' }, ...[['Finished', 0], ['A quarter', .25], ['Half', .5], ['Three quarters', .75]].map(([n, f]) => el('button', { class: 'chip', type: 'button', 'aria-pressed': String(!!o.answered && o.left === f), onclick: () => setOpenLeft(o.id, f) }, n))));
+}
+function setOpenLeft(id, frac) {
+  const o = Store.nodes.get(id); if (!o) return;
+  const d = describeVintage(o.links.vintage);
+  o.left = frac; o.answered = true; o.updatedAt = new Date().toISOString();
+  if (frac === 0) {
+    o.finished = true; Store.saveNode(o);
+    if (o.links.bottle) { const b = Store.nodes.get(o.links.bottle); if (b) { b.status = 'finished'; Store.saveNode(b); } }
+    Store.addEvent({ kind: 'bottle', act: 'finished', lot: o.links.lot, bottle: o.links.bottle || null, node: o.links.vintage });
+    renderAll(); openLog(wineToForm(d), { cellar: true }); toast('Finished. Log it?');
+  } else { Store.saveNode(o); renderAll(); toast('Noted: ' + Math.round(frac * 100) + '% left'); }
+}
+function openFromLot(lotId, bottleId) {
+  const lot = Store.nodes.get(lotId); if (!lot || lotLeft(lot) < 1) return;
+  const d = describeVintage(lot.links.vintage); const styleId = inferStyle(d);
+  let bId = bottleId || null;
+  if (lot.individual) {
+    const bs = lotBottles(lot).filter(b => b.status === 'cellar');
+    if (!bId && bs.length > 1) { closeSheet(); openSheet('Which bottle?', [el('div', { class: 'group' }, ...bs.map(b => el('button', { class: 'row', type: 'button', onclick: () => { closeSheet(); openFromLot(lotId, b.id); } }, el('span', { class: 'row-main' }, el('span', { class: 'row-t', style: 'font-family:var(--sans);font-size:17px', text: 'Bottle ' + b.n + ' of ' + b.of }), b.note ? el('span', { class: 'row-s', text: b.note }) : null), chev())))]); return; }
+    bId = bId || bs[0].id; const b = Store.nodes.get(bId); b.status = 'open'; b.updatedAt = new Date().toISOString(); Store.saveNode(b);
+  } else { lot.left = Math.max(0, (lot.left || 0) - 1); lot.updatedAt = new Date().toISOString(); Store.saveNode(lot); }
+  const o = newNode('open:' + ulid(), 'open', d.title, { lot: lot.id, vintage: lot.links.vintage, bottle: bId || undefined }, { openedAt: new Date().toISOString(), left: 1, answered: false, keep: 'fridge', fadesBy: new Date(Date.now() + fadeDays(styleId) * 864e5).toISOString().slice(0, 10) });
+  Store.saveNode(o);
+  Store.addEvent({ kind: 'bottle', act: 'opened', lot: lot.id, bottle: bId, node: lot.links.vintage });
+  const st = styleId && STYLE[styleId]; const mins = st ? prepMinutes(st.serve[2]) : 0;
+  if (mins) Timer.start(d.title.replace(/^(\d{4}|NV)\s+/, '').split(' ')[0], mins);
+  closeSheet(); toast(mins ? 'Opened. Chilling for ' + mins + ' min.' : 'Opened. Enjoy.'); S.pick = null; renderAll();
+}
+
+/* The Cellar screen */
+function renderCellar() {
+  const box = $('#cellarOut'); box.replaceChildren();
+  const y = new Date().getFullYear(); const infos = cellarLots().map(l => ({ lot: l, i: lotInfo(l) }));
+  const opens = openBottles();
+  const n = infos.reduce((a, x) => a + x.i.left, 0);
+  const ready = infos.filter(x => !x.i.status.startsWith('Not ready'));
+  const ending = infos.filter(x => x.i.win && y >= x.i.win[1]);
+  const hold = infos.filter(x => x.i.status.startsWith('Not ready'));
+  const sum = a => a.reduce((t, x) => t + x.i.left, 0);
+  const paid = infos.reduce((a, x) => a + (x.lot.paid || 0) * x.i.left, 0);
+  const paidN = infos.reduce((a, x) => a + (x.lot.paid != null ? x.i.left : 0), 0);
+  const tab = S.cTab || 'ready';
+  box.append(el('button', { class: 'btn', type: 'button', onclick: () => openLotForm() }, svgIcon('<path d="M12 5v14M5 12h14"/>'), 'Add bottles'));
+  if (!infos.length && !opens.length) { box.append(el('div', { class: 'empty' }, el('h3', { text: 'Nothing in the cellar yet' }), el('p', { text: 'Add what you own: a case from a merchant, a gift, a bottle in the rack. Claret will tell you what is ready, what is fading, and what to open tonight.' }), el('p', { text: 'You can also tap Add to cellar on any wine page.' }))); return; }
+  box.append(el('div', { class: 'stat-row' },
+    el('div', { class: 'stat' }, el('span', { class: 'n', text: String(n) }), el('span', { class: 'l', text: n === 1 ? 'Bottle' : 'Bottles' })),
+    el('div', { class: 'stat' }, el('span', { class: 'n', text: String(sum(ready)) }), el('span', { class: 'l', text: 'Ready now' })),
+    el('div', { class: 'stat' }, el('span', { class: 'n', text: String(sum(ending)) }), el('span', { class: 'l', text: 'Ending soon' }))),
+    paid ? el('p', { class: 'foot', style: 'margin-top:-8px', text: gbp(paid) + ' paid for ' + paidN + (paidN === 1 ? ' bottle' : ' bottles') + (paidN < n ? ' (the rest were gifts)' : '') + '. Only what you paid; Claret does not guess market values.' }) : null);
+  box.append(el('div', { class: 'seg', role: 'radiogroup', 'aria-label': 'Show' }, ...[['ready', 'Ready'], ['hold', 'Hold'], ['ending', 'Ending'], ['open', 'Open']].map(([k, nm]) =>
+    el('button', { type: 'button', role: 'radio', 'aria-checked': String(tab === k), onclick: () => { S.cTab = k; renderCellar(); } }, nm + (k === 'open' && opens.length ? ' ' + opens.length : '')))));
+  const list = { ready, hold, ending }[tab];
+  if (tab === 'open') box.append(opens.length ? el('div', { class: 'group' }, ...opens.map(openRowEl)) : el('p', { class: 'foot', text: 'Nothing open. Open a bottle from your cellar and it appears here.' }));
+  else if (list.length) box.append(el('div', { class: 'group' }, ...list.sort((a, b) => (b.i.win ? 1 : 0) - (a.i.win ? 1 : 0) || (a.i.win ? a.i.win[1] - b.i.win[1] : 0)).map(x => lotRow(x.lot))));
+  else box.append(el('p', { class: 'foot', text: { ready: 'Nothing is ready yet.', hold: 'Nothing is being held.', ending: 'Nothing is near the end of its window.' }[tab] }));
+  const gaps = cellarGaps(3);
+  if (gaps.length && tab !== 'open') box.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Short of' })), el('div', { class: 'chips' }, ...gaps.map(g => el('span', { class: 'chip static', text: g.name }))), el('p', { class: 'foot', text: 'Styles that suit now and that nothing in your cellar covers. Claret shows these when you scan in a shop.' })));
+}
+function lotRow(lot) {
+  const i = lotInfo(lot); const d = i.d; const win = i.win; const y = new Date().getFullYear() + new Date().getMonth() / 12;
+  let bar = null;
+  if (win) { const lo = win[0] - 1, hi = win[1] + 2; const pc = v => (Math.max(0, Math.min(1, (v - lo) / (hi - lo))) * 100).toFixed(1) + '%'; bar = el('span', { class: 'bar-mini', 'aria-hidden': 'true' }, el('i', { style: 'left:' + pc(win[0]) + ';width:calc(' + pc(win[1] + 1) + ' - ' + pc(win[0]) + ')' }), el('b', { style: 'left:' + pc(y) })); }
+  return el('button', { class: 'row has-glass', type: 'button', style: 'align-items:flex-start', onclick: () => openLotSheet(lot.id) },
+    labelURL(d.vintage) ? el('img', { class: 'labelthumb', src: labelURL(d.vintage), alt: '' }) : el('div', { class: 'glass' + (d.family === 'sparkling' ? ' sparkle' : ''), style: '--c:var(--c-' + d.colour + ');margin-top:2px', 'aria-hidden': 'true' }),
+    el('span', { class: 'row-main' }, el('span', { class: 'row-t' }, ...words(d.title)), el('span', { class: 'row-s', text: d.by }),
+      el('span', { class: 'row-s', text: [i.left + ' × ' + sizeName(lot.size || 750) + (lot.individual ? ', each tracked' : ''), lot.location, i.status].filter(Boolean).join(' · ') }),
+      lot.gift && lot.gift.from ? el('span', { class: 'row-s', text: 'From ' + personName(lot.gift.from) + (lot.gift.occasion ? ', ' + lot.gift.occasion : '') }) : null, bar),
+    chev());
+}
+function openLotSheet(id) {
+  const lot = Store.nodes.get(id); if (!lot) return; const i = lotInfo(lot); const d = i.d; const win = i.win;
+  const row = (k, v) => v ? el('div', { class: 'row' }, el('span', { class: 'lab', text: k }), el('span', { class: 'row-main' }), el('span', { class: 'row-end', style: 'color:var(--ink);max-width:62%', text: v })) : null;
+  const bottles = lot.individual ? lotBottles(lot) : [];
+  const venue = lot.links.venue && Store.nodes.get(lot.links.venue);
+  let removing = false;
+  openSheet(d.title || 'Lot', [
+    el('div', { class: 'eyebrow', text: d.by }),
+    el('div', { class: 'group' },
+      row('Left', i.left + ' of ' + lot.qty + ' × ' + sizeName(lot.size || 750)), row('Status', i.status + (win ? ' (drink ' + win[0] + ' – ' + win[1] + ')' : '')), row('Kept', lot.location),
+      lot.gift && lot.gift.from ? row('Gift from', personName(lot.gift.from) + (lot.gift.occasion ? ', ' + lot.gift.occasion : '')) : row('Paid', lot.paid != null ? gbp(lot.paid) + ' each' : ''),
+      row('Bought', [lot.boughtAt ? new Date(lot.boughtAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '', venue ? venue.name : ''].filter(Boolean).join(' · ')), row('Tier', TIER_NAME[lot.tier || 'good']), row('Note', lot.note)),
+    bottles.length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Each bottle' })), el('div', { class: 'group' }, ...bottles.map(b => el('div', { class: 'row' }, el('span', { class: 'row-main' }, el('span', { class: 'row-t', style: 'font-family:var(--sans);font-size:16px', text: 'Bottle ' + b.n + ' of ' + b.of }), b.note ? el('span', { class: 'row-s', text: b.note }) : null),
+      b.status === 'cellar' ? el('button', { class: 'link', type: 'button', onclick: () => openFromLot(lot.id, b.id) }, 'Open') : el('span', { class: 'row-end', text: b.status === 'open' ? 'Open' : b.status === 'gifted' ? 'Gifted' : 'Finished' }))))) : null,
+    el('div', { class: 'pillbtns' }, el('button', { class: 'btn', type: 'button', onclick: () => openFromLot(lot.id) }, 'Open it'), el('button', { class: 'btn ghost', type: 'button', style: 'background:color-mix(in oklab,var(--ink) 8%,transparent);color:var(--ink)', onclick: () => { closeSheet(); openWine(lot.links.vintage); } }, 'The wine')),
+    el('div', { class: 'btns' }, el('button', { class: 'link', type: 'button', onclick: () => { closeSheet(); openLotForm(null, lot.id); } }, 'Edit'), el('button', { class: 'link', type: 'button', onclick: () => { closeSheet(); openGiveAway(lot.id); } }, 'Give it away'),
+      el('button', { class: 'link', type: 'button', style: 'color:var(--bad)', onclick: e => { if (!removing) { removing = true; e.currentTarget.textContent = 'Tap again to remove'; return; } lot.left = 0; if (lot.individual) lotBottles(lot).forEach(b => { b.status = 'finished'; Store.saveNode(b); }); Store.saveNode(lot); Store.addEvent({ kind: 'bottle', act: 'adjusted', lot: lot.id, n: -i.left, node: lot.links.vintage }); closeSheet(); renderAll(); toast('Removed from the cellar'); } }, 'Remove'))]);
+}
+function openGiveAway(lotId) {
+  const lot = Store.nodes.get(lotId); const d = describeVintage(lot.links.vintage);
+  const who = el('input', { class: 'input', id: 'gaWho', type: 'text', list: 'personList', autocomplete: 'off', placeholder: 'Alex' }); const occ = el('input', { class: 'input', id: 'gaOcc', type: 'text', placeholder: 'Housewarming' });
+  openSheet('Give away', [el('p', { class: 'foot', text: d.title }), personList(), el('div', { class: 'group' }, el('label', { class: 'row', for: 'gaWho' }, el('span', { class: 'lab', text: 'To' }), who), el('label', { class: 'row', for: 'gaOcc' }, el('span', { class: 'lab', text: 'For' }), occ)),
+    el('button', { class: 'btn', type: 'button', onclick: () => {
+      const name = who.value.trim(); if (!name) { toast('Who is it for?'); return; }
+      const pid = 'person:' + slug(name); Store.saveNode(upsertNode(pid, 'person', name, null, [name]));
+      let bId = null;
+      if (lot.individual) { const b = lotBottles(lot).find(x => x.status === 'cellar'); if (b) { b.status = 'gifted'; Store.saveNode(b); bId = b.id; } } else { lot.left = Math.max(0, (lot.left || 0) - 1); Store.saveNode(lot); }
+      Store.addEvent({ kind: 'bottle', act: 'gifted', lot: lot.id, bottle: bId, node: lot.links.vintage, to: pid, occasion: occ.value.trim() || null });
+      closeSheet(); renderAll(); toast('Given to ' + name);
+    } }, 'Give it away')]);
+}
+function personList() { return el('datalist', { id: 'personList' }, ...nodesOf('person').map(p => el('option', { value: p.name }))); }
+function persistChain(vId) {
+  const v = Store.nodes.get(vId); if (!v) return; Store.saveNode(v);
+  const w = Store.nodes.get(v.links.wine); if (w) { Store.saveNode(w); const pr = Store.nodes.get(w.links.producer); if (pr) Store.saveNode(pr); }
+}
+/* Add or edit a lot. With a wine id the wine is fixed; without one the wine is typed in. */
+function openLotForm(vId0, lotId) {
+  const edit = lotId ? Store.nodes.get(lotId) : null; const vId = vId0 || (edit && edit.links.vintage) || null; const d = vId ? describeVintage(vId) : null;
+  let qty = edit ? Math.max(1, lotLeft(edit)) : 1; let tierTouched = !!edit, indTouched = !!edit;
+  const f = (id, label, val, attrs) => el('label', { class: 'row', for: id }, el('span', { class: 'lab', text: label }), el('input', Object.assign({ class: 'input', id, type: 'text', autocomplete: 'off', value: val == null ? '' : val }, attrs || {})));
+  const qtyOut = el('span', { class: 'mono', id: 'lcQty', text: String(qty) });
+  const syncInd = () => { if (!indTouched) ind.checked = tier.value === 'special' || (toPence(paid.value) || 0) >= 8000; };
+  const stepper = el('div', { class: 'qty' }, el('button', { type: 'button', 'aria-label': 'Fewer', onclick: () => { qty = Math.max(1, qty - 1); qtyOut.textContent = qty; } }, '−'), qtyOut, el('button', { type: 'button', 'aria-label': 'More', onclick: () => { qty = Math.min(60, qty + 1); qtyOut.textContent = qty; } }, '+'));
+  const size = el('select', { class: 'input', id: 'lcSize' }, ...SIZES.map(([ml, nm]) => el('option', { value: ml, text: nm }))); size.value = String(edit ? edit.size || 750 : 750);
+  const paid = el('input', { class: 'input mono', id: 'lcPaid', type: 'number', inputmode: 'decimal', min: '0', step: '0.01', placeholder: '0.00', value: edit && edit.paid != null ? edit.paid / 100 : '', style: 'text-align:right;width:96px' });
+  const tier = el('select', { class: 'input', id: 'lcTier' }, ...TIERS.map(t => el('option', { value: t, text: TIER_NAME[t] }))); tier.value = edit ? edit.tier || 'good' : 'good';
+  paid.addEventListener('input', () => { if (!tierTouched) tier.value = tierFor(toPence(paid.value)); syncInd(); });
+  tier.addEventListener('change', () => { tierTouched = true; syncInd(); });
+  const gift = el('input', { type: 'checkbox', class: 'toggle', id: 'lcGift', role: 'switch' }); gift.checked = !!(edit && edit.gift);
+  const from = el('input', { class: 'input', id: 'lcFrom', type: 'text', list: 'personList', autocomplete: 'off', placeholder: 'Who gave it?', value: edit && edit.gift && edit.gift.from ? personName(edit.gift.from) : '' });
+  const occ = el('input', { class: 'input', id: 'lcOcc', type: 'text', placeholder: 'Occasion, if any', value: edit && edit.gift && edit.gift.occasion || '' });
+  const giftRows = el('div', null, el('label', { class: 'row', for: 'lcFrom' }, el('span', { class: 'lab', text: 'From' }), from), el('label', { class: 'row', for: 'lcOcc' }, el('span', { class: 'lab', text: 'For' }), occ));
+  const paidRow = el('label', { class: 'row', for: 'lcPaid' }, el('span', { class: 'lab', text: 'Paid each' }), el('span', { class: 'row-main' }), el('span', { class: 'mono', text: '£' }), paid);
+  const showGift = () => { giftRows.hidden = !gift.checked; paidRow.hidden = gift.checked; }; gift.addEventListener('change', showGift); showGift();
+  const ind = el('input', { type: 'checkbox', class: 'toggle', id: 'lcInd', role: 'switch' }); ind.checked = !!(edit && edit.individual); ind.addEventListener('change', () => { indTouched = true; });
+  if (edit) ind.disabled = true;
+  const win = d && windowOf(d.vintage) || [null, null];
+  const wFrom = el('input', { class: 'input mono', id: 'lcWFrom', type: 'number', inputmode: 'numeric', placeholder: '2026', value: win[0] || '', style: 'width:84px;text-align:right' });
+  const wTo = el('input', { class: 'input mono', id: 'lcWTo', type: 'number', inputmode: 'numeric', placeholder: '2032', value: win[1] || '', style: 'width:84px;text-align:right' });
+  const loc = el('input', { class: 'input', id: 'lcLoc', type: 'text', list: 'locList', autocomplete: 'off', placeholder: 'Rack, wine fridge…', value: edit && edit.location || '' });
+  const note = el('textarea', { class: 'input', id: 'lcNote', placeholder: 'A note about this lot', 'aria-label': 'Note' }); note.value = edit && edit.note || '';
+  const fam = el('select', { class: 'input', id: 'lcFam' }, ...FAMILIES.map(([k, n]) => el('option', { value: k, text: n })));
+  const wineBlock = d ? el('div', { class: 'group' }, el('div', { class: 'row' }, el('span', { class: 'row-main' }, el('span', { class: 'row-t' }, ...words(d.title)), el('span', { class: 'row-s', text: d.by }))))
+    : el('div', { class: 'group' }, f('lcProducer', 'Producer', '', { placeholder: 'Isabel Estate' }), f('lcCuvee', 'Wine', '', { placeholder: 'Sauvignon Blanc' }), f('lcVintage', 'Vintage', '', { placeholder: '2023 or NV', inputmode: 'numeric', class: 'input mono' }),
+      f('lcRegion', 'Region', '', { placeholder: 'Marlborough' }), f('lcCountry', 'Country', '', { placeholder: 'New Zealand' }), f('lcGrapes', 'Grapes', '', { placeholder: 'Sauvignon Blanc' }), el('label', { class: 'row', for: 'lcFam' }, el('span', { class: 'lab', text: 'Style' }), fam));
+  openSheet(edit ? 'Edit this lot' : 'Add to cellar', [
+    personList(), el('datalist', { id: 'locList' }, ...LOCATIONS.map(l => el('option', { value: l }))), wineBlock,
+    el('div', { class: 'group' }, el('div', { class: 'row' }, el('span', { class: 'lab', text: edit ? 'Left' : 'How many' }), el('span', { class: 'row-main' }), stepper),
+      el('label', { class: 'row', for: 'lcSize' }, el('span', { class: 'lab', text: 'Size' }), el('span', { class: 'row-main' }), size), paidRow, el('label', { class: 'row', for: 'lcGift' }, el('span', { class: 'lab', text: 'It was a gift' }), el('span', { class: 'row-main' }), gift), giftRows,
+      f('lcWhere', 'Bought from', edit && edit.links.venue && (Store.nodes.get(edit.links.venue) || {}).name || '', { placeholder: 'Berry Bros., Waitrose…' }),
+      el('label', { class: 'row', for: 'lcLoc' }, el('span', { class: 'lab', text: 'Kept' }), loc),
+      el('label', { class: 'row', for: 'lcTier' }, el('span', { class: 'lab', text: 'Tier' }), el('span', { class: 'row-main' }), tier),
+      el('div', { class: 'row' }, el('span', { class: 'lab', text: 'Drink' }), el('span', { class: 'row-main' }), wFrom, el('span', { class: 'mono', text: '–' }), wTo),
+      el('label', { class: 'row', for: 'lcInd' }, el('span', { class: 'row-main' }, el('span', { class: 'lab', text: 'Track each bottle' }), el('span', { class: 'row-s', text: 'For special bottles: each gets its own note and story' })), ind),
+      el('div', { class: 'row' }, note)),
+    el('button', { class: 'btn', type: 'button', onclick: () => {
+      let id = vId;
+      if (!id) {
+        const producer = $('#lcProducer').value.trim(), cuvee = $('#lcCuvee').value.trim();
+        if (!producer && !cuvee) { toast('Add the producer or the wine’s name.'); $('#lcProducer').focus(); return; }
+        const f2 = fam.value; id = recordWine({ producer, cuvee, vintage: $('#lcVintage').value.trim(), region: $('#lcRegion').value.trim(), country: $('#lcCountry').value.trim(), grapes: $('#lcGrapes').value, colour: { red: 'garnet', white: 'straw', rose: 'salmon', orange: 'amber', sparkling: 'straw', sweet: 'tawny' }[f2], family: f2 }, 'user');
+      }
+      persistChain(id);
+      const a = +wFrom.value, b = +wTo.value;
+      if (a && b && b >= a) { const v = Store.nodes.get(id); v.claims = (v.claims || []).filter(c => !(c.a === 'drink-window' && c.src === 'user')); claim(v, 'drink-window', [a, b], 'user'); Store.saveNode(v); }
+      const isGift = gift.checked; let giftObj = null;
+      if (isGift) { const name = from.value.trim(); if (!name) { toast('Who gave it?'); from.focus(); return; } const pid = 'person:' + slug(name); Store.saveNode(upsertNode(pid, 'person', name, null, [name])); giftObj = { from: pid, occasion: occ.value.trim() || null, at: new Date().toISOString().slice(0, 10) }; }
+      const vn = $('#lcWhere').value.trim(); let venue = null; if (vn) { venue = 'venue:uk/' + slug(vn); Store.saveNode(upsertNode(venue, 'venue', vn, null, [vn])); }
+      const paidP = isGift ? null : toPence(paid.value);
+      const dd = describeVintage(id);
+      if (edit) {
+        Object.assign(edit, { size: +size.value, paid: paidP, tier: tier.value, location: loc.value.trim() || null, note: note.value.trim() || null, gift: giftObj, name: dd.title, updatedAt: new Date().toISOString() });
+        if (venue) edit.links.venue = venue;
+        if (!edit.individual) { const delta = qty - (edit.left || 0); edit.left = qty; edit.qty = Math.max(edit.qty || 0, qty); if (delta) Store.addEvent({ kind: 'bottle', act: 'adjusted', lot: edit.id, n: delta, node: id }); }
+        Store.saveNode(edit); closeSheet(); renderAll(); toast('Saved'); return;
+      }
+      const lot = newNode('lot:' + ulid(), 'lot', dd.title, { vintage: id, venue: venue || undefined }, { qty, left: qty, size: +size.value, paid: paidP, boughtAt: new Date().toISOString().slice(0, 10), tier: tier.value, location: loc.value.trim() || null, gift: giftObj, individual: ind.checked, note: note.value.trim() || null });
+      Store.saveNode(lot);
+      if (ind.checked) for (let k = 1; k <= qty; k++) Store.saveNode(newNode('bottle:' + ulid(), 'bottle', 'Bottle ' + k, { lot: lot.id, vintage: id }, { n: k, of: qty, status: 'cellar', note: null }));
+      Store.addEvent({ kind: 'bottle', act: isGift ? 'received' : 'bought', lot: lot.id, n: qty, node: id, paid: paidP, from: giftObj ? giftObj.from : null });
+      closeSheet(); S.pick = null; renderAll(); toast('Added to your cellar');
+    } }, edit ? 'Save' : 'Add to cellar')]);
+}
+
+/* ============================================================
+   Journey recording: what led to a tasting, and what was new
+   ============================================================ */
+function computeFirsts(vId) {
+  const d = describeVintage(vId); const seen = { grape: new Set(), place: new Set(), producer: new Set(), style: new Set() };
+  for (const t of Store.events('tasting')) { const e = describeVintage(t.node); ((e.wine.links && e.wine.links.grapes) || []).forEach(g => seen.grape.add(g)); const pl = e.wine.links && e.wine.links.place; if (pl) { const parts = pl.split('/'); for (let i = 1; i <= parts.length; i++) seen.place.add(parts.slice(0, i).join('/')); } if (e.producer) seen.producer.add(e.producer.id); const st = inferStyle(e); if (st) seen.style.add(st); }
+  const out = [];
+  ((d.wine.links && d.wine.links.grapes) || []).forEach(g => { if (!seen.grape.has(g)) out.push(g); });
+  const pl = d.wine.links && d.wine.links.place; if (pl) { const parts = pl.split('/'); for (let i = 1; i <= parts.length; i++) { const id = parts.slice(0, i).join('/'); if (!seen.place.has(id)) out.push(id); } }
+  if (d.producer && !seen.producer.has(d.producer.id)) out.push(d.producer.id);
+  const st = inferStyle(d); if (st && !seen.style.has(st)) out.push(st);
+  return out;
+}
+function leadFor(vId) { const now = Date.now(); return Store.events('lead').find(e => e.to === vId && now - new Date(e.at) < 30 * 864e5) || null; }
+
+/* ============================================================
    Claude access
    ============================================================ */
 let sampleP = null;
@@ -2085,6 +2457,10 @@ async function renderScan() {
     shutter.hidden = S.scan.files.length >= max;
     $('#photo').accept = caps.images.mediaTypes.join(',');
   }
+  const gl = $('#gapsLine'); gl.replaceChildren();
+  const lotsHere = cellarLots().length; const gaps = where() === 'shop' && lotsHere ? cellarGaps(3) : [];
+  gl.hidden = !gaps.length;
+  if (gaps.length) gl.append(el('span', { class: 'foot', style: 'width:100%;margin:0', text: 'Your cellar is short of:' }), ...gaps.map(g => el('span', { class: 'chip static', text: g.name })));
   const th = $('#thumbs'); th.replaceChildren();
   S.scan.files.forEach((f, i) => {
     const url = f.url || (f.url = URL.createObjectURL(f.blob));
@@ -2135,6 +2511,7 @@ async function readScan() {
   const sample = await getSample(); if (!sample || S.scan.busy) return;
   const mode = S.scan.mode;
   const out = $('#scanOut');
+  setWhere(mode === 'list' ? 'out' : 'shop', 3);
   S.scan.busy = true; S.scan.ctl = new AbortController(); renderScan();
   out.replaceChildren(el('div', { class: 'status' }, el('span', { class: 'spin', 'aria-hidden': 'true' }), mode === 'list' ? 'Reading the list…' : 'Reading the label…'));
   try {
@@ -2199,7 +2576,8 @@ function showScan(mode, r, images) {
         why || w.why ? el('span', { class: 'row-s', style: 'color:var(--ink)', text: why || w.why }) : null,
         w.expect ? el('span', { class: 'row-s', text: w.expect }) : null,
         w.serve ? el('span', { class: 'row-s mono', text: w.serve }) : null,
-        el('button', { class: 'link', type: 'button', style: 'align-self:flex-start', onclick: () => openLog(Object.assign({}, w, { price: (w.prices.find(p => p.per === 'bottle') || w.prices[0] || {}).amount, where: venueName }), { scan: scan.id }) }, 'Drinking this')));
+        el('div', { class: 'btns', style: 'justify-content:flex-start;gap:18px' }, el('button', { class: 'link', type: 'button', onclick: () => openLog(Object.assign({}, w, { price: (w.prices.find(p => p.per === 'bottle') || w.prices[0] || {}).amount, where: venueName }), { scan: scan.id }) }, 'Drinking this'),
+          mode !== 'list' ? el('button', { class: 'link', type: 'button', onclick: () => openLotForm(ids[i]) }, 'Add to cellar') : null)));
   };
 
   if (mode === 'list') {
@@ -2331,7 +2709,8 @@ function openLog(pre, link) {
       Store.addEvent({ kind: 'tasting', node: vId, rating, appearance, tags: [...tagSel].map(t => t.toLowerCase()),
         structure: { body: scaleVal('lgBody'), acid: scaleVal('lgAcid'), tannin: scaleVal('lgTannin'), sweetness: scaleVal('lgSweet') },
         notes: $('#lgNotes').value.trim(), again: again.checked, food: $('#lgFood').value.trim() || null, with: withList.map(p => 'person:' + slug(p)),
-        venue, paid: paid ? { price: paid, cur: 'GBP' } : null, suggestion: link.suggestion || null, scan: link.scan || null, ctx: ctxSnapshot() });
+        venue, paid: paid ? { price: paid, cur: 'GBP' } : null, suggestion: link.suggestion || null, scan: link.scan || null, ctx: ctxSnapshot(),
+        firsts: computeFirsts(vId), from: (() => { const ld = leadFor(vId); return ld ? { kind: 'lead', role: ld.role, ref: ld.from } : link.suggestion ? { kind: 'suggestion' } : link.scan ? { kind: 'scan' } : link.cellar ? { kind: 'cellar' } : { kind: 'manual' }; })() });
       closeSheet(); toast('Logged'); renderAll();
     } }, 'Save to log')
   ]);
@@ -2436,7 +2815,7 @@ $('#exportBtn').addEventListener('click', async () => {
 /* ============================================================
    Shell: header, tabs, moment switch
    ============================================================ */
-const TAB_TITLE = { scan: 'Scan', log: 'Log', you: 'You', explore: 'Explore', wine: '', place: '' };
+const TAB_TITLE = { scan: 'Scan', log: 'Journey', you: 'Limits & settings', explore: 'Explore', cellar: 'Cellar', wine: '', place: '' };
 /* "Saturday, 24 October, 07:55": plain, and live. Tapping it still switches Today / Tonight. */
 function setWhen() {
   const n = $('#heroWhen'); if (!n) return;
@@ -2449,6 +2828,7 @@ function renderHeader() {
   const m = moment();
   const d = new Date();
   $('.top').classList.toggle('hide', S.tab === 'tonight' || S.tab === 'wine' || S.tab === 'place');
+  $('#topBack').hidden = S.tab !== 'you';
   $('#title').textContent = TAB_TITLE[S.tab] || '';
   $('#tabMoment').textContent = MOMENT_NAME[m] === 'This afternoon' ? 'Today' : MOMENT_NAME[m];
   const s = season(d);
@@ -2456,9 +2836,9 @@ function renderHeader() {
 }
 function go(tab, focusSel) {
   S.tab = tab;
-  for (const v of ['tonight', 'explore', 'wine', 'place', 'scan', 'log', 'you']) $('#v-' + v).hidden = v !== tab;
+  for (const v of ['tonight', 'cellar', 'explore', 'wine', 'place', 'scan', 'log', 'you']) $('#v-' + v).hidden = v !== tab;
   if (tab !== 'wine' && tab !== 'place') S.nav = [];
-  const lit = tab === 'wine' || tab === 'place' ? S.base : tab;
+  const lit = tab === 'wine' || tab === 'place' ? S.base : tab === 'you' ? 'log' : tab;
   $$('.tab').forEach(b => { if (b.dataset.tab === lit) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
   renderAll();
   window.scrollTo(0, 0);
@@ -2469,6 +2849,7 @@ function renderAll() {
   if (S.tab === 'tonight') renderTonight();
   if (S.tab === 'scan') renderScan();
   if (S.tab === 'log') renderLog();
+  if (S.tab === 'cellar') renderCellar();
   if (S.tab === 'explore') renderExplore();
   if (S.tab === 'wine') renderWine();
   if (S.tab === 'place') renderPlace();
@@ -2489,6 +2870,7 @@ $('#momentBtn').addEventListener('click', () => {
 });
 $('#findBtn').addEventListener('click', findBottles);
 $('#addLog').addEventListener('click', () => openLog());
+$('#topBack').addEventListener('click', () => go('log'));
 $('#timerStop').addEventListener('click', () => Timer.stop());
 $('#scanMode').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S.scan.mode = b.dataset.m; $('#photo').toggleAttribute('multiple', b.dataset.m !== 'label'); $('#scanOut').replaceChildren(); renderScan(); });
 $('#photo').addEventListener('change', e => { for (const f of e.target.files) S.scan.files.push({ blob: f }); e.target.value = ''; $('#scanOut').replaceChildren(); renderScan(); });
