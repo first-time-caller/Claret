@@ -858,23 +858,23 @@ const STYLES = [
     look: ['Côtes de Provence', 'Bandol rosé', 'Navarra rosado', 'English rosé'],
     serve: ['9°C', 'White wine glass', '2 hours in the fridge'],
     w: { today: 1, lunch: 3, summer: 3, warm: 3, easy: 2 }, food: ['salad', 'bbq', 'barbecue', 'mezze', 'prawn', 'tapas', 'picnic', 'spicy', 'salmon'] },
-  { id: 'style:orange/skin', fam: 'orange', col: 'amber', name: 'Skin-contact orange', body: 3,
+  { id: 'style:orange/skin', fam: 'orange', col: 'amber', name: 'Amber, skin-contact orange', body: 3,
     look: ['Georgian Rkatsiteli in qvevri', 'Friulian Ribolla', 'Slovenian Brda', 'Swartland skin-contact'],
     serve: ['12°C', 'Large glass', '1 hour in the fridge'],
     w: { autumn: 1, mild: 1, curious: 3 }, food: ['mezze', 'spicy', 'pickles', 'tagine', 'middle eastern', 'veg', 'cheese', 'pork'] },
-  { id: 'style:sparkling/traditional', fam: 'sparkling', col: 'straw', sparkle: true, name: 'Traditional-method sparkling', body: 2,
+  { id: 'style:sparkling/traditional', fam: 'sparkling', col: 'straw', sparkle: true, name: 'Fine, toasty sparkling', body: 2,
     look: ['Grower Champagne', 'English sparkling', 'Crémant de Bourgogne', 'Cava Corpinnat'],
     serve: ['8°C', 'Tulip or white glass', '3 hours in the fridge'],
     w: { lunch: 1, celebrating: 4, spring: 1, warm: 1 }, food: ['fish and chips', 'chips', 'crisps', 'fried', 'oyster', 'canape', 'sushi', 'tempura', 'chicken'] },
-  { id: 'style:sparkling/easy', fam: 'sparkling', col: 'lemon', sparkle: true, name: 'Easy, fruity fizz', body: 1,
+  { id: 'style:sparkling/easy', fam: 'sparkling', col: 'lemon', sparkle: true, name: 'Easy, fruity sparkling', body: 1,
     look: ['Prosecco Superiore', 'Pét-nat', 'Moscato d\'Asti', 'Crémant de Loire'],
     serve: ['7°C', 'Tulip or white glass', '3 hours in the fridge'],
     w: { today: 1, lunch: 2, summer: 2, warm: 2, easy: 3, celebrating: 2 }, food: ['brunch', 'fruit', 'cake', 'pizza', 'aperitif'] },
-  { id: 'style:sweet/fortified', fam: 'sweet', col: 'tawny', name: 'Fortified or sweet', body: 4,
+  { id: 'style:sweet/fortified', fam: 'sweet', col: 'tawny', name: 'Rich, sweet or fortified', body: 4,
     look: ['10-year Tawny Port', 'Amontillado Sherry', 'Sauternes', 'Rutherglen Muscat', 'Madeira Bual'],
     serve: ['14°C', 'Small glass', 'As is'],
     w: { nightcap: 4, winter: 2, 'cold-wet': 1, comforting: 2 }, food: ['cheese', 'stilton', 'chocolate', 'dessert', 'pudding', 'nuts', 'cake', 'blue cheese'] },
-  { id: 'style:sweet/fino', fam: 'sweet', col: 'straw', name: 'Bone-dry Fino or Manzanilla', body: 1,
+  { id: 'style:sweet/fino', fam: 'sweet', col: 'straw', name: 'Bone-dry, saline sherry', body: 1,
     look: ['Manzanilla', 'Fino en rama', 'Montilla-Moriles Fino'],
     serve: ['8°C', 'Small white glass', 'From the fridge; finish within a week'],
     w: { today: 1, lunch: 1, curious: 2, warm: 1 }, food: ['olives', 'almonds', 'tapas', 'ham', 'jamon', 'prawn', 'crisps', 'aperitif', 'anchovy'] }
@@ -2225,11 +2225,17 @@ function producerCard(pe, size, opts) {
     k ? el('img', { src: regionPhoto(k), alt: '', loading: 'lazy' }) : null,
     el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: pe.place }), producerLetter(pe, 'card'))), 'producer', pe.id);
 }
+/* Only wines you own are named on a style card, never generic examples */
+function cellarExamples(styleId) {
+  const seen = new Set(), out = [];
+  for (const lot of cellarLots()) { const d = describeVintage(lot.links.vintage); if (inferStyle(d) !== styleId) continue; const nm = (d.producer ? d.producer.name + ' ' : '') + d.wine.name; if (!seen.has(nm)) { seen.add(nm); out.push(nm); } }
+  return out.slice(0, 2);
+}
 function styleCard(id, size, opts) {
   const st = STYLE[id]; if (!st) return null;
   return decorate(el('button', { class: 'place gcard', type: 'button', style: '--c:var(--c-' + st.col + ');' + (size ? 'width:' + size[0] + 'px;height:' + size[1] + 'px' : ''), onclick: (opts && opts.onclick) || (() => { S.pick = id; go('tonight'); }), 'aria-label': st.name },
     el('span', { class: 'glass' + (st.sparkle ? ' sparkle' : ''), style: '--c:var(--c-' + st.col + ')', 'aria-hidden': 'true' }),
-    el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: FAMILY_NAME[st.fam] }), el('span', { class: 'letter', style: 'font-size:22px' }, st.name), el('span', { class: 'place-s', text: st.look.slice(0, 3).join(' · ') }))), 'style', id);
+    el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: FAMILY_NAME[st.fam] }), el('span', { class: 'letter', style: 'font-size:22px' }, st.name), (() => { const ex = cellarExamples(id); return ex.length ? el('span', { class: 'place-s', style: 'white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical', text: ex.join(' · ') }) : null; })())), 'style', id);
 }
 function grapeCard(g, size, opts) {
   const tried = stateOf(maps().T.grape[g]) !== 'not'; const info = GRAPE_INFO[g];
@@ -2454,9 +2460,16 @@ function groupLots(dim) {
   const arr = [...groups.values()];
   return dim === 'vintage' ? arr.sort((a, b) => String(b.key).localeCompare(String(a.key))) : arr.sort((a, b) => b.n - a.n || a.label.localeCompare(b.label));
 }
+const COUNTRY_LETTER = { fr: ['"Pinyon Script",cursive', '#33402E', 1.5], it: ['"IM Fell English SC",serif', '#4E3A22', 1], es: ['Cinzel,serif', '#5A2E22', .9], pt: ['"Great Vibes",cursive', '#3A2A3A', 1.4], de: ['"UnifrakturMaguntia",serif', '#40382A', 1.2], au: ['"DM Serif Display",serif', '#5A3A28', 1], nz: ['"Josefin Sans",sans-serif', '#2E3A2A', .8], us: ['"Playfair Display SC",serif', '#3A2E22', 1], za: ['"Josefin Sans",sans-serif', '#4A3322', .8], ar: ['"Cormorant SC",serif', '#4A2A2A', 1], cl: ['"Cormorant SC",serif', '#2E3A3A', 1], at: ['"Bodoni Moda",serif', '#33302A', 1], gb: ['"Bodoni Moda",serif', '#2E3A2E', 1] };
+function placeCard(placeId, label, n, onclick) {
+  const c = String(placeId).split('/')[0]; const L = COUNTRY_LETTER[c] || ['"Newsreader",Georgia,serif', '#2C2426', 1]; const short = String(label).split(',')[0];
+  return el('button', { class: 'place plain', type: 'button', style: '--tone:' + L[1], onclick, 'aria-label': label },
+    el('span', { class: 'mark cellar', text: n + ' in cellar' }), el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: (COUNTRY[c] || {}).name || '' }), el('span', { style: 'display:block;width:100%' }, el('span', { class: 'letter', lang: 'en', style: 'font-family:' + L[0] + ';font-size:' + Math.round(34 * L[2]) + 'px' }, short))));
+}
 function groupCard(dim, g) {
   const pick = () => { S.cFilter = { dim, key: g.key }; renderCellar(); window.scrollTo(0, 0); };
   if (dim === 'region' && REGIONS[g.key]) return regionCard(g.key, null, { onclick: pick });
+  if (dim === 'region' && g.key !== 'other') return placeCard(g.key, g.label, g.n, pick);
   if (dim === 'producer' && g.key !== 'none') return producerCard(producerEntities().find(p => p.id === g.key) || { id: g.key, name: g.label, place: '', region: null }, null, { onclick: pick });
   if (dim === 'grape' && g.key !== 'none') return grapeCard(g.key, null, { onclick: pick });
   if (dim === 'style' && STYLE[g.key]) return styleCard(g.key, null, { onclick: pick });
@@ -2563,6 +2576,28 @@ function persistChain(vId) {
   const w = Store.nodes.get(v.links.wine); if (w) { Store.saveNode(w); const pr = Store.nodes.get(w.links.producer); if (pr) Store.saveNode(pr); }
 }
 /* Add or edit a lot. With a wine id the wine is fixed; without one the wine is typed in. */
+/* Put what Claude read or inferred into the form; blanks only when the person has already typed something */
+function fillForm(w, drink, onlyBlank) {
+  const set = (id, v) => { const n = $('#' + id); if (n && v && !(onlyBlank && n.value.trim())) n.value = v; };
+  if (w) { set('lcProducer', w.producer); set('lcCuvee', w.cuvee); set('lcVintage', w.vintage); set('lcRegion', w.region); set('lcCountry', w.country); set('lcGrapes', (w.grapes || []).join(', ')); if (w.family && $('#lcFam') && !onlyBlank) $('#lcFam').value = w.family; }
+  const dr = Array.isArray(drink) ? drink.map(Number) : null;
+  if (dr && dr.length === 2 && dr[0] > 1900 && dr[1] >= dr[0]) { set('lcWFrom', dr[0]); set('lcWTo', dr[1]); }
+}
+/* From a typed producer, wine and vintage, ask Claude for the rest */
+async function enrichIntoForm(ui) {
+  const producer = $('#lcProducer').value.trim(), cuvee = $('#lcCuvee').value.trim();
+  if (!producer && !cuvee) { ui.status.textContent = 'Type the producer or the wine first.'; return; }
+  const sample = await getSample(); if (!sample) { ui.status.textContent = 'This needs Claude. Open Claret in the Claude app.'; return; }
+  ui.status.textContent = 'Asking Claude\u2026';
+  try {
+    const q = [producer, cuvee, $('#lcVintage').value.trim(), $('#lcRegion').value.trim()].filter(Boolean).join(' · ');
+    const prompt = 'You are Claret, a UK wine companion. For this wine, give what is reliably known; leave a field out if unsure and never invent. Wine: ' + q + '\nReply with only JSON: {"producer":"the producer\'s proper name","cuvee":"the wine\'s name without producer or vintage","country":"","region":"the appellation or region","grapes":[""],"family":"red|white|rose|orange|sparkling|sweet","abv":13.5,"drink":[2026,2032]} where drink is your estimate of the drinking window for the vintage.';
+    const r = await sample.json(prompt, { modelTier: 'quick', cache: true }); const w = r && typeof r === 'object' ? { producer: str(r.producer), cuvee: str(r.cuvee), country: str(r.country), region: str(r.region), grapes: arr(r.grapes), family: ['red', 'white', 'rose', 'orange', 'sparkling', 'sweet'].includes(r.family) ? r.family : null } : null;
+    if (!w) { ui.status.textContent = 'Claude had nothing to add.'; return; }
+    fillForm(w, r.drink, true); if (w.family && $('#lcFam')) $('#lcFam').value = w.family;
+    ui.status.textContent = 'Filled in from Claude. Check the details below.';
+  } catch (e) { ui.status.textContent = e && e.code === 'cancelled' ? '' : sampleError(e); }
+}
 async function scanIntoForm(file, ui) {
   const sample = await getSample(); const caps = sample ? await sample.limits().catch(() => null) : null;
   if (!sample || !caps || !caps.images) { ui.status.textContent = 'Scanning needs Claude. Open Claret in the Claude app, or type the wine in.'; return; }
@@ -2574,10 +2609,8 @@ async function scanIntoForm(file, ui) {
     const r = await sample.json(prompt, { images: [img], modelTier: 'quick', cache: false });
     const w = cleanItem(Array.isArray(r && r.items) ? r.items[0] : r);
     if (!w) { ui.status.textContent = 'Couldn\u2019t read a wine. Try a closer photo, or type it in.'; return; }
-    const set = (id, v) => { const n = $('#' + id); if (n && v) n.value = v; };
-    set('lcProducer', w.producer); set('lcCuvee', w.cuvee); set('lcVintage', w.vintage); set('lcRegion', w.region); set('lcCountry', w.country); set('lcGrapes', w.grapes.join(', '));
-    if (w.family && $('#lcFam')) $('#lcFam').value = w.family;
-    const dr = Array.isArray(r && r.items && r.items[0] && r.items[0].drink) ? r.items[0].drink.map(Number) : null; if (dr && dr.length === 2 && dr[0] > 1900 && dr[1] >= dr[0]) { $('#lcWFrom').value = dr[0]; $('#lcWTo').value = dr[1]; }
+    fillForm(w, null, false);
+    fillForm(null, r && r.items && r.items[0] && r.items[0].drink, false);
     ui.blob = img; ui.status.textContent = 'Read from the label. Check the details below.';
   } catch (e) { ui.status.textContent = e && e.code === 'cancelled' ? '' : sampleError(e); }
 }
@@ -2611,9 +2644,10 @@ function openLotForm(vId0, lotId, opts) {
     : el('div', { class: 'group' }, f('lcProducer', 'Producer', '', { placeholder: 'Isabel Estate' }), f('lcCuvee', 'Wine', '', { placeholder: 'Sauvignon Blanc' }), f('lcVintage', 'Vintage', '', { placeholder: '2023 or NV', inputmode: 'numeric', class: 'input mono' }),
       f('lcRegion', 'Region', '', { placeholder: 'Marlborough' }), f('lcCountry', 'Country', '', { placeholder: 'New Zealand' }), f('lcGrapes', 'Grapes', '', { placeholder: 'Sauvignon Blanc' }), el('label', { class: 'row', for: 'lcFam' }, el('span', { class: 'lab', text: 'Style' }), fam));
   const ui = { blob: null, status: el('p', { class: 'foot', style: 'margin:0', 'aria-live': 'polite', text: '' }) };
+  const enrichBtn = d ? null : el('button', { class: 'link', type: 'button', style: 'align-self:flex-start;min-height:32px', onclick: () => enrichIntoForm(ui) }, 'Fill in the rest with Claude');
   const scanBlock = d ? null : el('div', { class: 'group' }, el('div', { class: 'row', style: 'flex-direction:column;align-items:stretch;gap:6px' },
     el('label', { class: 'link', style: 'display:flex;align-items:center;gap:8px;cursor:pointer;position:relative' }, svgIcon('<path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.2l1.5-2h5.6l1.5 2h1.2A2.5 2.5 0 0 1 20 8.5v8A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5z"/><circle cx="12" cy="12.5" r="3.5"/>'), 'Scan the label to fill this in',
-      el('input', { type: 'file', accept: 'image/*', capture: 'environment', class: 'sr-only', 'aria-label': 'Scan the label', onchange: e => { const f = e.target.files[0]; e.target.value = ''; if (f) scanIntoForm(f, ui); } })), ui.status));
+      el('input', { type: 'file', accept: 'image/*', capture: 'environment', class: 'sr-only', 'aria-label': 'Scan the label', onchange: e => { const f = e.target.files[0]; e.target.value = ''; if (f) scanIntoForm(f, ui); } })), enrichBtn, ui.status));
   openSheet(edit ? 'Edit this lot' : 'Add to cellar', [
     scanBlock, personList(), el('datalist', { id: 'locList' }, ...LOCATIONS.map(l => el('option', { value: l }))), wineBlock,
     el('div', { class: 'group' }, el('div', { class: 'row' }, el('span', { class: 'lab', text: edit ? 'Left' : 'How many' }), el('span', { class: 'row-main' }), stepper),
