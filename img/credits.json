@@ -115,5 +115,50 @@
   "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
   "source": "https://commons.wikimedia.org/wiki/File:Champagne_Vineyards.jpg",
   "query": "Hautvillers vineyards Champagne"
+ },
+ "douro": {
+  "file": "img/douro.jpg",
+  "title": "Supplied by the project owner",
+  "artist": "Creative Commons photographer (attribution to be added)",
+  "license": "Creative Commons",
+  "licenseUrl": "https://creativecommons.org/licenses/",
+  "source": "",
+  "query": "douro"
+ },
+ "bergerac": {
+  "file": "img/bergerac.jpg",
+  "title": "Supplied by the project owner",
+  "artist": "Creative Commons photographer (attribution to be added)",
+  "license": "Creative Commons",
+  "licenseUrl": "https://creativecommons.org/licenses/",
+  "source": "",
+  "query": "bergerac"
+ },
+ "south-west": {
+  "file": "img/south-west.jpg",
+  "title": "Supplied by the project owner",
+  "artist": "Creative Commons photographer (attribution to be added)",
+  "license": "Creative Commons",
+  "licenseUrl": "https://creativecommons.org/licenses/",
+  "source": "",
+  "query": "south-west"
+ },
+ "alsace": {
+  "file": "img/alsace.jpg",
+  "title": "Supplied by the project owner",
+  "artist": "Creative Commons photographer (attribution to be added)",
+  "license": "Creative Commons",
+  "licenseUrl": "https://creativecommons.org/licenses/",
+  "source": "",
+  "query": "alsace"
+ },
+ "valdobbiadene": {
+  "file": "img/valdobbiadene.jpg",
+  "title": "Supplied by the project owner",
+  "artist": "Creative Commons photographer (attribution to be added)",
+  "license": "Creative Commons",
+  "licenseUrl": "https://creativecommons.org/licenses/",
+  "source": "",
+  "query": "valdobbiadene"
  }
 }
