@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts-local.css">
+<style>
+:root{--serif:"Newsreader",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"DM Mono",ui-monospace,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:#ECE9E9;font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.board{padding:56px 64px 64px;display:flex;flex-direction:column;gap:30px;width:1560px;background:#ECE9E9}
+.board-h .k{font:500 13px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#7A6D71}
+.board-h h1{margin:6px 0 6px;font:600 44px/1.1 var(--serif)}
+.board-h p{margin:0;font-size:17px;line-height:1.5;color:#5E5357;max-width:1080px}
+.concept{display:grid;grid-template-columns:250px 1fr;gap:34px;align-items:center;padding:26px 0;border-top:1px solid #D9D2D3}
+.label .n{font:500 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#7A6D71}
+.label h2{margin:4px 0 8px;font:600 24px/1.15 var(--serif)}
+.label p{margin:0;font-size:14.5px;line-height:1.5;color:#5E5357}
+.row{display:flex;gap:24px;align-items:center;flex-wrap:nowrap}
+.cell{display:flex;flex-direction:column;gap:8px;align-items:center}
+.cell .c{font:500 11px var(--mono);letter-spacing:.06em;color:#7A6D71}
+.icon{width:128px;height:128px;border-radius:29px;overflow:hidden;box-shadow:0 10px 26px rgba(0,0,0,.16);flex:none}
+.icon svg,.tile svg{width:100%;height:100%;display:block}
+.tile{width:150px;height:150px;border-radius:18px;overflow:hidden;flex:none}
+.word{height:96px;border-radius:18px;display:flex;align-items:center;padding:0 26px;flex:none}
+.word.l{background:#F5F3F3}.word.d{background:#0E0A0B}
+.word svg{height:62px;width:auto}
+.lock{display:flex;align-items:center;gap:16px;padding:18px 26px;border-radius:20px;flex:none}
+.lock.l{background:#F5F3F3}.lock.d{background:#0E0A0B}
+.lock .m{width:58px;height:58px;flex:none}
+.lock .w{height:50px;width:auto}
+.paper{background:#F7F2EA}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <!-- wine in the glass: deep core, paler rim, centre nudged as when tilted -->
+    <radialGradient id="glass" cx="45%" cy="43%" r="58%"><stop offset="0" stop-color="#36070F"/><stop offset=".5" stop-color="#6E1526"/><stop offset=".78" stop-color="#A63A51"/><stop offset=".93" stop-color="#E2A7B2"/><stop offset="1" stop-color="#F6DCE1"/></radialGradient>
+    <radialGradient id="glassD" cx="45%" cy="43%" r="58%"><stop offset="0" stop-color="#4A0B17"/><stop offset=".5" stop-color="#8E1E34"/><stop offset=".8" stop-color="#C2566B"/><stop offset="1" stop-color="#F0B6C1"/></radialGradient>
+    <!-- ring stain: darker at the edge, a pale wash inside (how a drying drop of wine actually behaves) -->
+    <radialGradient id="wash" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#8E1E34" stop-opacity=".10"/><stop offset=".78" stop-color="#8E1E34" stop-opacity=".22"/><stop offset=".93" stop-color="#6E1526" stop-opacity=".55"/><stop offset="1" stop-color="#5A0F20" stop-opacity=".0"/></radialGradient>
+    <filter id="rough" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="1.6" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter>
+    <filter id="rough2" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="2.2" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="1.6"/><feGaussianBlur stdDeviation=".25"/></filter>
+    <!-- the pour: fill rises to a meniscus line that curves up at the edges -->
+    <linearGradient id="pour" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#3B0913"/><stop offset=".55" stop-color="#6E1526"/><stop offset="1" stop-color="#B24A5E"/></linearGradient>
+    <linearGradient id="pourD" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#7A1A2E"/><stop offset=".55" stop-color="#B02A47"/><stop offset="1" stop-color="#E27D8F"/></linearGradient>
+    <clipPath id="lvl40"><path d="M0 40 Q10 44 200 44 T400 40 V90 H0z"/></clipPath>
+    <clipPath id="lvl0"><path d="M0 90 H400 V90 H0z"/></clipPath>
+    <clipPath id="lvl25"><path d="M0 63 Q10 67 200 67 T400 63 V90 H0z"/></clipPath>
+    <clipPath id="lvl55"><path d="M0 49 Q10 53 200 53 T400 49 V90 H0z"/></clipPath>
+    <clipPath id="lvl85"><path d="M0 28 Q10 32 200 32 T400 28 V90 H0z"/></clipPath>
+    <clipPath id="lvl100"><path d="M0 0 H400 V90 H0z"/></clipPath>
+    <!-- stain C: an open ring, as a glass set down on its edge -->
+    <mask id="cgap"><rect width="100" height="100" fill="#fff"/><path d="M50 50 L100 24 L100 76z" fill="#000"/></mask>
+  </defs>
+</svg>
+
+<section class="board" id="logos2">
+  <div class="board-h"><span class="k">Claret · logo, round two</span><h1>The rim, the mark it leaves, and the pour</h1><p>Two ideas carried forward. The mark: a deep core with a paler rim, the colour of wine in the glass. Its reverse is the stain a glass of red leaves on linen, darker at the edge and pale inside, the mark the wine leaves on you. The word: Claret filled to a pour line with a real meniscus, which becomes the launch animation.</p></div>
+
+  <!-- 1. Rim, refined -->
+  <div class="concept">
+    <div class="label"><span class="n">1 · The rim, refined</span><h2>In the glass</h2><p>The tilt is now real: the core sits up and left and the rim thins towards one side, as when you tip a glass over a white cloth. A fine outer line is the edge of the bowl.</p></div>
+    <div class="row">
+      <div class="cell"><div class="icon"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#F5EEEF"/><circle cx="50" cy="50" r="32" fill="url(#glass)"/></svg></div><span class="c">Rim</span></div>
+      <div class="cell"><div class="icon"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#F5EEEF"/><ellipse cx="50" cy="50" rx="33" ry="31" fill="url(#glass)" transform="rotate(-24 50 50)"/><circle cx="50" cy="50" r="38" fill="none" stroke="#6E1526" stroke-opacity=".28" stroke-width=".8"/></svg></div><span class="c">Tilted, with bowl</span></div>
+      <div class="cell"><div class="icon"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#0E0A0B"/><ellipse cx="50" cy="50" rx="33" ry="31" fill="url(#glassD)" transform="rotate(-24 50 50)"/><circle cx="50" cy="50" r="38" fill="none" stroke="#F0B6C1" stroke-opacity=".3" stroke-width=".8"/></svg></div><span class="c">Dark</span></div>
+      <div class="cell"><div class="icon"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#1C1C1E"/><circle cx="50" cy="50" r="32" fill="#E6B54A" opacity=".35"/><circle cx="46" cy="47" r="22" fill="#E6B54A"/></svg></div><span class="c">Tinted (iOS)</span></div>
+      <div class="cell"><div class="icon"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#FFFFFF"/><circle cx="50" cy="50" r="32" fill="#6E1526" opacity=".35"/><circle cx="46" cy="47" r="22" fill="#6E1526"/></svg></div><span class="c">Two tones, for print</span></div>
+    </div>
+  </div>
+
+  <!-- 2. The mark it leaves -->
+  <div class="concept">
+    <div class="label"><span class="n">2 · The mark it leaves</span><h2>A ring of red on linen</h2><p>A drying drop of wine pulls its colour to the edge, so the stain is dark at the rim and pale inside. Slightly irregular, never quite closed: proof someone was here, drinking something good.</p></div>
+    <div class="row">
+      <div class="cell"><div class="icon paper"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#F7F2EA"/><g filter="url(#rough)"><circle cx="50" cy="50" r="31" fill="url(#wash)"/><circle cx="50" cy="50" r="30.5" fill="none" stroke="#6E1526" stroke-width="2.6" stroke-opacity=".78"/><circle cx="50.6" cy="49.4" r="29.2" fill="none" stroke="#8E1E34" stroke-width="1" stroke-opacity=".35"/></g></svg></div><span class="c">Ring stain</span></div>
+      <div class="cell"><div class="icon paper"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#F7F2EA"/><g filter="url(#rough)"><circle cx="50" cy="50" r="31" fill="url(#wash)" opacity=".75"/><circle cx="50" cy="50" r="30.5" fill="none" stroke="#6E1526" stroke-width="3" stroke-opacity="0.85" stroke-linecap="round" stroke-dasharray="166.7 24.9" stroke-dashoffset="-12.5" transform="rotate(-8 50 50)"/><circle cx="50" cy="50" r="29" fill="none" stroke="#8E1E34" stroke-width="1" stroke-opacity="0.35" stroke-linecap="round" stroke-dasharray="158.5 23.7" stroke-dashoffset="-11.8" transform="rotate(-8 50 50)"/></g><circle cx="80.5" cy="44" r="1.5" fill="#6E1526" opacity=".55" filter="url(#rough2)"/></svg></div><span class="c">Stain C</span></div>
+      <div class="cell"><div class="icon paper"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#F7F2EA"/><g filter="url(#rough)"><circle cx="45" cy="48" r="27" fill="none" stroke="#6E1526" stroke-width="2.2" stroke-opacity=".7"/><circle cx="57" cy="55" r="27" fill="none" stroke="#8E1E34" stroke-width="1.8" stroke-opacity=".45"/><circle cx="45" cy="48" r="27" fill="url(#wash)"/></g></svg></div><span class="c">Set down twice</span></div>
+      <div class="cell"><div class="icon"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#6E1526"/><g filter="url(#rough)"><circle cx="50" cy="50" r="31" fill="#F6DCE1" fill-opacity=".12"/><circle cx="50" cy="50" r="30.5" fill="none" stroke="#F6DCE1" stroke-width="3.2" stroke-opacity="1" stroke-linecap="round" stroke-dasharray="166.7 24.9" stroke-dashoffset="-12.5" transform="rotate(-8 50 50)"/></g></svg></div><span class="c">Stain C, reversed</span></div>
+      <div class="cell"><div class="icon"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#F7F2EA"/><g filter="url(#rough)"><circle cx="50" cy="50" r="31" fill="url(#wash)" opacity=".75"/><circle cx="50" cy="50" r="30.5" fill="none" stroke="#6E1526" stroke-width="3" stroke-opacity="0.85" stroke-linecap="round" stroke-dasharray="166.7 24.9" stroke-dashoffset="-12.5" transform="rotate(-8 50 50)"/></g><circle cx="50" cy="50" r="19" fill="url(#glass)"/></svg></div><span class="c">Glass in its own mark</span></div>
+    </div>
+  </div>
+
+  <!-- 3. The pour -->
+  <div class="concept">
+    <div class="label"><span class="n">3 · The pour</span><h2>Claret, filled to the line</h2><p>The fill stops at a meniscus that curves up at the edges, deep at the bottom and paler at the surface, like the rim. Filled about a third: a proper pour, never to the brim.</p></div>
+    <div class="row">
+      <div class="word l"><svg viewBox="0 0 270 90"><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="#1D1517">Claret</text><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="url(#pour)" clip-path="url(#lvl40)">Claret</text></svg></div>
+      <div class="word d"><svg viewBox="0 0 270 90"><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="#F3EDEE">Claret</text><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="url(#pourD)" clip-path="url(#lvl40)">Claret</text></svg></div>
+      <div class="word l"><svg viewBox="0 0 270 90"><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="none" stroke="#1D1517" stroke-width="1">Claret</text><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="url(#pour)" clip-path="url(#lvl40)">Claret</text></svg></div>
+    </div>
+  </div>
+
+  <!-- 4. The pour as launch animation -->
+  <div class="concept">
+    <div class="label"><span class="n">4 · The reveal</span><h2>The launch, frame by frame</h2><p>The word is drawn as an empty glass outline, then fills from the bottom in tonight's colour, settles at the pour line with a small wobble of the meniscus, and the mark appears beside it. About 1.2 seconds.</p></div>
+    <div class="row" style="gap:14px">
+      <div class="cell"><div class="word l" style="padding:0 16px"><svg viewBox="0 0 270 90" style="height:46px"><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="none" stroke="#1D1517" stroke-opacity=".5" stroke-width="1.2">Claret</text></svg></div><span class="c">0.0s · empty</span></div>
+      <div class="cell"><div class="word l" style="padding:0 16px"><svg viewBox="0 0 270 90" style="height:46px"><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="none" stroke="#1D1517" stroke-opacity=".5" stroke-width="1.2">Claret</text><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="url(#pour)" clip-path="url(#lvl25)">Claret</text></svg></div><span class="c">0.4s · pouring</span></div>
+      <div class="cell"><div class="word l" style="padding:0 16px"><svg viewBox="0 0 270 90" style="height:46px"><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="none" stroke="#1D1517" stroke-opacity=".5" stroke-width="1.2">Claret</text><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="url(#pour)" clip-path="url(#lvl55)">Claret</text></svg></div><span class="c">0.7s · overshoot</span></div>
+      <div class="cell"><div class="word l" style="padding:0 16px"><svg viewBox="0 0 270 90" style="height:46px"><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="#1D1517">Claret</text><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="url(#pour)" clip-path="url(#lvl40)">Claret</text></svg></div><span class="c">0.9s · settles, ink fills</span></div>
+      <div class="cell"><div class="lock l" style="padding:14px 18px"><svg class="m" viewBox="0 0 100 100" style="width:44px;height:44px"><circle cx="50" cy="50" r="46" fill="url(#glass)"/></svg><svg class="w" viewBox="0 0 270 90" style="height:40px"><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="#1D1517">Claret</text><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="url(#pour)" clip-path="url(#lvl40)">Claret</text></svg></div><span class="c">1.2s · the mark lands</span></div>
+    </div>
+  </div>
+
+  <!-- 5. Lockups -->
+  <div class="concept">
+    <div class="label"><span class="n">5 · Together</span><h2>Mark and word</h2><p>Either mark beside the poured wordmark. The rim for the app icon and the interface; the stain for print, packaging and anywhere tactile.</p></div>
+    <div class="row">
+      <div class="lock l"><svg class="m" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="url(#glass)"/></svg><svg class="w" viewBox="0 0 270 90"><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="#1D1517">Claret</text><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="url(#pour)" clip-path="url(#lvl40)">Claret</text></svg></div>
+      <div class="lock d"><svg class="m" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="url(#glassD)"/></svg><svg class="w" viewBox="0 0 270 90"><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="#F3EDEE">Claret</text><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="url(#pourD)" clip-path="url(#lvl40)">Claret</text></svg></div>
+      <div class="lock l paper" style="background:#F7F2EA"><svg class="m" viewBox="0 0 100 100"><g filter="url(#rough)"><circle cx="50" cy="50" r="40" fill="url(#wash)" opacity=".75"/><circle cx="50" cy="50" r="39.5" fill="none" stroke="#6E1526" stroke-width="3.6" stroke-opacity="0.85" stroke-linecap="round" stroke-dasharray="215.9 32.3" stroke-dashoffset="-16.1" transform="rotate(-8 50 50)"/></g></svg><svg class="w" viewBox="0 0 270 90"><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="#2A1A14">Claret</text><text x="4" y="70" font-family="Newsreader" font-weight="500" font-size="80" fill="url(#pour)" clip-path="url(#lvl40)">Claret</text></svg></div>
+    </div>
+  </div>
+</section>
+</body></html>
