@@ -1,4 +1,6 @@
-# Journey and Cellar: spec (draft 1, 24 Oct 2026)
+# Journey and Cellar: spec (draft 2, 24 Oct 2026)
+
+Decisions made on 24 Oct are in section 10; section 11 covers the expanded Explore.
 
 Builds on `data-model.md`. This covers two things and one change of principle.
 
@@ -56,6 +58,25 @@ A cellar is bottles you own. Tracking each bottle as its own record is heavy and
   tier: "everyday",          // everyday | good | treat | special; derived from paid, overridable
   note: "Case deal, free delivery" }
 ```
+**Individual bottles.** A lot is counted by default. For special bottles, a lot can be switched to **track each bottle** (offered automatically when the tier is `special` or a bottle cost £80 or more; always available from the lot). Each bottle then becomes its own node:
+```js
+{ id: "bottle:01J…", type: "bottle", links: { lot: "lot:01J…", vintage: "…" },
+  n: 3, of: 6,                  // "bottle 3 of 6"
+  note: "From the left-hand end of the case; the 2010 vertical",
+  photo: "<asset id>",          // your photo of this bottle, not the label
+  location: "rack-a/row-2",
+  status: "cellar" | "open" | "finished" | "gifted",
+  gift: null }
+```
+Opening, notes, photos and the drinking window all attach to the bottle, so two bottles from one case can have different stories. The lot keeps the shared facts (price, date, merchant).
+
+**Gifts.** A lot or a bottle can be a gift in either direction.
+```js
+gift: { from: "person:sam", occasion: "40th birthday", at: "2025-03-14" }     // given to you
+gift: { to: "person:alex", occasion: "housewarming", at: "2026-08-02" }       // you gave it away
+```
+A gift received has `paid: null`, shows "From Sam" in the cellar and on the wine page, and the tasting remembers it ("Opened the bottle from Sam"). People are the same `person` nodes used for "with". Giving a bottle away writes a `gifted` event that takes it out of the cellar.
+
 Where it was kept is free text with a suggested list: Rack, Fridge, Wine fridge, Garage, Under the stairs. Moving a lot writes a `bottle` event; the lot's `location` updates.
 
 ### Open bottle (a node, type `open`)
@@ -66,6 +87,8 @@ A bottle you've opened and not finished. This is the most useful thing a home sc
   keep: "fridge" | "cellar" | "preserver",        // how it's being kept
   fadesBy: "2026-10-17" }                         // derived from style
 ```
+**How much is left?** Claret asks, and never guesses. Tapping **Open it** only records that it's open. The question comes at the end of the evening or on next opening of the app: the home screen shows "Last night's Chinon: how much is left?" with **Finished · A quarter · Half · Three quarters**. The answer sets `left` and, if finished, offers to log it. An open bottle that has not been answered after a day shows the prompt again on the "Still open" row.
+
 `fadesBy` comes from the style: sparkling 1–2 days, light white or rosé 3 days, red 3–5 days, Fino 5–7 days, fortified weeks. It's a suggestion, labelled as one.
 
 ### Events (kind `bottle`, in the monthly docs)
@@ -234,9 +257,42 @@ The `lead` and `firsts` recording should ship before anything else on this list,
 
 ---
 
-## 10. Open questions
+## 10. Decisions (24 Oct 2026)
 
-1. **Bottle quantities.** Is a lot enough, or do you want per-bottle tracking for the few special ones (a bottle with its own note and photo)? I'd suggest lots by default and an "individual" switch on a lot.
-2. **Opening a bottle you're drinking out.** Should "Open it" ask how much was left after the evening, or default to half and let you correct it?
-3. **Where you are.** Is the three-way chip enough, or do you want "Home" to include a second home or a friend's house, where you'd drink from your own cellar elsewhere?
-4. **Gifts and bottles from others.** Should a gift be marked with who gave it (a person node), so the cellar remembers?
+1. **Per-bottle tracking for special ones.** Lots are counted by default; a lot can track each bottle (section 3).
+2. **Ask how much is left.** After opening, never assume (section 3).
+3. **Where you are:** Home, In a shop, Out. Three values, no more.
+4. **Gifts, with who gave it.** Received and given, both recorded against a person (section 3).
+
+---
+
+## 11. Explore: browse by region, producer and grape
+
+Explore becomes the place to wander. It is built from three kinds of card, each opening a full page laid out the same way (a hero, three round buttons, then what to drink and where to learn more).
+
+### Layout
+- **Search** across wines, regions, producers and grapes.
+- A segmented control: **Regions · Producers · Grapes**, remembered between visits. Each is a two-column grid of cards.
+- **Saved** (regions, producers, grapes and wines) and **The catalogue** below the grid.
+- While searching, every kind that matches is shown under its own heading.
+
+### Cards
+| Kind | Card | Page hero |
+|---|---|---|
+| **Region** | Photo with the name in its own lettering. Regions without a photo get a tone and the lettering | Photo, lettering, the region's style, wines from here, grapes, photo credit |
+| **Producer** | Photo of the estate (or its region) with the name | Photo, name and place; wines from them; the region it's in; a short note |
+| **Grape** | A glass in the grape's own colour, with the name in italic and a line on how it tastes; a dot if you've logged it | The glass at large size on a deep tone, the name, how it tastes; classic places as region cards; next steps; trade up and down; your wines |
+
+### The three round buttons (same on every page)
+- **Info:** jumps to the About section.
+- **Find bottles:** asks Claude for real UK-buyable wines for this region, producer or grape, with your limits applied. Results become wine pages marked as suggestions.
+- **Save:** stars it; it appears under Saved in Explore and counts towards Journey.
+
+### Producers
+Producers come from the famous-names list with photos, plus every producer in your graph (catalogue, scans, suggestions). A producer without its own photo borrows its region's photo.
+
+### Grapes
+Each grape has a colour from the tasting scale, a one-line description, classic places that link to region cards, and "next step" grapes that link on to their own pages. This is where Journey's passport and Explore meet: a grape you have logged shows a dot, and the page shows your rating.
+
+### Navigation
+Detail pages keep a back stack, so region → grape → region → wine → back returns step by step, and tapping a bottom tab resets it.

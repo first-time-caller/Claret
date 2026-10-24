@@ -407,6 +407,24 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
 .ph-back{position:absolute;z-index:4;top:12px;left:max(14px,env(safe-area-inset-left,0px));width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;background:rgba(0,0,0,.25);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
 .ph-back svg{width:20px;height:20px}
 @media (min-width:560px){.ph,.ph-below{margin-inline:0}.ph{border-radius:32px 32px 0 0}}
+/* Explore cards and the producer and grape pages */
+.place.plain{background:var(--tone,#2C2426)}
+.place.plain::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 78% 18%,rgba(255,255,255,.14),transparent 55%)}
+.gcard{--c:var(--c-claret);background:color-mix(in oklab,var(--c) 40%,#0c0709)}
+.gcard .glass{position:absolute;width:104px;height:104px;right:-26px;top:-34px;opacity:.95;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.gcard .dot{position:absolute;top:14px;left:14px;z-index:2;width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.25)}
+.gcard .letter{font-style:italic;font-family:"Newsreader",Georgia,serif;font-weight:400}
+.gcard .place-s{-webkit-line-clamp:1;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}
+.ph-name{font:500 clamp(34px,10vw,46px)/1.06 var(--serif);margin:0;text-align:center;text-wrap:balance;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.4)}
+.ph-sub{font:400 15px/1.35 var(--sans);color:rgba(255,255,255,.82);text-align:center;margin:-6px 0 0}
+.ph.grape{min-height:600px;justify-content:flex-end;background:var(--tone)}
+.ph.grape::after{display:none}
+.ph.grape .glass.xl{position:absolute;left:50%;top:84px;transform:translateX(-50%);width:230px;height:230px;box-shadow:0 24px 60px rgba(0,0,0,.45)}
+.ph.grape .letter{font-style:italic;font-family:"Newsreader",Georgia,serif;font-weight:400;font-size:var(--lb,60px)}
+.mini-strip{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding-inline:max(16px,env(safe-area-inset-left,0px))}
+.mini-strip::-webkit-scrollbar{display:none}
+.mini-strip .place{width:150px;height:190px;border-radius:18px;flex:none}
+.chips.on-dark .chip{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.2)}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
@@ -903,20 +921,35 @@ function lettering(k, where) {
 function fitLetters(root) {
   const run = () => (root || document).querySelectorAll('.letter').forEach(n => {
     const base = +n.dataset.size || parseFloat(n.style.fontSize) || 40; n.dataset.size = base;
-    n.style.fontSize = base + 'px';
+    n.style.whiteSpace = 'nowrap'; n.style.fontSize = base + 'px';
     const room = n.parentElement.getBoundingClientRect().width;
-    const need = n.scrollWidth;
-    if (room > 0 && need > room) n.style.fontSize = Math.max(14, Math.floor(base * room / need * 0.98)) + 'px';
+    let need = n.scrollWidth;
+    if (room > 0 && need > room) {
+      const size = Math.floor(base * room / need * 0.98);
+      if (size < 20 && /\s/.test(n.textContent.trim())) {
+        // two lines, words kept whole; shrink only if a single word is still too wide
+        n.style.whiteSpace = 'normal'; n.style.fontSize = Math.min(base, 26) + 'px';
+        const w = n.scrollWidth; if (w > room) n.style.fontSize = Math.max(10, Math.floor(Math.min(base, 26) * room / w * 0.98)) + 'px';
+      } else n.style.fontSize = Math.max(10, size) + 'px';
+    }
   });
   requestAnimationFrame(run);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => requestAnimationFrame(run));
 }
 addEventListener('resize', () => fitLetters());
 /* Region page: the photo, the name in its own hand, and what to drink from there */
-function openRegion(k) { if (S.tab !== 'place') S.prevTab = S.tab; S.place = k; go('place'); }
-function isPlaceSaved(k) { return LS.get('claret.places', []).includes(k); }
+/* A back stack for detail pages: region -> grape -> wine -> back, one step at a time */
+function pushNav() { if (S.tab !== 'wine' && S.tab !== 'place') S.base = S.tab; S.nav.push({ tab: S.tab, entity: S.entity, wine: S.wine }); }
+function goBack() { const n = S.nav.pop(); if (!n) { go(S.base || 'explore'); return; } S.entity = n.entity; S.wine = n.wine; go(n.tab); }
+function openEntity(kind, key) { pushNav(); S.entity = { kind, key }; go('place'); }
+function openRegion(k) { openEntity('region', k); }
+function openProducer(pId) { openEntity('producer', pId); }
+function openGrape(gId) { openEntity('grape', gId); }
 function renderPlace() {
-  const k = S.place; const r = REGIONS[k]; const box = $('#v-place'); box.replaceChildren();
+  const E = S.entity || { kind: 'region', key: S.place };
+  if (E.kind === 'producer') return renderProducerPage(E.key);
+  if (E.kind === 'grape') return renderGrapePage(E.key);
+  const k = E.key; const r = REGIONS[k]; const box = $('#v-place'); box.replaceChildren();
   if (!r) return;
   const L = LETTERING[k] || { tone: '#2C2426' };
   const c = CREDITS[k];
@@ -924,19 +957,19 @@ function renderPlace() {
   const st = styleId && STYLE[styleId];
   const placeIds = Object.keys(PLACE_REGION).filter(id => PLACE_REGION[id] === k);
   const wines = [...Store.nodes.values()].filter(n => n.type === 'vintage' && !n.mergedInto).filter(v => { const w = Store.nodes.get(v.links.wine); return w && w.links.place && placeIds.some(id => w.links.place.startsWith(id)); });
-  const saved = isPlaceSaved(k);
+  const saved = isEntitySaved('region', k);
   const ico = p => svgIcon(p);
   box.append(
     el('div', { class: 'ph', style: '--tone:' + L.tone },
       hasPhoto(k) ? el('img', { src: regionPhoto(k), alt: r.name + ', ' + r.country }) : null,
-      el('button', { class: 'ph-back', type: 'button', 'aria-label': 'Back', onclick: () => go(S.prevTab || 'explore') }, ico('<path d="M15 5l-7 7 7 7"/>')),
+      el('button', { class: 'ph-back', type: 'button', 'aria-label': 'Back', onclick: goBack }, ico('<path d="M15 5l-7 7 7 7"/>')),
       hasPhoto(k) ? el('button', { class: 'credit', type: 'button', style: 'height:60%', 'aria-label': 'View the photo full screen', onclick: () => openPhoto(k) }) : null,
       el('div', { class: 'ph-in' },
         el('h1', { style: 'margin:0;width:100%', 'aria-label': r.name }, lettering(k, 'page')),
         el('div', { class: 'ph-btns' },
           el('button', { class: 'cbtn', type: 'button', 'aria-label': 'About ' + r.name, onclick: () => $('#phAbout').scrollIntoView({ behavior: 'smooth', block: 'start' }) }, ico('<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>')),
           el('button', { class: 'cbtn big', type: 'button', 'aria-label': 'Find bottles from ' + r.name + ' in UK shops', onclick: () => askRegion(k) }, svgIcon('<path d="M7 3h10l-.4 5.2a4.6 4.6 0 0 1-9.2 0z" fill="currentColor"/><path d="M12 13v7M8.5 21h7"/>')),
-          el('button', { class: 'cbtn', type: 'button', 'aria-pressed': String(saved), 'aria-label': saved ? 'Saved' : 'Save this place', onclick: () => { const cur = LS.get('claret.places', []); LS.set('claret.places', saved ? cur.filter(x => x !== k) : [...cur, k]); renderPlace(); toast(saved ? 'Removed from saved places' : 'Saved to Explore'); } },
+          el('button', { class: 'cbtn', type: 'button', 'aria-pressed': String(saved), 'aria-label': saved ? 'Saved' : 'Save this place', onclick: () => toggleEntitySaved('region', k) },
             svgIcon(saved ? '<path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z" fill="currentColor"/>' : '<path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/>'))))),
     el('div', { class: 'ph-below', style: '--tone:' + L.tone },
       st ? el('button', { class: 'feat', type: 'button', onclick: () => { S.pick = st.id; S.momentOverride = S.momentOverride; go('tonight'); } },
@@ -948,6 +981,95 @@ function renderPlace() {
       el('div', { class: 'sec', id: 'phAbout' }, el('div', { class: 'sec-h' }, el('h2', { text: 'About' })), el('p', { class: 'ph-blurb', text: r.blurb }), el('div', { class: 'group' }, el('div', { class: 'row' }, el('span', { class: 'lab', style: 'color:#fff', text: 'Grapes' }), el('span', { class: 'row-main row-s', text: r.grapes })), el('div', { class: 'row' }, el('span', { class: 'lab', style: 'color:#fff', text: 'Where' }), el('span', { class: 'row-main row-s', text: r.country })))),
       c ? el('p', { class: 'ph-credit' }, 'Photo: ' + c.artist + ' · ' + c.license + ' · ', el('a', { href: c.source, target: '_blank', rel: 'noopener' }, 'Source')) : null));
   fitLetters(box);
+}
+/* Producer and grape pages share the region page's layout */
+function pageButtons(about, find, savedKind, key, label) {
+  const saved = isEntitySaved(savedKind, key);
+  return el('div', { class: 'ph-btns' },
+    el('button', { class: 'cbtn', type: 'button', 'aria-label': 'About ' + label, onclick: () => $('#phAbout').scrollIntoView({ behavior: 'smooth', block: 'start' }) }, svgIcon('<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>')),
+    el('button', { class: 'cbtn big', type: 'button', 'aria-label': 'Find bottles: ' + label, onclick: find }, svgIcon('<path d="M7 3h10l-.4 5.2a4.6 4.6 0 0 1-9.2 0z" fill="currentColor"/><path d="M12 13v7M8.5 21h7"/>')),
+    el('button', { class: 'cbtn', type: 'button', 'aria-pressed': String(saved), 'aria-label': saved ? 'Saved' : 'Save ' + label, onclick: () => toggleEntitySaved(savedKind, key) },
+      svgIcon(saved ? '<path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z" fill="currentColor"/>' : '<path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/>')));
+}
+async function askBottles(subject, extra) {
+  const out = $('#phFind'); const sample = await getSample();
+  out.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  if (!sample) { out.replaceChildren(el('p', { class: 'ph-credit', style: 'font-size:14px', text: 'Finding bottles needs Claude. Open Claret in the Claude app.' })); return; }
+  out.replaceChildren(el('div', { class: 'status', style: 'color:#fff' }, el('span', { class: 'spin', 'aria-hidden': 'true' }), 'Finding bottles…'));
+  const prompt = ['You are Claret, a UK wine companion with nothing to sell. Suggest 4 real wines ' + subject + ' that are easy to buy in the UK, from a good everyday bottle to a treat, with a realistic UK shelf price per 75cl.' + (extra ? ' ' + extra : ''),
+    'Do not invent wines or critic scores. Never break a hard limit.', 'Hard limits:', ...(limitsText().length ? limitsText().map(t => '- ' + t) : ['- none']), 'Their palate:', palateText(palate()),
+    'Reply with only JSON: {"bottles":[{"producer":"","wine":"name as on the label, without producer or vintage","vintage":"recent year or NV","country":"","region":"","grapes":[""],"colour":"one of ' + COLOURS.map(c => c.id).join('|') + '","family":"red|white|rose|orange|sparkling|sweet","price":20,"where":"UK merchants","why":"one line"}]}'].join('\n');
+  try {
+    const res = await sample.json(prompt, { modelTier: 'default', cache: true });
+    const g = el('div', { class: 'group' }); let dropped = 0;
+    for (const b of (Array.isArray(res && res.bottles) ? res.bottles.slice(0, 4) : [])) {
+      const w = { producer: str(b.producer), cuvee: str(b.wine), vintage: str(b.vintage), country: str(b.country), region: str(b.region), grapes: arr(b.grapes), colour: COLOUR[b.colour] ? b.colour : null, family: str(b.family), prices: num(b.price) ? [{ amount: num(b.price), per: 'bottle', size: 750 }] : [] };
+      if (!w.cuvee && !w.producer) continue;
+      if (breaks(w).length) { dropped++; continue; }
+      g.append(wineRow(suggestedWine(w, b)));
+    }
+    out.replaceChildren(el('div', { class: 'sec-h' }, el('h2', { text: 'In UK shops' })), g, el('p', { class: 'ph-credit', style: 'font-size:13px', text: (dropped ? dropped + ' removed for breaking your limits. ' : '') + 'Suggested by Claude. Prices are typical UK estimates, not live stock.' }));
+  } catch (e) { out.replaceChildren(el('p', { class: 'ph-credit', style: 'font-size:14px', text: sampleError(e) })); }
+}
+function backButton() { return el('button', { class: 'ph-back', type: 'button', 'aria-label': 'Back', onclick: goBack }, svgIcon('<path d="M15 5l-7 7 7 7"/>')); }
+function renderProducerPage(id) {
+  const box = $('#v-place'); box.replaceChildren();
+  const pe = producerEntities().find(p => p.id === id);
+  if (!pe) { box.append(el('div', { class: 'ph-below', style: '--tone:#2C2426;min-height:70vh;padding-top:70px' }, backButton(), el('p', { class: 'ph-blurb', text: 'That producer isn\u2019t in your catalogue yet.' }))); return; }
+  const rk = pe.region; const L = LETTERING[rk] || { tone: '#2C2426' }; const photo = pe.photo || (rk && hasPhoto(rk) ? rk : null); const c = photo && CREDITS[photo];
+  const wines = [...Store.nodes.values()].filter(n => n.type === 'vintage' && !n.mergedInto).filter(v => { const w = Store.nodes.get(v.links.wine); return w && w.links.producer === id; });
+  box.append(
+    el('div', { class: 'ph', style: '--tone:' + L.tone },
+      photo ? el('img', { src: regionPhoto(photo), alt: pe.name }) : null, backButton(),
+      photo ? el('button', { class: 'credit', type: 'button', style: 'height:60%', 'aria-label': 'View the photo full screen', onclick: () => openPhotoKey(photo, pe.name, pe.place) }) : null,
+      el('div', { class: 'ph-in' }, el('h1', { class: 'ph-name' }, ...words(pe.name)), el('p', { class: 'ph-sub', text: pe.place }), pageButtons(null, () => askBottles('made by ' + pe.name + ' (' + pe.place + ')'), 'producer', id, pe.name))),
+    el('div', { class: 'ph-below', style: '--tone:' + L.tone },
+      rk && REGIONS[rk] ? el('button', { class: 'feat', type: 'button', onclick: () => openRegion(rk) }, el('span', { class: 'glass', style: '--c:var(--c-claret)', 'aria-hidden': 'true' }),
+        el('span', { style: 'display:flex;flex-direction:column;gap:2px;min-width:0' }, el('span', { class: 'k', text: 'The region' }), el('span', { class: 't', text: REGIONS[rk].name }), el('span', { class: 's', text: REGIONS[rk].country })), el('span', { class: 'plus', 'aria-hidden': 'true' }, svgIcon('<path d="M9 6l6 6-6 6"/>'))) : null,
+      el('div', { id: 'phFind', class: 'sec', 'aria-live': 'polite' }),
+      wines.length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Their wines' })), el('div', { class: 'group' }, ...wines.map(v => wineRow(v.id)))) : null,
+      el('div', { class: 'sec', id: 'phAbout' }, el('div', { class: 'sec-h' }, el('h2', { text: 'About' })), el('p', { class: 'ph-blurb', text: pe.blurb })),
+      pe.bottle && hasPhoto(pe.bottle) ? el('img', { src: regionPhoto(pe.bottle), alt: pe.name + ' bottle', style: 'width:100%;max-height:260px;object-fit:contain;border-radius:18px;background:rgba(255,255,255,.06)' }) : null,
+      c ? el('p', { class: 'ph-credit' }, 'Photo: ' + c.artist + ' · ' + c.license + ' · ', el('a', { href: c.source, target: '_blank', rel: 'noopener' }, 'Source')) : null));
+}
+/* Classic places for a grape: match the text to region cards where there is one */
+function regionsFromText(list) {
+  const keys = []; const rest = [];
+  for (const txt of list) {
+    const f = fold(txt); let hit = null;
+    for (const k of Object.keys(REGIONS)) { const rn = fold(REGIONS[k].name.replace(/&.*/, '')); const first = rn.split(' ')[0]; if (rn.length > 3 && (f.includes(rn) || f.includes(first) && first.length > 4)) { hit = k; break; } }
+    if (hit && !keys.includes(hit)) keys.push(hit); else if (!hit) rest.push(txt);
+  }
+  return { keys, rest };
+}
+function renderGrapePage(g) {
+  const box = $('#v-place'); box.replaceChildren();
+  const info = GRAPE_INFO[g]; const tone = grapeTone(g); const P = palate(); const mine = P.grape[g]; const gv = GRAPE[g] || { colour: 'red', aliases: [] };
+  const wines = [...Store.nodes.values()].filter(n => n.type === 'vintage' && !n.mergedInto).filter(v => { const w = Store.nodes.get(v.links.wine); return w && (w.links.grapes || []).includes(g); });
+  const places = info ? regionsFromText(info.places) : { keys: [], rest: [] };
+  const pageTone = 'color-mix(in oklab,var(--c-' + tone + ') 34%,#0c0709)';
+  box.append(
+    el('div', { class: 'ph grape', style: '--tone:' + pageTone }, backButton(), el('span', { class: 'glass xl', style: '--c:var(--c-' + tone + ')', 'aria-hidden': 'true' }),
+      el('div', { class: 'ph-in' }, el('h1', { style: 'margin:0;width:100%', 'aria-label': grapeName(g) }, el('span', { style: 'display:block;width:100%' }, el('span', { class: 'letter', lang: 'en', style: '--lb:60px;font-size:60px' }, grapeName(g)))),
+        el('p', { class: 'ph-sub', text: (gv.colour === 'red' ? 'Red grape' : 'White grape') + (mine ? ' · you rate it ' + mine.avg.toFixed(1) + '/5 over ' + mine.n : ' · not tried yet') }),
+        pageButtons(null, () => askBottles('made from ' + grapeName(g), 'Choose different classic places rather than four from one region.'), 'grape', g, grapeName(g)))),
+    el('div', { class: 'ph-below', style: '--tone:' + pageTone },
+      el('div', { id: 'phFind', class: 'sec', 'aria-live': 'polite' }),
+      places.keys.length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Classic places' })), el('div', { class: 'mini-strip' }, ...places.keys.map(k => regionCard(k, [150, 190])))) : null,
+      places.rest.length ? el('p', { class: 'ph-blurb', style: 'font-size:16px', text: (places.keys.length ? 'Also: ' : 'Classic places: ') + places.rest.join(' · ') }) : null,
+      info && info.next.length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Next step' })), el('div', { class: 'mini-strip' }, ...info.next.map(n => grapeCard(n, [150, 190])))) : null,
+      info ? el('div', { class: 'group' }, recRow('Trade up', info.up), recRow('Trade down', info.down)) : null,
+      wines.length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Your wines' })), el('div', { class: 'group' }, ...wines.map(v => wineRow(v.id)))) : null,
+      el('div', { class: 'sec', id: 'phAbout' }, el('div', { class: 'sec-h' }, el('h2', { text: 'About' })), el('p', { class: 'ph-blurb', text: info ? info.taste : 'Nothing written about this grape yet. Scan or log a bottle and it will appear here.' }),
+        gv.aliases && gv.aliases.length > 1 ? el('p', { class: 'ph-credit', text: 'Also called: ' + gv.aliases.slice(1).map(a => a.replace(/\b\w/g, m => m.toUpperCase())).join(', ') }) : null)));
+  fitLetters(box);
+}
+function openPhotoKey(k, title, sub) { const r = REGIONS[k]; if (r) return openPhoto(k); const c = CREDITS[k];
+  const close = () => { v.remove(); document.removeEventListener('keydown', esc); }; const esc = e => { if (e.key === 'Escape') close(); };
+  const v = el('div', { class: 'photo-view', role: 'dialog', 'aria-modal': 'true', 'aria-label': title, onclick: e => { if (!e.target.closest('a')) close(); } }, el('img', { src: regionPhoto(k), alt: title }),
+    el('div', { class: 'pv-cap' }, el('div', null, el('div', { class: 'pv-t' }, ...words(title)), el('div', { class: 'pv-s', text: sub || '' }))),
+    c ? el('p', { class: 'pv-credit' }, 'Photo: ' + c.artist + ' · ' + c.license + ' · ', el('a', { href: c.source, target: '_blank', rel: 'noopener' }, 'Source')) : null);
+  document.addEventListener('keydown', esc); document.body.append(v);
 }
 async function askRegion(k) {
   const r = REGIONS[k]; const out = $('#phFind'); const sample = await getSample();
@@ -1046,6 +1168,15 @@ const GRAPE_INFO = {
   'grape:gruner-veltliner': { taste: 'Green apple, white pepper, lentil.', places: ['Wachau', 'Kamptal', 'Kremstal', 'Weinviertel'], next: ['grape:riesling', 'grape:sauvignon-blanc', 'grape:furmint'], up: 'A Wachau Smaragd', down: 'Weinviertel DAC' },
   'grape:malbec': { taste: 'Dark plum, violet, cocoa.', places: ['Mendoza', 'Cahors'], next: ['grape:syrah', 'grape:tempranillo'], up: 'High-altitude Uco Valley Malbec', down: 'Mendoza Malbec' }
 };
+/* Each grape's colour on the tasting scale; unlisted grapes take their family's */
+const GRAPE_TONE = { 'grape:sauvignon-blanc': 'lemon', 'grape:riesling': 'lemon', 'grape:albarino': 'lemon', 'grape:gruner-veltliner': 'lemon', 'grape:chardonnay': 'gold', 'grape:chenin-blanc': 'straw', 'grape:semillon': 'gold', 'grape:viognier': 'gold',
+  'grape:pinot-noir': 'ruby', 'grape:gamay': 'ruby', 'grape:grenache': 'ruby', 'grape:cabernet-franc': 'ruby', 'grape:syrah': 'purple', 'grape:malbec': 'purple', 'grape:cabernet-sauvignon': 'claret', 'grape:merlot': 'claret',
+  'grape:tempranillo': 'garnet', 'grape:sangiovese': 'garnet', 'grape:nebbiolo': 'brick', 'grape:mourvedre': 'purple', 'grape:zinfandel': 'purple', 'grape:pinot-gris': 'onion-skin', 'grape:gewurztraminer': 'gold', 'grape:muscat': 'gold' };
+function grapeTone(id) { return GRAPE_TONE[id] || ((GRAPE[id] && GRAPE[id].colour === 'red') ? 'garnet' : 'straw'); }
+function grapeList() {
+  const withInfo = Object.keys(GRAPE_INFO); const rest = GRAPES.map(g => g.id).filter(id => !GRAPE_INFO[id]).sort((a, b) => grapeName(a).localeCompare(grapeName(b)));
+  return [...withInfo.sort((a, b) => grapeName(a).localeCompare(grapeName(b))), ...rest];
+}
 function grapeName(id) { return (GRAPE[id] && GRAPE[id].name) || String(id).split(':')[1].replace(/-/g, ' ').replace(/\b\w/g, m => m.toUpperCase()); }
 
 /* Catalogue: a few real bottles shipped with the page. Merchant facts as listed on the merchant's page (Oct 2026); notes paraphrased and credited. */
@@ -1097,37 +1228,17 @@ const FAMOUS = [
   { k: 'nyetimber', name: 'Nyetimber', place: 'West Sussex, England', blurb: 'A pioneer of English sparkling wine, planting Champagne’s grapes in Sussex from 1988.' },
   { k: 'vega-sicilia-bottle', name: 'Vega Sicilia', place: 'Ribera del Duero, Spain', blurb: 'Único is released after a decade or more of ageing, and is Spain’s most celebrated red.' }
 ];
-function openFamous(f) {
-  const c = CREDITS[f.k], cb = f.bottle && CREDITS[f.bottle];
-  openSheet(f.name, [
-    hasPhoto(f.k) ? el('img', { class: 'sheet-photo', src: regionPhoto(f.k), alt: f.name }) : null,
-    el('div', { class: 'eyebrow', text: f.place }),
-    el('p', { class: 'look-list', style: 'margin:0', text: f.blurb }),
-    cb && hasPhoto(f.bottle) ? el('img', { class: 'sheet-photo', src: regionPhoto(f.bottle), alt: f.name + ' bottle', style: 'height:280px;object-fit:contain;background:color-mix(in oklab,var(--ink) 5%,transparent)' }) : null,
-    el('button', { class: 'btn', type: 'button', onclick: () => { closeSheet(); $('#q').value = f.name; go('explore'); askAbout(f); } }, 'Their wines, in UK shops'),
-    el('p', { class: 'fine' }, ...[c, cb].filter(Boolean).flatMap((x, i) => [i ? ' · ' : '', 'Photo: ' + x.artist + ', ' + x.license + ' (', el('a', { href: x.source, target: '_blank', rel: 'noopener' }, 'source'), ')']))
-  ]);
-}
-/* Ask Claude for a producer's wines you can buy; each becomes a wine page in the catalogue */
-async function askAbout(f) {
-  const out = $('#exploreOut'); const sample = await getSample();
-  const box = el('div', { class: 'sec', 'aria-live': 'polite' }); out.prepend(box);
-  if (!sample) { box.append(el('p', { class: 'foot', text: 'This needs Claude. Open Claret in the Claude app.' })); return; }
-  box.append(el('div', { class: 'status' }, el('span', { class: 'spin', 'aria-hidden': 'true' }), 'Looking up ' + f.name + '…'));
-  const prompt = ['You are Claret, a UK wine companion with nothing to sell. List up to 4 wines made by ' + f.name + ' (' + f.place + ') that a UK buyer can actually find, from the entry level up, with a realistic UK price per 75cl for a recent vintage.',
-    'Do not invent cuvées or critic scores. Reply with only JSON: {"bottles":[{"producer":"' + f.name + '","wine":"name as on the label, without producer or vintage","vintage":"recent year or NV","country":"","region":"","grapes":[""],"colour":"one of ' + COLOURS.map(c => c.id).join('|') + '","family":"red|white|rose|orange|sparkling|sweet","price":40,"where":"UK merchants","why":"one line on what it is"}]}'].join('\n');
-  try {
-    const r = await sample.json(prompt, { modelTier: 'default', cache: true });
-    const g = el('div', { class: 'group' });
-    for (const b of (Array.isArray(r && r.bottles) ? r.bottles.slice(0, 4) : [])) {
-      const w = { producer: str(b.producer) || f.name, cuvee: str(b.wine), vintage: str(b.vintage), country: str(b.country), region: str(b.region), grapes: arr(b.grapes), colour: COLOUR[b.colour] ? b.colour : null, family: str(b.family), prices: num(b.price) ? [{ amount: num(b.price), per: 'bottle', size: 750 }] : [] };
-      if (!w.cuvee) continue;
-      const id = suggestedWine(w, b);
-      const over = breaks(w).length;
-      g.append(wineRow(id, over ? 'Breaks one of your limits' : null));
-    }
-    box.replaceChildren(el('div', { class: 'sec-h' }, el('h2', { text: f.name })), g, el('p', { class: 'foot', text: 'Suggested by Claude. Prices are typical UK estimates, not live stock.' }));
-  } catch (e) { box.replaceChildren(el('p', { class: 'foot', text: sampleError(e) })); }
+const FAMOUS_REGION = { 'romanee-conti': 'burgundy', 'chateau-yquem': 'bordeaux', 'lopez-de-heredia': 'rioja', 'marques-de-riscal': 'rioja', 'dom-perignon': 'champagne', 'scharzhofberg': 'mosel', 'penfolds': 'barossa', 'cloudy-bay': 'marlborough' };
+function producerEntities() {
+  const out = FAMOUS.map(f => ({ id: 'producer:' + slug(f.name), name: f.name, place: f.place, blurb: f.blurb, photo: hasPhoto(f.k) ? f.k : null, bottle: f.bottle && hasPhoto(f.bottle) ? f.bottle : null, region: FAMOUS_REGION[f.k] || null, famous: true }));
+  const have = new Set(out.map(o => o.id));
+  for (const n of Store.nodes.values()) {
+    if (n.type !== 'producer' || n.mergedInto || have.has(n.id)) continue;
+    const place = n.links && n.links.place; const rk = place && (PLACE_REGION[place] || PLACE_REGION[place.split('/').slice(0, 2).join('/')]);
+    const bits = [best(n, 'winemaker') ? 'Winemaker: ' + best(n, 'winemaker') + '.' : '', best(n, 'subregion') ? best(n, 'subregion') + (place ? ', ' + placeShort(place) : '') + '.' : ''].filter(Boolean).join(' ');
+    out.push({ id: n.id, name: n.name, place: place ? placeLabel(place) : '', blurb: bits || 'In your catalogue.', photo: null, bottle: null, region: rk || null, famous: false });
+  }
+  return out;
 }
 const CRITICS = [['Jancis Robinson MW', 20], ['Decanter', 100], ['Wine Advocate', 100], ['Vinous', 100], ['James Suckling', 100], ['Wine Spectator', 100], ['Tim Atkin MW', 100], ['Bob Campbell MW', 100], ['Jasper Morris MW', 100], ['Jeb Dunnuck', 100], ['Guía Peñín', 100], ['Wine Enthusiast', 100]];
 
@@ -1371,7 +1482,7 @@ function limitsText() {
    Context and moments (section 7)
    ============================================================ */
 const MOMENT_NAME = { today: 'Today', lunch: 'This afternoon', tonight: 'Tonight', nightcap: 'Nightcap' };
-const S = { tab: 'tonight', momentOverride: null, weather: LS.get('claret.weather', null), mood: null, food: '', withWho: '', pick: null, scan: { mode: 'label', files: [], ctl: null, busy: false }, find: { ctl: null, busy: false } };
+const S = { nav: [], base: 'explore', exTab: LS.get('claret.exTab', 'regions'), tab: 'tonight', momentOverride: null, weather: LS.get('claret.weather', null), mood: null, food: '', withWho: '', pick: null, scan: { mode: 'label', files: [], ctl: null, busy: false }, find: { ctl: null, busy: false } };
 function mins(hhmm) { const [h, m] = String(hhmm || '0:0').split(':').map(Number); return h * 60 + (m || 0); }
 function autoMoment(d = new Date()) {
   const t = d.getHours() * 60 + d.getMinutes();
@@ -1651,7 +1762,7 @@ function maturityWord(win) {
   if (win[1] - y <= 0) return 'Drink up';
   return y - win[0] < (win[1] - win[0]) / 2 ? 'Ready – youthful' : 'Ready – mature';
 }
-function openWine(vId) { if (S.tab !== 'wine') S.prevTab = S.tab; S.wine = vId; go('wine'); }
+function openWine(vId) { pushNav(); S.wine = vId; go('wine'); }
 function isSaved(vId) { const s = Store.events('saved').find(e => e.node === vId); return !!(s && !s.removed); }
 function toggleSaved(vId) {
   const s = Store.events('saved').find(e => e.node === vId);
@@ -1669,7 +1780,7 @@ function renderWine() {
   const hero = el('div', { class: 'wine-hero', style: '--wine:var(--c-' + col + ')' },
     rk && hasPhoto(rk) ? el('img', { class: 'ph', src: regionPhoto(rk), alt: '' }) : null,
     lp ? el('img', { class: 'label', src: lp, alt: 'Your photo of the label' }) : bottleSVG(bottleFor(d), col),
-    el('button', { class: 'backbtn lgm', type: 'button', 'aria-label': 'Back', onclick: () => go(S.prevTab || 'explore') }, svgIcon('<path d="M15 5l-7 7 7 7"/>')),
+    el('button', { class: 'backbtn lgm', type: 'button', 'aria-label': 'Back', onclick: goBack }, svgIcon('<path d="M15 5l-7 7 7 7"/>')),
     el('button', { class: 'savebtn lgm', type: 'button', onclick: () => toggleSaved(vId) }, svgIcon(isSaved(vId) ? '<path d="M6 3h12v18l-6-4-6 4z" fill="currentColor"/>' : '<path d="M6 3h12v18l-6-4-6 4z"/>'), isSaved(vId) ? 'Saved' : 'Save'));
   // breadcrumb: country > region
   const crumbs = el('div', { class: 'crumbs' });
@@ -1850,17 +1961,6 @@ function openAddScore(vId) {
       Store.saveNode(v); closeSheet(); renderWine(); toast('Score added');
     } }, 'Add score')]);
 }
-function openProducer(pId) {
-  const p = Store.nodes.get(pId); if (!p) return;
-  const wines = [...Store.nodes.values()].filter(n => n.type === 'vintage' && !n.mergedInto).filter(v => { const w = Store.nodes.get(v.links.wine); return w && w.links.producer === pId; });
-  const place = p.links && p.links.place;
-  const rk = place && PLACE_REGION[place];
-  openSheet(p.name, [
-    rk && hasPhoto(rk) ? el('img', { class: 'sheet-photo', src: regionPhoto(rk), alt: REGIONS[rk].name }) : null,
-    el('div', { class: 'eyebrow', text: [best(p, 'subregion'), place ? placeLabel(place) : ''].filter(Boolean).join(' · ') }),
-    best(p, 'winemaker') ? el('p', { class: 'look-list', style: 'margin:0', text: 'Winemaker: ' + best(p, 'winemaker') }) : null,
-    el('div', { class: 'group' }, ...wines.map(v => wineRow(v.id)))]);
-}
 function wineRow(vId, extra) {
   const d = describeVintage(vId); const v = d.vintage;
   const cr = claimsOf(v, 'critic')[0]; const lp = labelURL(v);
@@ -1879,15 +1979,32 @@ function openPlace(id) {
     c && id === c.id ? el('div', { class: 'chips' }, ...c.regions.map(r => el('button', { class: 'chip', type: 'button', onclick: () => openPlace(r.id) }, r.name))) : null,
     wines.length ? el('div', { class: 'group' }, ...wines.map(v => wineRow(v.id))) : el('p', { class: 'foot', text: 'Nothing from here in your catalogue yet.' })]);
 }
-function openGrape(gId) {
-  const info = GRAPE_INFO[gId]; const P = palate(); const mine = P.grape[gId];
-  const wines = [...Store.nodes.values()].filter(n => n.type === 'vintage').filter(v => { const w = Store.nodes.get(v.links.wine); return w && (w.links.grapes || []).includes(gId); });
-  openSheet(grapeName(gId), [
-    el('div', { class: 'eyebrow', text: (GRAPE[gId] ? (GRAPE[gId].colour === 'red' ? 'Red grape' : 'White grape') : 'Grape') + (mine ? ' · you rate it ' + mine.avg.toFixed(1) + '/5 over ' + mine.n : ' · not tried yet') }),
-    info ? el('p', { class: 'look-list', style: 'margin:0', text: info.taste }) : null,
-    info ? el('div', { class: 'group' }, recRow('Classic places', info.places.join(' · ')), recRow('Next step', info.next.map(grapeName).join(' · ')), recRow('Trade up', info.up), recRow('Trade down', info.down)) : null,
-    wines.length ? el('div', { class: 'group' }, ...wines.map(v => wineRow(v.id))) : null]);
+/* Cards */
+function regionCard(k, size) {
+  const has = hasPhoto(k); const L = LETTERING[k] || {};
+  return el('button', { class: 'place' + (has ? '' : ' plain'), type: 'button', style: (has ? '' : '--tone:' + (L.tone || '#2C2426') + ';') + (size ? 'width:' + size[0] + 'px;height:' + size[1] + 'px' : ''), onclick: () => openRegion(k), 'aria-label': REGIONS[k].name },
+    has ? el('img', { src: regionPhoto(k), alt: '', loading: 'lazy' }) : null,
+    el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: REGIONS[k].country }), lettering(k, 'card')));
 }
+function producerCard(pe, size) {
+  const k = pe.photo || (pe.region && hasPhoto(pe.region) ? pe.region : null); const L = LETTERING[pe.region] || {};
+  return el('button', { class: 'place' + (k ? '' : ' plain'), type: 'button', style: (k ? '' : '--tone:' + (L.tone || '#2C2426') + ';') + (size ? 'width:' + size[0] + 'px;height:' + size[1] + 'px' : ''), onclick: () => openProducer(pe.id), 'aria-label': pe.name },
+    k ? el('img', { src: regionPhoto(k), alt: '', loading: 'lazy' }) : null,
+    el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: pe.place }), el('span', { class: 'place-t' }, ...words(pe.name))));
+}
+function grapeCard(g, size) {
+  const tried = !!palate().grape[g]; const info = GRAPE_INFO[g];
+  return el('button', { class: 'place gcard', type: 'button', style: '--c:var(--c-' + grapeTone(g) + ');' + (size ? 'width:' + size[0] + 'px;height:' + size[1] + 'px' : ''), onclick: () => openGrape(g), 'aria-label': grapeName(g) + (tried ? ', you have logged it' : '') },
+    el('span', { class: 'glass', style: '--c:var(--c-' + grapeTone(g) + ')', 'aria-hidden': 'true' }), tried ? el('span', { class: 'dot', 'aria-hidden': 'true' }) : null,
+    el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: (GRAPE[g] && GRAPE[g].colour === 'red') ? 'Red grape' : 'White grape' }), el('span', { class: 'letter', style: 'font-size:28px' }, grapeName(g)), info ? el('span', { class: 'place-s', text: info.taste }) : null));
+}
+const savedKeys = kind => LS.get(kind === 'region' ? 'claret.places' : 'claret.' + kind + 's', []);
+function isEntitySaved(kind, key) { return savedKeys(kind).includes(key); }
+function toggleEntitySaved(kind, key) {
+  const lk = kind === 'region' ? 'claret.places' : 'claret.' + kind + 's'; const cur = LS.get(lk, []); const on = cur.includes(key);
+  LS.set(lk, on ? cur.filter(x => x !== key) : [...cur, key]); renderPlace(); toast(on ? 'Removed from saved' : 'Saved to Explore');
+}
+
 /* Explore: the catalogue, places and grapes, searchable */
 function renderExplore() { renderExploreInner(); fitLetters($('#exploreOut')); }
 function renderExploreInner() {
@@ -1895,25 +2012,36 @@ function renderExploreInner() {
   const out = $('#exploreOut'); out.replaceChildren();
   const vintages = [...Store.nodes.values()].filter(n => n.type === 'vintage' && !n.mergedInto);
   const match = id => { if (!q) return true; const d = describeVintage(id); return fold(d.title + ' ' + d.by + ' ' + d.grapes.join(' ') + ' ' + (d.placeName || '')).includes(q); };
-  const saved = Store.events('saved').filter(e => !e.removed).map(e => e.node).filter(id => Store.nodes.has(id) && match(id));
-  if (saved.length) out.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Saved' })), el('div', { class: 'group' }, ...[...new Set(saved)].map(id => wineRow(id)))));
+  const regKeys = Object.keys(REGIONS).filter(k => !q || fold(REGIONS[k].name + ' ' + REGIONS[k].country + ' ' + REGIONS[k].grapes).includes(q));
+  const prods = producerEntities().filter(p => !q || fold(p.name + ' ' + p.place).includes(q));
+  const grs = grapeList().filter(g => !q || fold(grapeName(g) + ' ' + ((GRAPE[g] && GRAPE[g].aliases) || []).join(' ')).includes(q));
+  const grid = (cards, more) => el('div', { class: 'tiles' }, ...cards);
+  const sec = (title, node, foot) => el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: title })), node, foot ? el('p', { class: 'foot', text: foot }) : null);
+  const blocks = {
+    regions: () => regKeys.length ? sec('Regions', grid(regKeys.map(k => regionCard(k)))) : null,
+    producers: () => prods.length ? sec('Producers', grid(prods.map(p => producerCard(p)))) : null,
+    grapes: () => grs.length ? sec('Grapes', grid(grs.slice(0, q ? 60 : 80).map(g => grapeCard(g))), '● marks a grape you have logged.') : null
+  };
+  // wines
+  const saved = [...new Set(Store.events('saved').filter(e => !e.removed).map(e => e.node))].filter(id => Store.nodes.has(id) && match(id));
   const cat = vintages.filter(v => match(v.id)).sort((a, b) => (b.catalogue ? 1 : 0) - (a.catalogue ? 1 : 0) || String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')));
-  out.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: q ? 'Wines' : 'The catalogue' })),
-    cat.length ? el('div', { class: 'group' }, ...cat.slice(0, 40).map(v => wineRow(v.id))) : el('p', { class: 'foot', text: 'No wines match. Scan a label or ask for bottles on Tonight to add more.' }),
-    !q ? el('p', { class: 'foot', text: 'Two Berry Bros. & Rudd bottles to start, plus every wine you scan, log or get suggested.' }) : null));
-  const savedPlaces = LS.get('claret.places', []).filter(k => REGIONS[k] && hasPhoto(k));
-  if (savedPlaces.length && !q) out.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Saved places' })), el('div', { class: 'strip' }, ...savedPlaces.map(k => el('button', { class: 'place', type: 'button', style: 'width:200px;height:200px', onclick: () => openRegion(k), 'aria-label': REGIONS[k].name },
-    el('img', { src: regionPhoto(k), alt: '', loading: 'lazy' }), el('span', { class: 'place-in' }, lettering(k, 'card')))))));
-  const fam = FAMOUS.filter(f => hasPhoto(f.k) && (!q || fold(f.name + ' ' + f.place).includes(q)));
-  if (fam.length) out.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Famous names' })), el('div', { class: 'strip' }, ...fam.map(f => el('button', { class: 'place', type: 'button', style: 'width:200px;height:250px', onclick: () => openFamous(f), 'aria-label': f.name },
-    el('img', { src: regionPhoto(f.k), alt: '', loading: 'lazy' }), el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: f.place }), el('span', { class: 'place-t' }, ...words(f.name))))))));
-  const regs = Object.keys(REGIONS).filter(k => hasPhoto(k) && (!q || fold(REGIONS[k].name + ' ' + REGIONS[k].country + ' ' + REGIONS[k].grapes).includes(q)));
-  if (regs.length) out.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Places' })), el('div', { class: 'tiles' }, ...regs.map(k => el('button', { class: 'place', type: 'button', onclick: () => openRegion(k), 'aria-label': REGIONS[k].name },
-    el('img', { src: regionPhoto(k), alt: '', loading: 'lazy' }), el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: REGIONS[k].country }), lettering(k, 'card')))))));
-  const P = palate();
-  const gr = Object.keys(GRAPE_INFO).filter(g => !q || fold(grapeName(g)).includes(q));
-  if (gr.length) out.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Grapes' })), el('div', { class: 'chips' }, ...gr.map(g => el('button', { class: 'chip grape-chip', type: 'button', 'data-tried': String(!!P.grape[g]), onclick: () => openGrape(g) }, grapeName(g)))),
-    el('p', { class: 'foot', text: '● you’ve logged it. The rest is new ground.' })));
+  const wines = () => [
+    saved.length ? sec('Saved wines', el('div', { class: 'group' }, ...saved.map(id => wineRow(id)))) : null,
+    sec(q ? 'Wines' : 'The catalogue', cat.length ? el('div', { class: 'group' }, ...cat.slice(0, 40).map(v => wineRow(v.id))) : el('p', { class: 'foot', text: 'No wines match. Scan a label or ask for bottles on Tonight to add more.' }),
+      !q ? 'Two Berry Bros. & Rudd bottles to start, plus every wine you scan, log or get suggested.' : null)
+  ];
+  if (q) {
+    out.append(...wines().filter(Boolean), ...['regions', 'producers', 'grapes'].map(k => blocks[k]()).filter(Boolean));
+    if (!out.children.length) out.append(el('p', { class: 'foot', text: 'Nothing matches.' }));
+    return;
+  }
+  const tab = ['regions', 'producers', 'grapes'].includes(S.exTab) ? S.exTab : 'regions';
+  out.append(el('div', { class: 'seg', role: 'radiogroup', 'aria-label': 'Browse by' }, ...[['regions', 'Regions'], ['producers', 'Producers'], ['grapes', 'Grapes']].map(([k, n]) =>
+    el('button', { type: 'button', role: 'radio', 'aria-checked': String(tab === k), onclick: () => { S.exTab = k; LS.set('claret.exTab', k); renderExplore(); } }, n))));
+  // saved places, producers and grapes
+  const savedCards = [...savedKeys('region').filter(k => REGIONS[k]).map(k => regionCard(k, [150, 190])), ...savedKeys('producer').map(id => producerEntities().find(p => p.id === id)).filter(Boolean).map(p => producerCard(p, [150, 190])), ...savedKeys('grape').filter(g => GRAPE[g] || GRAPE_INFO[g]).map(g => grapeCard(g, [150, 190]))];
+  if (savedCards.length) out.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Saved' })), el('div', { class: 'mini-strip' }, ...savedCards)));
+  out.append(blocks[tab]() || el('p', { class: 'foot', text: 'Nothing here yet.' }), ...wines().filter(Boolean));
 }
 
 /* ============================================================
@@ -2329,7 +2457,8 @@ function renderHeader() {
 function go(tab, focusSel) {
   S.tab = tab;
   for (const v of ['tonight', 'explore', 'wine', 'place', 'scan', 'log', 'you']) $('#v-' + v).hidden = v !== tab;
-  const lit = tab === 'wine' || tab === 'place' ? S.prevTab : tab;
+  if (tab !== 'wine' && tab !== 'place') S.nav = [];
+  const lit = tab === 'wine' || tab === 'place' ? S.base : tab;
   $$('.tab').forEach(b => { if (b.dataset.tab === lit) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
   renderAll();
   window.scrollTo(0, 0);
