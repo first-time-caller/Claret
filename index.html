@@ -373,8 +373,8 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
 .pv-credit a{color:inherit}
 /* Region lettering: each place's name drawn in a hand that belongs to it */
 .logo-mark{display:block;background:#fff;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:left center;mask-position:left center;filter:drop-shadow(0 2px 14px rgba(0,0,0,.4))}
-.logo-mark.card{width:86%;max-height:54px}
-.logo-mark.page{width:min(86%,340px);margin:0 auto;-webkit-mask-position:center;mask-position:center}
+.logo-mark.card{width:min(86%,calc(72px * var(--ar)))}
+.logo-mark.page{width:min(86%,340px,calc(130px * var(--ar)));margin:0 auto;-webkit-mask-position:center;mask-position:center}
 .letter{display:inline-block;line-height:1.05;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.35);overflow-wrap:normal;white-space:nowrap;padding-inline:.04em}
 .letter-local{display:block;font-size:15px;letter-spacing:.08em;opacity:.82;margin-top:6px;color:#fff}
 .place .letter{font-size:var(--ls,34px);text-align:left}
@@ -1367,10 +1367,23 @@ const PRODUCER_LETTERING = {
   'vega-sicilia': { t: 'Vega Sicilia', f: '"Cormorant SC",serif', w: 500, size: 54, card: 30, ls: '.12em', up: true }
 };
 /* Real wordmarks (transparent PNGs in img/logos), drawn as a mask so they take the card's white */
-const LOGOS = { 'dom-perignon': 4.369, 'nyetimber': 5.66, 'cloudy-bay': 5.844, 'domaine-de-la-romanee-conti': 4.555, 'chateau-d-yquem': 3.422 };
+const LOGOS = { 'dom-perignon': 4.369, 'nyetimber': 5.66, 'cloudy-bay': 5.844, 'domaine-de-la-romanee-conti': 4.555, 'chateau-d-yquem': 3.422,
+  'chateau-arricau-bordes': 2.525, 'chateau-de-sabazan': 2.234, 'quinta-de-la-rosa': 1.219, 'beaumont-des-crayeres': 2.55 };
+/* Producers the way they are really named; matched on the folded name, so older entries such as "De La Rosa" are corrected */
+const PRODUCER_CANON = [[/^(quinta )?de la rosa$/, 'Quinta De La Rosa', 'quinta-de-la-rosa'], [/arricau/, 'Château Arricau-Bordes', 'chateau-arricau-bordes'], [/sabazan/, 'Château de Sabazan', 'chateau-de-sabazan'], [/beaumont des crayeres/, 'Beaumont des Crayères', 'beaumont-des-crayeres']];
+const canonProducer = name => { const f = fold(name || ''); const c = PRODUCER_CANON.find(x => x[0].test(f)); return c ? c[1] : name; };
+function canonProducers() {
+  let changed = false;
+  for (const n of Store.nodes.values()) if (n.type === 'producer' && !n.mergedInto) { const c = canonProducer(n.name); if (c !== n.name) { n.name = c; Store.saveNode(n); changed = true; } }
+  return changed;
+}
+function logoKey(pe) {
+  const key = String(pe.id).replace('producer:', ''); if (LOGOS[key] != null) return key;
+  const f = fold(pe.name || ''); const c = PRODUCER_CANON.find(x => x[0].test(f)); return c && LOGOS[c[2]] != null ? c[2] : null;
+}
 function producerLetter(pe, where) {
-  const key = String(pe.id).replace('producer:', '');
-  if (LOGOS[key] != null) { const u = 'url(img/logos/' + key + '.png)'; return el('span', { class: 'logo-mark ' + where, role: 'img', 'aria-label': pe.name, style: '-webkit-mask-image:' + u + ';mask-image:' + u + ';aspect-ratio:' + (LOGOS[key] || 4) }); }
+  const lk = logoKey(pe), key = String(pe.id).replace('producer:', '');
+  if (lk) { const u = 'url(img/logos/' + lk + '.png)'; return el('span', { class: 'logo-mark ' + where, role: 'img', 'aria-label': pe.name, style: '-webkit-mask-image:' + u + ';mask-image:' + u + ';--ar:' + LOGOS[lk] + ';aspect-ratio:' + LOGOS[lk] }); }
   const L = PRODUCER_LETTERING[key];
   if (!L) return where === 'page' ? el('span', { class: 'ph-name', style: 'display:block' }, ...words(pe.name)) : el('span', { class: 'place-t' }, ...words(pe.name));
   const size = where === 'page' ? L.size : L.card;
@@ -1529,7 +1542,7 @@ function upsertNode(id, type, name, links, aliases) {
 }
 /* One wine from scan or form fields -> producer, wine and vintage nodes. Returns the vintage id. */
 function recordWine(w, src) {
-  const producer = (w.producer || '').trim();
+  const producer = canonProducer((w.producer || '').trim());
   const cuvee = (w.cuvee || w.name || '').trim() || (w.region || w.place || 'Wine');
   const pId = 'producer:' + slug(producer || 'unknown');
   const wId = 'wine:' + slug(producer || 'unknown') + '/' + slug(cuvee);
@@ -3252,8 +3265,10 @@ launch();
 Store.loadLocal();
 function seedCatalogue() { for (const n of CATALOGUE) if (!Store.nodes.has(n.id)) Store.nodes.set(n.id, structuredClone(n)); }
 seedCatalogue();
+canonProducers();
 for (const n of Store.nodes.values()) indexAlias(n.id, [n.name, ...(n.aliases || [])]);
 renderAll();
 Timer.tick();
+{ const _connect = Store.connect; Store.connect = async function () { const r = await _connect.apply(this, arguments); if (canonProducers()) renderAll(); return r; }; }
 Store.connect();
 </script>
