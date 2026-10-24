@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts-local.css">
+<style>
+:root{--serif:"Newsreader",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"DM Mono",ui-monospace,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:#ECE9E9;font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.board{padding:56px 64px 64px;display:flex;flex-direction:column;gap:34px;width:1500px;background:#ECE9E9}
+.board-h .k{font:500 13px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#7A6D71}
+.board-h h1{margin:6px 0 6px;font:600 44px/1.1 var(--serif)}
+.board-h p{margin:0;font-size:17px;line-height:1.5;color:#5E5357;max-width:1000px}
+.concept{display:grid;grid-template-columns:260px 1fr;gap:36px;align-items:center;padding:28px 0;border-top:1px solid #D9D2D3}
+.label .n{font:500 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#7A6D71}
+.label h2{margin:4px 0 8px;font:600 26px/1.15 var(--serif)}
+.label p{margin:0;font-size:15px;line-height:1.5;color:#5E5357}
+.row{display:flex;gap:28px;align-items:center}
+.icon{width:132px;height:132px;border-radius:30px;overflow:hidden;box-shadow:0 10px 26px rgba(0,0,0,.18);flex:none}
+.icon svg{width:100%;height:100%;display:block}
+.small{width:60px;height:60px;border-radius:14px}
+.lock{display:flex;align-items:center;gap:14px;padding:22px 28px;border-radius:20px;min-width:330px}
+.lock.l{background:#F5F3F3;color:#1D1517}
+.lock.d{background:#0E0A0B;color:#F3EDEE}
+.lock svg{width:44px;height:44px;flex:none}
+.word{font:500 40px/1 var(--serif);letter-spacing:-.01em}
+</style></head><body>
+<section class="board" id="logos">
+  <div class="board-h"><span class="k">Claret · logo concepts</span><h1>Four marks from the glass</h1><p>Each mark comes from something a sommelier actually looks at. Shown as the iPhone app icon, small at Home Screen size, and as a wordmark lockup in light and dark. The wordmark is set in New York's open cousin, Newsreader, here.</p></div>
+
+  <div class="concept">
+    <div class="label"><span class="n">A · The rim</span><h2>Looking down into the glass</h2><p>A deep core and a pale rim, offset as when you tilt the glass to judge colour and age. It is already the swatch used everywhere in the app.</p></div>
+    <div class="row">
+      <div class="icon"><svg viewBox="0 0 100 100"><defs><radialGradient id="a1" cx="44%" cy="42%" r="60%"><stop offset="0" stop-color="#3B0913"/><stop offset=".55" stop-color="#6E1526"/><stop offset=".8" stop-color="#B24A5E"/><stop offset="1" stop-color="#F0C9D0"/></radialGradient></defs><rect width="100" height="100" fill="#F5EEEF"/><circle cx="50" cy="50" r="33" fill="url(#a1)"/><circle cx="50" cy="50" r="33" fill="none" stroke="#1D1517" stroke-opacity=".08"/></svg></div>
+      <div class="icon small"><svg viewBox="0 0 100 100"><use href="#a1"/><rect width="100" height="100" fill="#F5EEEF"/><circle cx="50" cy="50" r="33" fill="url(#a1)"/></svg></div>
+      <div class="lock l"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="url(#a1)"/></svg><span class="word">Claret</span></div>
+      <div class="lock d"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="url(#a1)"/></svg><span class="word">Claret</span></div>
+    </div>
+  </div>
+
+  <div class="concept">
+    <div class="label"><span class="n">B · The meniscus C</span><h2>The rim of wine becomes the C</h2><p>Tilt a glass and the wine's edge makes a crescent against the bowl. That crescent is the C of Claret: one shape that is both the letter and the wine.</p></div>
+    <div class="row">
+      <div class="icon"><svg viewBox="0 0 100 100"><defs><linearGradient id="b1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F0C9D0"/><stop offset=".45" stop-color="#B24A5E"/><stop offset="1" stop-color="#5A0F20"/></linearGradient><mask id="bm"><rect width="100" height="100" fill="#000"/><circle cx="48" cy="50" r="32" fill="#fff"/><circle cx="60" cy="47" r="25" fill="#000"/></mask></defs><rect width="100" height="100" fill="#6E1526"/><rect width="100" height="100" fill="#F5EEEF" mask="url(#bm)"/></svg></div>
+      <div class="icon"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#F5EEEF"/><rect width="100" height="100" fill="url(#b1)" mask="url(#bm)"/></svg></div>
+      <div class="icon small"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#6E1526"/><rect width="100" height="100" fill="#F5EEEF" mask="url(#bm)"/></svg></div>
+      <div class="lock l"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="url(#b1)" mask="url(#bm)"/></svg><span class="word">Claret</span></div>
+      <div class="lock d"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="url(#b1)" mask="url(#bm)"/></svg><span class="word">Claret</span></div>
+    </div>
+  </div>
+
+  <div class="concept">
+    <div class="label"><span class="n">C · The range</span><h2>Three glasses, the whole spectrum</h2><p>Straw, rosé and claret overlapping, seen from above. It says discovery across styles, and it changes order to lead with tonight's colour.</p></div>
+    <div class="row">
+      <div class="icon"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#F5EEEF"/><g style="mix-blend-mode:multiply"><circle cx="38" cy="40" r="20" fill="#E5CF78"/><circle cx="62" cy="40" r="20" fill="#EFA48E"/><circle cx="50" cy="61" r="20" fill="#8C1530"/></g></svg></div>
+      <div class="icon"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#1B1517"/><g style="mix-blend-mode:screen"><circle cx="38" cy="40" r="20" fill="#D6BE63"/><circle cx="62" cy="40" r="20" fill="#E8977F"/><circle cx="50" cy="61" r="20" fill="#B02A47"/></g></svg></div>
+      <div class="icon small"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#F5EEEF"/><g style="mix-blend-mode:multiply"><circle cx="38" cy="40" r="20" fill="#E5CF78"/><circle cx="62" cy="40" r="20" fill="#EFA48E"/><circle cx="50" cy="61" r="20" fill="#8C1530"/></g></svg></div>
+      <div class="lock l"><svg viewBox="0 0 100 100"><g style="mix-blend-mode:multiply"><circle cx="34" cy="36" r="24" fill="#E5CF78"/><circle cx="66" cy="36" r="24" fill="#EFA48E"/><circle cx="50" cy="64" r="24" fill="#8C1530"/></g></svg><span class="word">Claret</span></div>
+      <div class="lock d"><svg viewBox="0 0 100 100"><g style="mix-blend-mode:screen"><circle cx="34" cy="36" r="24" fill="#D6BE63"/><circle cx="66" cy="36" r="24" fill="#E8977F"/><circle cx="50" cy="64" r="24" fill="#B02A47"/></g></svg><span class="word">Claret</span></div>
+    </div>
+  </div>
+
+  <div class="concept">
+    <div class="label"><span class="n">D · The level</span><h2>A wordmark with the wine poured in</h2><p>Type-led, like a merchant's name over the door. The letters are filled to a pour line, like a glass a third full: the bottom of the word is the wine.</p></div>
+    <div class="row">
+      <div class="icon"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#6E1526"/><text x="50" y="69" text-anchor="middle" font-family="Newsreader" font-weight="500" font-size="62" fill="#F5EEEF">C</text><rect x="22" y="58" width="56" height="3" fill="#E27D8F"/></svg></div>
+      <div class="icon small"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#6E1526"/><text x="50" y="69" text-anchor="middle" font-family="Newsreader" font-weight="500" font-size="62" fill="#F5EEEF">C</text><rect x="22" y="58" width="56" height="3" fill="#E27D8F"/></svg></div>
+      <div class="lock l" style="min-width:360px"><svg viewBox="0 0 420 70" style="width:300px;height:56px"><defs><clipPath id="dl"><rect x="0" y="40" width="420" height="40"/></clipPath></defs><text x="0" y="56" font-family="Newsreader" font-weight="500" font-size="64" fill="#1D1517">Claret</text><text x="0" y="56" font-family="Newsreader" font-weight="500" font-size="64" fill="#6E1526" clip-path="url(#dl)">Claret</text></svg></div>
+      <div class="lock d" style="min-width:360px"><svg viewBox="0 0 420 70" style="width:300px;height:56px"><text x="0" y="56" font-family="Newsreader" font-weight="500" font-size="64" fill="#F3EDEE">Claret</text><text x="0" y="56" font-family="Newsreader" font-weight="500" font-size="64" fill="#E27D8F" clip-path="url(#dl)">Claret</text></svg></div>
+    </div>
+  </div>
+</section>
+</body></html>
