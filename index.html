@@ -1073,6 +1073,7 @@ function renderPlace() {
   if (E.kind === 'grape') return renderGrapePage(E.key);
   const k = E.key; const r = REGIONS[k]; const box = $('#v-place'); box.replaceChildren();
   if (!r) return;
+  ctxCountry = lastPart(r.country);
   const L = LETTERING[k] || { tone: '#2C2426' };
   const c = CREDITS[photoKeyOf(k)];
   const styleId = Object.keys(STYLE_REGIONS).find(id => STYLE_REGIONS[id].includes(k));
@@ -1164,7 +1165,7 @@ function producersOfGrape(g) {
 }
 function renderProducerPage(id) {
   const box = $('#v-place'); box.replaceChildren();
-  const pe = producerEntities().find(p => p.id === id);
+  const pe = producerEntities().find(p => p.id === id); ctxCountry = pe ? lastPart(pe.place) : null;
   if (!pe) { box.append(el('div', { class: 'ph-below', style: '--tone:#2C2426;min-height:70vh;padding-top:70px' }, backButton(), el('p', { class: 'ph-blurb', text: 'That producer isn\u2019t in your catalogue yet.' }))); return; }
   const rk = pe.region; const L = LETTERING[rk] || { tone: '#2C2426' }; const photo = pe.photo || (rk && hasPhoto(rk) ? rk : null); const c = photo && CREDITS[photo];
   const wines = [...Store.nodes.values()].filter(n => n.type === 'vintage' && !n.mergedInto).filter(v => { const w = Store.nodes.get(v.links.wine); return w && w.links.producer === id; });
@@ -1197,7 +1198,7 @@ function regionsFromText(list) {
   return { keys, rest };
 }
 function renderGrapePage(g) {
-  const box = $('#v-place'); box.replaceChildren();
+  const box = $('#v-place'); box.replaceChildren(); ctxCountry = null;
   const info = GRAPE_INFO[g]; const tone = grapeTone(g); const P = palate(); const mine = P.grape[g]; const gv = GRAPE[g] || { colour: 'red', aliases: [] };
   const wines = [...Store.nodes.values()].filter(n => n.type === 'vintage' && !n.mergedInto).filter(v => { const w = Store.nodes.get(v.links.wine); return w && (w.links.grapes || []).includes(g); });
   const places = info ? regionsFromText(info.places) : { keys: [], rest: [] };
@@ -2002,6 +2003,7 @@ function scoreStyles() {
   return out.sort((a, b) => b.score - a.score);
 }
 function renderTonight() {
+  ctxCountry = null;
   const ranked = scoreStyles();
   const hero = $('#hero'), card = $('#pick');
   card.replaceChildren();
@@ -2471,18 +2473,21 @@ function mineSections(kind, key) {
     tried.length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'You’ve tried' })), el('div', { class: 'group' }, ...tried.map(id => wineRow(id)))) : null] };
 }
 
-/* Cards */
+/* Cards. When the whole view is already inside one country, its cards drop the country label. */
+let ctxCountry = null;
+const lastPart = t => String(t || '').split(',').pop().trim();
+const sameCountry = t => !!ctxCountry && fold(lastPart(t)) === fold(ctxCountry);
 function regionCard(k, size, opts) {
   const has = hasPhoto(k); const L = LETTERING[k] || {};
   return decorate(el('button', { class: 'place' + (has ? '' : ' plain'), type: 'button', style: (has ? '' : '--tone:' + (L.tone || '#2C2426') + ';') + (size ? 'width:' + size[0] + 'px;height:' + size[1] + 'px' : ''), onclick: (opts && opts.onclick) || (() => openRegion(k)), 'aria-label': REGIONS[k].name },
     has ? el('img', { src: regionPhoto(k), alt: '', loading: 'lazy' }) : null,
-    el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: REGIONS[k].country.split(',').pop().trim() }), lettering(k, 'card'), opts && opts.blurb ? el('span', { class: 'place-s', text: REGIONS[k].blurb }) : opts && opts.sub ? el('span', { class: 'place-s', text: opts.sub }) : null)), 'region', k);
+    el('span', { class: 'place-in' }, sameCountry(REGIONS[k].country) ? null : el('span', { class: 'place-k', text: lastPart(REGIONS[k].country) }), lettering(k, 'card'), opts && opts.blurb ? el('span', { class: 'place-s', text: REGIONS[k].blurb }) : opts && opts.sub ? el('span', { class: 'place-s', text: opts.sub }) : null)), 'region', k);
 }
 function producerCard(pe, size, opts) {
   const cp = COUNTRY_PHOTO[String(pe.placeId || '').split('/')[0]]; const k = pe.photo || (pe.region && hasPhoto(pe.region) ? pe.region : null) || (cp && hasPhoto(cp) ? cp : null); const L = LETTERING[pe.region] || {};
   return decorate(el('button', { class: 'place' + (k ? '' : ' plain'), type: 'button', style: (k ? '' : '--tone:' + (L.tone || '#2C2426') + ';') + (size ? 'width:' + size[0] + 'px;height:' + size[1] + 'px' : ''), onclick: (opts && opts.onclick) || (() => openProducer(pe.id)), 'aria-label': pe.name },
     k ? el('img', { src: regionPhoto(k), alt: '', loading: 'lazy' }) : null,
-    el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: pe.place }), producerLetter(pe, 'card'))), 'producer', pe.id);
+    el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: sameCountry(pe.place) ? String(pe.place).split(',').slice(0, -1).join(',').trim() : pe.place }), producerLetter(pe, 'card'))), 'producer', pe.id);
 }
 /* Only wines you own are named on a style card, never generic examples */
 function cellarExamples(styleId) {
@@ -2523,6 +2528,7 @@ function renderExploreInner() {
     .sort((a, b) => (fold(REGIONS[b].name) === q) - (fold(REGIONS[a].name) === q) || !!REGIONS[a].parent - !!REGIONS[b].parent);
   const prods = producerEntities().filter(p => !q || fold(p.name + ' ' + p.place).includes(q));
   const grs = grapeList().filter(g => !q || fold(grapeName(g) + ' ' + ((GRAPE[g] && GRAPE[g].aliases) || []).join(' ')).includes(q));
+  { const cs = [...new Set(regKeys.map(k => fold(lastPart(REGIONS[k].country))))]; ctxCountry = q && cs.length === 1 ? lastPart(REGIONS[regKeys[0]].country) : null; }
   const grid = (cards, more) => el('div', { class: 'tiles' }, ...cards);
   const sec = (title, node, foot) => el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: title })), node, foot ? el('p', { class: 'foot', text: foot }) : null);
   const { T, C } = maps(); const flt = S.exFilter || 'all';
@@ -2752,6 +2758,7 @@ function groupCard(dim, g) {
     el('span', { class: 'mark cellar', text: g.n + ' in cellar' }), el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: dim === 'vintage' ? 'Vintage' : dim === 'region' ? (COUNTRY[String(g.key).split('/')[0]] || {}).name || 'Region' : '' }), el('span', { class: 'letter', style: 'font:500 ' + (dim === 'vintage' ? 38 : 24) + 'px var(--serif)' }, g.label)));
 }
 function renderCellar() {
+  ctxCountry = null;
   const box = $('#cellarOut'); box.replaceChildren();
   const y = new Date().getFullYear(); const infos = cellarLots().map(l => ({ lot: l, i: lotInfo(l) }));
   const opens = openBottles();
@@ -3015,6 +3022,7 @@ function fromLabel(t) {
   return { suggestion: 'Tonight’s pick', scan: 'Found in a shop', cellar: 'From your cellar' }[f.kind] || '';
 }
 function renderJourney() {
+  ctxCountry = null;
   const top = $('#journeyTop'), body = $('#journeyBody'); top.replaceChildren(); body.replaceChildren();
   const all = allTastings().slice().sort((a, b) => a.at < b.at ? 1 : -1); const { T, C } = maps();
   const firsts = journeyFirsts(); const newIds = new Set(firsts.map(f => f.t.id));
