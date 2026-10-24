@@ -1397,11 +1397,12 @@ function producerLetter(pe, where) {
 function producerEntities() {
   const out = FAMOUS.map(f => ({ id: 'producer:' + slug(f.name), name: f.name, place: f.place, blurb: f.blurb, photo: hasPhoto(f.k) ? f.k : null, bottle: f.bottle && hasPhoto(f.bottle) ? f.bottle : null, region: FAMOUS_REGION[f.k] || null, famous: true }));
   const have = new Set(out.map(o => o.id));
+  const wineRegion = new Map(); for (const w of nodesOf('wine')) { const pid = w.links && w.links.producer, pl = w.links && w.links.place; if (pid && pl && !wineRegion.has(pid)) wineRegion.set(pid, regionKeyOf(pl)); }
   for (const n of Store.nodes.values()) {
     if (n.type !== 'producer' || n.mergedInto || have.has(n.id)) continue;
-    const place = n.links && n.links.place; const rk = place && (PLACE_REGION[place] || PLACE_REGION[place.split('/').slice(0, 2).join('/')]);
+    const place = n.links && n.links.place; const rk = wineRegion.get(n.id) || (place && (PLACE_REGION[place] || PLACE_REGION[place.split('/').slice(0, 2).join('/')]));
     const bits = [best(n, 'winemaker') ? 'Winemaker: ' + best(n, 'winemaker') + '.' : '', best(n, 'subregion') ? best(n, 'subregion') + (place ? ', ' + placeShort(place) : '') + '.' : ''].filter(Boolean).join(' ');
-    out.push({ id: n.id, name: n.name, place: place ? placeLabel(place) : '', blurb: bits || 'In your catalogue.', photo: null, bottle: null, region: rk || null, famous: false });
+    out.push({ id: n.id, name: n.name, place: place ? placeLabel(place) : '', blurb: bits || 'In your catalogue.', placeId: place || null, photo: null, bottle: null, region: rk || null, famous: false });
   }
   return out;
 }
@@ -2225,7 +2226,7 @@ function regionCard(k, size, opts) {
     el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: REGIONS[k].country }), lettering(k, 'card'), opts && opts.blurb ? el('span', { class: 'place-s', text: REGIONS[k].blurb }) : null)), 'region', k);
 }
 function producerCard(pe, size, opts) {
-  const k = pe.photo || (pe.region && hasPhoto(pe.region) ? pe.region : null); const L = LETTERING[pe.region] || {};
+  const cp = COUNTRY_PHOTO[String(pe.placeId || '').split('/')[0]]; const k = pe.photo || (pe.region && hasPhoto(pe.region) ? pe.region : null) || (cp && hasPhoto(cp) ? cp : null); const L = LETTERING[pe.region] || {};
   return decorate(el('button', { class: 'place' + (k ? '' : ' plain'), type: 'button', style: (k ? '' : '--tone:' + (L.tone || '#2C2426') + ';') + (size ? 'width:' + size[0] + 'px;height:' + size[1] + 'px' : ''), onclick: (opts && opts.onclick) || (() => openProducer(pe.id)), 'aria-label': pe.name },
     k ? el('img', { src: regionPhoto(k), alt: '', loading: 'lazy' }) : null,
     el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: pe.place }), producerLetter(pe, 'card'))), 'producer', pe.id);
@@ -2466,10 +2467,11 @@ function groupLots(dim) {
   return dim === 'vintage' ? arr.sort((a, b) => String(b.key).localeCompare(String(a.key))) : arr.sort((a, b) => b.n - a.n || a.label.localeCompare(b.label));
 }
 const COUNTRY_LETTER = { fr: ['"Pinyon Script",cursive', '#33402E', 1.5], it: ['"IM Fell English SC",serif', '#4E3A22', 1], es: ['Cinzel,serif', '#5A2E22', .9], pt: ['"Great Vibes",cursive', '#3A2A3A', 1.4], de: ['"UnifrakturMaguntia",serif', '#40382A', 1.2], au: ['"DM Serif Display",serif', '#5A3A28', 1], nz: ['"Josefin Sans",sans-serif', '#2E3A2A', .8], us: ['"Playfair Display SC",serif', '#3A2E22', 1], za: ['"Josefin Sans",sans-serif', '#4A3322', .8], ar: ['"Cormorant SC",serif', '#4A2A2A', 1], cl: ['"Cormorant SC",serif', '#2E3A3A', 1], at: ['"Bodoni Moda",serif', '#33302A', 1], gb: ['"Bodoni Moda",serif', '#2E3A2E', 1] };
+const COUNTRY_PHOTO = { 'place:fr': 'burgundy', 'place:it': 'valdobbiadene', 'place:es': 'rioja', 'place:pt': 'douro', 'place:de': 'mosel', 'place:au': 'barossa', 'place:nz': 'marlborough', 'place:gr': 'santorini', 'place:ge': 'kakheti' };
 function placeCard(placeId, label, n, onclick) {
-  const c = String(placeId).split('/')[0]; const L = COUNTRY_LETTER[c] || ['"Newsreader",Georgia,serif', '#2C2426', 1]; const short = String(label).split(',')[0];
-  return el('button', { class: 'place plain', type: 'button', style: '--tone:' + L[1], onclick, 'aria-label': label },
-    el('span', { class: 'mark cellar', text: n + ' in cellar' }), el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: (COUNTRY[c] || {}).name || '' }), el('span', { style: 'display:block;width:100%' }, el('span', { class: 'letter', lang: 'en', style: 'font-family:' + L[0] + ';font-size:' + Math.round(34 * L[2]) + 'px' }, short))));
+  const c = String(placeId).split('/')[0]; const ph = COUNTRY_PHOTO[c]; const phFile = ph && hasPhoto(ph) ? regionPhoto(ph) : null; const L = COUNTRY_LETTER[c] || ['"Newsreader",Georgia,serif', '#2C2426', 1]; const short = String(label).split(',')[0];
+  return el('button', { class: 'place' + (phFile ? '' : ' plain'), type: 'button', style: '--tone:' + L[1], onclick, 'aria-label': label },
+    phFile ? el('img', { src: phFile, alt: '', loading: 'lazy' }) : null, el('span', { class: 'mark cellar', text: n + ' in cellar' }), el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: (COUNTRY[c] || {}).name || '' }), el('span', { style: 'display:block;width:100%' }, el('span', { class: 'letter', lang: 'en', style: 'font-family:' + L[0] + ';font-size:' + Math.round(34 * L[2]) + 'px' }, short))));
 }
 function groupCard(dim, g) {
   const pick = () => { S.cFilter = { dim, key: g.key }; renderCellar(); window.scrollTo(0, 0); };
