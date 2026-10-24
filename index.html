@@ -907,7 +907,7 @@ const REGIONS = {
   'northern-rhone': { name: 'Côte-Rôtie & Hermitage', country: 'France', blurb: 'Steep granite terraces above the Rhône, where Syrah is at its most perfumed and savoury.', grapes: 'Syrah, Viognier, Marsanne, Roussanne' },
   'beaujolais': { name: 'Beaujolais', country: 'France', blurb: 'Granite hills north of Lyon. Gamay, and ten crus such as Morgon, Fleurie and Moulin-à-Vent.', grapes: 'Gamay, Chardonnay' },
   'burgundy': { name: 'Clos de Vougeot', country: 'Burgundy, France', blurb: 'Planted by Cistercian monks in the 12th century, in the heart of Pinot Noir country.', grapes: 'Pinot Noir, Chardonnay' },
-  'barossa': { name: 'Barossa Valley', country: 'South Australia', blurb: 'Warm valley with some of the world’s oldest Shiraz vines, planted from the 1840s.', grapes: 'Shiraz, Grenache, Mourvèdre, Riesling' },
+  'barossa': { name: 'Barossa Valley', country: 'South Australia, Australia', blurb: 'Warm valley with some of the world’s oldest Shiraz vines, planted from the 1840s.', grapes: 'Shiraz, Grenache, Mourvèdre, Riesling' },
   'bordeaux': { level: 'Region', name: 'Bordeaux', country: 'France', blurb: 'Left-bank gravel and Cabernet-led blends, right-bank Merlot, and sweet Sauternes. The 1855 classification still shapes how the wines are named and priced.', grapes: 'Cabernet Sauvignon, Merlot, Cabernet Franc, Petit Verdot' },
   'rioja': { name: 'Rioja', country: 'Spain', blurb: 'Spain’s classic red, Tempranillo aged in oak, from young Joven to long-aged Gran Reserva.', grapes: 'Tempranillo, Garnacha, Graciano, Viura' },
   'santorini': { name: 'Santorini', country: 'Greece', blurb: 'Volcanic island vines trained into low baskets, kouloura, to shelter them from the wind.', grapes: 'Assyrtiko, Athiri, Aidani' },
@@ -1054,7 +1054,7 @@ function regionMap(k) {
   const m = REGION_MAPS && REGION_MAPS.reg[k]; if (!m) return null; const w = REGION_MAPS.win[m.w]; if (!w) return null;
   const NS = 'http://www.w3.org/2000/svg'; const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', '0 0 300 ' + w.h); svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', 'Map showing where ' + REGIONS[k].name + ' is'); svg.style.cssText = 'width:100%;max-height:340px;display:block;border-radius:var(--r);background:rgba(255,255,255,.06)';
   const mk = (d, fill, stroke, sw) => { const p = document.createElementNS(NS, 'path'); p.setAttribute('d', d); p.setAttribute('fill', fill); p.setAttribute('stroke', stroke); p.setAttribute('stroke-width', sw); p.setAttribute('stroke-linejoin', 'round'); return p; };
-  svg.append(mk(w.land, 'rgba(255,255,255,.16)', 'rgba(255,255,255,.35)', '.6')); if (w.ctx) svg.append(mk(w.ctx, 'rgba(255,255,255,.12)', 'rgba(255,255,255,.4)', '.8')); svg.append(mk(m.hi, '#E7A9B6', '#fff', '1'));
+  svg.append(mk(w.land, 'rgba(255,255,255,.16)', 'rgba(255,255,255,.35)', '.6')); if (m.ctx || w.ctx) svg.append(mk(m.ctx || w.ctx, 'rgba(255,255,255,.12)', 'rgba(255,255,255,.4)', '.8')); svg.append(mk(m.hi, '#E7A9B6', '#fff', '1'));
   return svg;
 }
 function renderPlace() {
@@ -1328,11 +1328,19 @@ function regionAncestors(k) { const out = []; for (let p = regionParent(k); p &&
 const regionKids = k => Object.keys(REGIONS).filter(o => REGIONS[o].parent === k);
 function regionAndKids(k) { return [k, ...regionKids(k).flatMap(regionAndKids)]; }
 const topRegions = () => Object.keys(REGIONS).filter(k => !REGIONS[k].parent);
+REGIONS['mclaren-vale'] = { name: 'McLaren Vale', country: 'South Australia, Australia', blurb: 'Hills and coast south of Adelaide, with a Mediterranean climate. Known for generous Shiraz and Grenache, with old bush vines among them.', grapes: 'Shiraz, Grenache, Cabernet Sauvignon, Mourvèdre' };
+REGIONS['yarra-valley'] = { name: 'Yarra Valley', country: 'Victoria, Australia', blurb: 'Victoria’s first wine region, an hour east of Melbourne. Cool-climate Pinot Noir and Chardonnay, with elegant Shiraz and sparkling wine.', grapes: 'Pinot Noir, Chardonnay, Shiraz, Cabernet Sauvignon' };
+REGIONS['hunter-valley'] = { name: 'Hunter Valley', country: 'New South Wales, Australia', blurb: 'Australia’s oldest wine region, warm and humid. Famous for long-lived, low-alcohol Semillon, and for Shiraz and Chardonnay.', grapes: 'Semillon, Shiraz, Chardonnay' };
+REGIONS['tasmania'] = { name: 'Tasmania', country: 'Tasmania, Australia', blurb: 'Australia’s coolest wine island. Pinot Noir, Chardonnay and some of the country’s best sparkling wine.', grapes: 'Pinot Noir, Chardonnay, Riesling, Pinot Gris' };
+LETTERING['mclaren-vale'] = { t: 'McLaren Vale', f: '"DM Serif Display",serif', size: 56, card: 32, tone: '#4A2A22' };
+LETTERING['yarra-valley'] = { t: 'Yarra Valley', f: '"Josefin Sans",sans-serif', w: 300, size: 40, card: 22, tone: '#2E3A2A', ls: '.16em' };
+LETTERING['hunter-valley'] = { t: 'Hunter Valley', f: '"IM Fell English SC",serif', size: 48, card: 28, tone: '#4A3A22' };
+LETTERING['tasmania'] = { t: 'Tasmania', f: '"Cormorant SC",serif', w: 500, size: 56, card: 32, tone: '#26363A', ls: '.14em' };
 const REGION_PHOTO_ALIAS = { 'margaux': 'bordeaux', 'chateau-margaux': 'bordeaux', 'loire': 'sancerre', 'bolgheri': 'tenuta-san-guido', 'mendoza': 'catena-zapata', 'napa-valley': 'opus-one', 'sussex': 'nyetimber', 'sauternes': 'chateau-yquem' };
 const PLACE_REGION = { 'place:fr/loire': 'loire', 'place:fr/chinon': 'loire', 'place:fr/vouvray': 'loire', 'place:fr/saumur': 'loire', 'place:fr/anjou': 'loire', 'place:fr/muscadet': 'loire', 'place:it/tuscany': 'tuscany', 'place:it/piedmont': 'piedmont', 'place:it/barolo': 'piedmont', 'place:fr/alsace': 'alsace', 'place:fr/languedoc': 'languedoc', 'place:za/stellenbosch': 'stellenbosch', 'place:us/willamette': 'willamette-valley', 'place:nz/hawke-s-bay': 'hawkes-bay', 'place:it/bolgheri': 'bolgheri', 'place:ar/mendoza': 'mendoza', 'place:us/napa': 'napa-valley', 'place:gb/sussex': 'sussex', 'place:es/ribera-del-duero': 'ribera-del-duero', 'place:nz/marlborough': 'marlborough', 'place:nz/north-canterbury': 'north-canterbury', 'place:nz/central-otago': 'central-otago', 'place:fr/burgundy': 'burgundy',
   'place:fr/bordeaux': 'bordeaux', 'place:fr/beaujolais': 'beaujolais', 'place:fr/rhone': 'northern-rhone', 'place:fr/champagne': 'champagne', 'place:fr/provence': 'provence',
   'place:es/rioja': 'rioja', 'place:es/jerez': 'jerez', 'place:pt/douro': 'douro', 'place:de/mosel': 'mosel', 'place:gr/santorini': 'santorini', 'place:it/etna': 'etna', 'place:it/veneto': 'valdobbiadene',
-  'place:au/barossa': 'barossa', 'place:ge/kakheti': 'kakheti' };
+  'place:au/barossa': 'barossa', 'place:au/barossa-valley': 'barossa', 'place:au/mclaren-vale': 'mclaren-vale', 'place:au/yarra-valley': 'yarra-valley', 'place:au/hunter-valley': 'hunter-valley', 'place:au/tasmania': 'tasmania', 'place:ge/kakheti': 'kakheti' };
 Object.assign(PLACE_REGION, { 'place:fr/madiran': 'south-west', 'place:fr/saint-mont': 'south-west', 'place:fr/gascony': 'south-west', 'place:fr/cotes-de-gascogne': 'south-west', 'place:fr/jurancon': 'south-west', 'place:fr/cahors': 'south-west', 'place:fr/south-west': 'south-west', 'place:fr/bergerac': 'bergerac', 'place:fr/monbazillac': 'bergerac' });
 
 /* Grapes: what they taste like, where they're classic, where to go next, and how to trade up or down */
@@ -1437,7 +1445,7 @@ const PRODUCER_LETTERING = {
 };
 /* Real wordmarks (transparent PNGs in img/logos), drawn as a mask so they take the card's white */
 const LOGOS = { 'dom-perignon': 4.369, 'nyetimber': 5.66, 'cloudy-bay': 5.844, 'domaine-de-la-romanee-conti': 4.555, 'chateau-d-yquem': 3.422,
-  'chateau-arricau-bordes': 2.525, 'chateau-de-sabazan': 2.234, 'quinta-de-la-rosa': 1.219, 'beaumont-des-crayeres': 2.55, 'penfolds': 1.925, 'opus-one': 0.848 };
+  'chateau-arricau-bordes': 2.525, 'chateau-de-sabazan': 2.234, 'quinta-de-la-rosa': 1.219, 'beaumont-des-crayeres': 2.55, 'penfolds': 1.925, 'opus-one': 0.848, 'torbreck': 3.237, 'yalumba': 8.806, 'peter-lehmann': 2.196, 'ministry-of-clouds': 0.899, 'grant-burge': 2.138 };
 /* Producers the way they are really named; matched on the folded name, so older entries such as "De La Rosa" are corrected */
 const PRODUCER_CANON = [[/^(quinta )?de la rosa$/, 'Quinta De La Rosa', 'quinta-de-la-rosa'], [/arricau/, 'Château Arricau-Bordes', 'chateau-arricau-bordes'], [/sabazan/, 'Château de Sabazan', 'chateau-de-sabazan'], [/beaumont des crayeres/, 'Beaumont des Crayères', 'beaumont-des-crayeres']];
 const canonProducer = name => { const f = fold(name || ''); const c = PRODUCER_CANON.find(x => x[0].test(f)); return c ? c[1] : name; };
@@ -1458,8 +1466,161 @@ function producerLetter(pe, where) {
   const size = where === 'page' ? L.size : L.card;
   return el('span', { style: 'display:block;width:100%' }, el('span', { class: 'letter', style: 'font-family:' + L.f + ';font-weight:' + (L.w || 400) + ';letter-spacing:' + (L.ls || '0') + ';font-size:' + size + 'px;' + (L.up ? 'text-transform:uppercase;' : '') }, where === 'page' ? L.t : (L.short || L.t)));
 }
+const ESTATES = [
+ {
+  "name": "Torbreck",
+  "place": "Barossa Valley, South Australia",
+  "region": "barossa",
+  "blurb": "Rhône-style Barossa reds, from Shiraz, Grenache and Mataro. Known for The Laird, RunRig and Descendant."
+ },
+ {
+  "name": "Yalumba",
+  "place": "Barossa Valley, South Australia",
+  "region": "barossa",
+  "blurb": "Founded in 1849, Australia’s oldest family-owned winery. Known for Viognier, Shiraz and the Signature cabernet-shiraz."
+ },
+ {
+  "name": "Peter Lehmann",
+  "place": "Barossa Valley, South Australia",
+  "region": "barossa",
+  "blurb": "Founded in 1979 by the “Baron of the Barossa”, who bought fruit from growers when others would not. Generous, good-value Barossa Shiraz."
+ },
+ {
+  "name": "Grant Burge",
+  "place": "Barossa Valley, South Australia",
+  "region": "barossa",
+  "blurb": "A Barossa family estate honouring the 1865 pioneer John Burge. Known for Shiraz, including Meshach."
+ },
+ {
+  "name": "Ministry of Clouds",
+  "place": "McLaren Vale, South Australia",
+  "region": "mclaren-vale",
+  "blurb": "A boutique McLaren Vale producer making Grenache, Shiraz and other expressive reds and whites."
+ },
+ {
+  "name": "Yering Station",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "Victoria’s oldest vineyard, established in 1838, with a heritage cellar door and a modern restaurant. Chardonnay, Pinot Noir and Shiraz Viognier."
+ },
+ {
+  "name": "De Bortoli Yarra Valley",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A family-owned pioneer of premium cool-climate styles, with an Italian restaurant. Noble One Botrytis Semillon, Chardonnay and Pinot Noir."
+ },
+ {
+  "name": "TarraWarra Estate",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "An architectural property with an underground cellar door and a public art museum. Estate Chardonnay, Pinot Noir and Barbera."
+ },
+ {
+  "name": "Oakridge Wines",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "Precise single-block Chardonnay and Pinot Noir, with a locally sourced fine-dining menu."
+ },
+ {
+  "name": "Dominique Portet Winery",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "Founded by a 10th-generation French winemaking family, with a Bordeaux-inspired touch. Rosé, Cabernet Sauvignon and sparkling."
+ },
+ {
+  "name": "Levantine Hill",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A luxury boutique producer of low-yield wines on an upscale estate. Premium Cabernet blends and Syrah."
+ },
+ {
+  "name": "Giant Steps",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A celebrated modern producer focused on single-vineyard Pinot Noir and Chardonnay, expressing specific sub-regional microclimates."
+ },
+ {
+  "name": "Coldstream Hills",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "Established by the critic James Halliday in 1985. Elegant, structured Pinot Noir, Chardonnay and Merlot."
+ },
+ {
+  "name": "Yarra Yering",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "One of the region’s most iconic historic estates. Dry Red No. 1 is a Bordeaux blend and Dry Red No. 2 a Rhône blend, among Australia’s highest-rated reds."
+ },
+ {
+  "name": "Rochford Wines",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A large, lively estate that hosts concerts and festivals as well as alfresco dining. Chardonnay, Pinot Noir and Syrah."
+ },
+ {
+  "name": "Medhurst Wines",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A modern boutique winery built into a hillside, making small-batch, low-intervention Pinot Noir, Chardonnay and Shiraz."
+ },
+ {
+  "name": "Soumah of Yarra Valley",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "Northern Italian varieties beside valley staples, with a trattoria. Savagnin, Nebbiolo and Pinot Noir."
+ },
+ {
+  "name": "Mac Forbes",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A leader of the minimal-intervention, new-wave movement, focused on freshness, acidity and raw terroir. Sub-regional Pinot Noir and experimental whites."
+ },
+ {
+  "name": "Maddens Rise",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A certified organic and biodynamic producer focused on soil health and additive-free fruit. Pinot Noir, Chardonnay and Viognier."
+ },
+ {
+  "name": "Seville Estate",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "An upper-Yarra pioneer established in 1972, known for long-lived, cool and elegant Shiraz, Pinot Noir and Chardonnay."
+ },
+ {
+  "name": "Innocent Bystander",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A relaxed urban-style cellar door and pizzeria in Healesville. Moscato, Pinot Noir and Gamay."
+ },
+ {
+  "name": "Warramunda Estate",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A family-run boutique vineyard using traditional hand-crafted methods. Viognier, Syrah and Marsanne."
+ },
+ {
+  "name": "Helen & Joey Estate",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "A modern, picturesque estate with playful branding and great views. Cabernet, Pinot Noir and sparkling."
+ },
+ {
+  "name": "Coombe Yarra Valley",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "The historic former home of Dame Nellie Melba, with century-old gardens. Chardonnay, Pinot Noir and sparkling."
+ },
+ {
+  "name": "Punt Road Wines",
+  "place": "Yarra Valley, Victoria",
+  "region": "yarra-valley",
+  "blurb": "Down-to-earth estate-grown wines, a relaxed tasting room and on-site cider. Pinot Noir, Pinot Gris and Gamay."
+ }
+];
 function producerEntities() {
   const out = FAMOUS.map(f => ({ id: 'producer:' + slug(f.name), name: f.name, place: f.place, blurb: f.blurb, photo: hasPhoto(f.k) ? f.k : null, bottle: f.bottle && hasPhoto(f.bottle) ? f.bottle : null, region: FAMOUS_REGION[f.k] || null, famous: true }));
+  for (const e of ESTATES) out.push({ id: 'producer:' + slug(e.name), name: e.name, place: e.place, blurb: e.blurb, placeId: 'place:au', photo: null, bottle: null, region: e.region, famous: true });
   const have = new Set(out.map(o => o.id));
   const wineRegion = new Map(); for (const w of nodesOf('wine')) { const pid = w.links && w.links.producer, pl = w.links && w.links.place; if (pid && pl && !wineRegion.has(pid)) wineRegion.set(pid, regionKeyOf(pl)); }
   for (const n of Store.nodes.values()) {
@@ -2287,7 +2448,7 @@ function regionCard(k, size, opts) {
   const has = hasPhoto(k); const L = LETTERING[k] || {};
   return decorate(el('button', { class: 'place' + (has ? '' : ' plain'), type: 'button', style: (has ? '' : '--tone:' + (L.tone || '#2C2426') + ';') + (size ? 'width:' + size[0] + 'px;height:' + size[1] + 'px' : ''), onclick: (opts && opts.onclick) || (() => openRegion(k)), 'aria-label': REGIONS[k].name },
     has ? el('img', { src: regionPhoto(k), alt: '', loading: 'lazy' }) : null,
-    el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: REGIONS[k].country }), lettering(k, 'card'), opts && opts.blurb ? el('span', { class: 'place-s', text: REGIONS[k].blurb }) : null)), 'region', k);
+    el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: REGIONS[k].country.split(',').pop().trim() }), lettering(k, 'card'), opts && opts.blurb ? el('span', { class: 'place-s', text: REGIONS[k].blurb }) : null)), 'region', k);
 }
 function producerCard(pe, size, opts) {
   const cp = COUNTRY_PHOTO[String(pe.placeId || '').split('/')[0]]; const k = pe.photo || (pe.region && hasPhoto(pe.region) ? pe.region : null) || (cp && hasPhoto(cp) ? cp : null); const L = LETTERING[pe.region] || {};
