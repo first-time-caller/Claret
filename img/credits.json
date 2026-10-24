@@ -70,5 +70,32 @@
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
   "source": "https://commons.wikimedia.org/wiki/File:Sancerre_-_View_on_vineyards_-_2.jpg",
   "query": "Sancerre vineyards"
+ },
+ "mosel": {
+  "file": "img/mosel.jpg",
+  "title": "File:Beste Weinlagen an der Mosel. 04.jpg",
+  "artist": "Holger Uwe Schmitt",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Beste_Weinlagen_an_der_Mosel._04.jpg",
+  "query": "Mosel vineyards steep"
+ },
+ "cote-de-beaune": {
+  "file": "img/cote-de-beaune.jpg",
+  "title": "File:Meursault - Vineyards - 1.jpg",
+  "artist": "Benjamin Smith",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Meursault_-_Vineyards_-_1.jpg",
+  "query": "Meursault vineyards"
+ },
+ "kakheti": {
+  "file": "img/kakheti.jpg",
+  "title": "File:Qvevri-Georgia-UNOG-2016-02.jpg",
+  "artist": "MHM55",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Qvevri-Georgia-UNOG-2016-02.jpg",
+  "query": "Qvevri Georgia wine"
  }
 }
