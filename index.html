@@ -1093,6 +1093,8 @@ function renderPlace() {
       el('div', { id: 'phFind', class: 'sec', 'aria-live': 'polite' }),
       ...mn.nodes,
       wines.filter(v => !mn.shown.has(v.id)).length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: mn.shown.size ? 'Also in the catalogue' : 'Wines from here' })), el('div', { class: 'group' }, ...wines.filter(v => !mn.shown.has(v.id)).map(v => wineRow(v.id)))) : null,
+      stripSec('Top producers', producersOfRegion(k).slice(0, 8).map(p => (w, h) => producerCard(p, [w, h]))),
+      stripSec('Grapes', grapesOfRegion(k).map(g => (w, h) => grapeCard(g, [w, h]))),
       regionKids(k).length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: REGIONS[regionKids(k)[0]].parent === k && REGIONS[k].level === 'Region' ? 'Appellations in ' + r.name : 'Inside ' + r.name })), el('div', { class: 'tiles' }, ...regionKids(k).map(o => regionCard(o)))) : null,
       regionMap(k) ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Where it is' })), regionMap(k), el('p', { class: 'foot', style: 'color:rgba(255,255,255,.6);margin:0', text: 'Rough area, drawn from political boundaries.' })) : null,
       el('div', { class: 'sec', id: 'phAbout' }, el('div', { class: 'sec-h' }, el('h2', { text: 'About' })), el('p', { class: 'ph-blurb', text: r.blurb }), el('div', { class: 'group' }, el('div', { class: 'row' }, el('span', { class: 'lab', style: 'color:#fff', text: 'Grapes' }), el('span', { class: 'row-main row-s', text: r.grapes })), el('div', { class: 'row' }, el('span', { class: 'lab', style: 'color:#fff', text: 'Where' }), el('span', { class: 'row-main row-s', text: r.country })))),
@@ -1135,6 +1137,22 @@ function relatedRegions(k) {
   const country = fold(here.country.split(',').pop());
   return topRegions().filter(o => o !== k && fold(REGIONS[o].country.split(',').pop()) === country).slice(0, 3);
 }
+/* The explore cycle: region ⇄ producer ⇄ grape, each page linking to the other two kinds */
+const stripSec = (title, cards, w, h) => { const c = cards.filter(Boolean); return c.length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: title })), el('div', { class: 'mini-strip' }, ...c.map(f => f(w || 150, h || 190)))) : null; };
+const mineFirst = (list, kind, keyOf) => { const { T, C } = maps(); const score = x => (C[kind][keyOf(x)] ? 2 : 0) + (T[kind][keyOf(x)] && T[kind][keyOf(x)].n ? 1 : 0) + (x.famous ? .5 : 0); return list.slice().sort((a, b) => score(b) - score(a)); };
+function grapesOfRegion(k) { const out = []; for (const t of String((REGIONS[k] || {}).grapes || '').split(/,\s*/)) { const g = resolveGrape(t.trim()); if (g && !out.includes(g)) out.push(g); } return out; }
+function producersOfRegion(k) { const ks = regionAndKids(k); return mineFirst(producerEntities().filter(p => p.region && ks.includes(p.region)), 'producer', p => p.id); }
+function grapesOfProducer(pe) {
+  const out = []; for (const v of Store.nodes.values()) { if (v.type !== 'wine' || v.mergedInto || !v.links || v.links.producer !== pe.id) continue; for (const g of v.links.grapes || []) if (!out.includes(g)) out.push(g); }
+  for (const g of (pe.region ? grapesOfRegion(pe.region) : [])) if (!out.includes(g)) out.push(g);
+  return out.filter(g => GRAPE[g]).slice(0, 6);
+}
+const regionsOfGrape = g => topRegions().filter(k => grapesOfRegion(k).includes(g));
+function producersOfGrape(g) {
+  const ids = new Set(); for (const w of Store.nodes.values()) if (w.type === 'wine' && !w.mergedInto && w.links && w.links.producer && (w.links.grapes || []).includes(g)) ids.add(w.links.producer);
+  const list = producerEntities().filter(p => ids.has(p.id) || (p.region && grapesOfRegion(p.region).includes(g)));
+  return mineFirst(list, 'producer', p => p.id);
+}
 function renderProducerPage(id) {
   const box = $('#v-place'); box.replaceChildren();
   const pe = producerEntities().find(p => p.id === id);
@@ -1151,6 +1169,8 @@ function renderProducerPage(id) {
       rk && REGIONS[rk] ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Where it\u2019s made' })), el('div', { class: 'mini-strip' }, regionCard(rk, [170, 210]), ...relatedRegions(rk).map(k => regionCard(k, [170, 210])))) : null,
       el('div', { id: 'phFind', class: 'sec', 'aria-live': 'polite' }),
       ...mn.nodes,
+      stripSec('Grapes', grapesOfProducer(pe).map(g => (w, h) => grapeCard(g, [w, h]))),
+      stripSec('Also from ' + (rk && REGIONS[rk] ? REGIONS[rk].name : 'here'), (rk ? producersOfRegion(rk).filter(p => p.id !== id) : []).slice(0, 6).map(p => (w, h) => producerCard(p, [w, h]))),
       wines.filter(v => !mn.shown.has(v.id)).length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: mn.shown.size ? 'Also in the catalogue' : 'Their wines' })), el('div', { class: 'group' }, ...wines.filter(v => !mn.shown.has(v.id)).map(v => wineRow(v.id)))) : null,
       el('div', { class: 'sec', id: 'phAbout' }, el('div', { class: 'sec-h' }, el('h2', { text: 'About' })), el('p', { class: 'ph-blurb', text: pe.blurb })),
       pe.bottle && hasPhoto(pe.bottle) ? el('img', { src: regionPhoto(pe.bottle), alt: pe.name + ' bottle', style: 'width:100%;max-height:260px;object-fit:contain;border-radius:18px;background:rgba(255,255,255,.06)' }) : null,
@@ -1172,6 +1192,7 @@ function renderGrapePage(g) {
   const info = GRAPE_INFO[g]; const tone = grapeTone(g); const P = palate(); const mine = P.grape[g]; const gv = GRAPE[g] || { colour: 'red', aliases: [] };
   const wines = [...Store.nodes.values()].filter(n => n.type === 'vintage' && !n.mergedInto).filter(v => { const w = Store.nodes.get(v.links.wine); return w && (w.links.grapes || []).includes(g); });
   const places = info ? regionsFromText(info.places) : { keys: [], rest: [] };
+  for (const k of regionsOfGrape(g)) if (places.keys.length < 5 && !places.keys.includes(k)) places.keys.push(k);
   const mn = mineSections('grape', g);
   const pageTone = 'color-mix(in oklab,var(--c-' + tone + ') 34%,#0c0709)';
   box.append(
@@ -1182,6 +1203,7 @@ function renderGrapePage(g) {
     el('div', { class: 'ph-below', style: '--tone:' + pageTone },
       el('div', { id: 'phFind', class: 'sec', 'aria-live': 'polite' }),
       places.keys.length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Classic places' })), el('div', { class: 'mini-strip' }, ...places.keys.map(k => regionCard(k, [150, 190])))) : null,
+      stripSec('Top producers', producersOfGrape(g).slice(0, 8).map(p => (w, h) => producerCard(p, [w, h]))),
       places.rest.length ? el('p', { class: 'ph-blurb', style: 'font-size:16px', text: (places.keys.length ? 'Also: ' : 'Classic places: ') + places.rest.join(' · ') }) : null,
       info && info.next.length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Next step' })), el('div', { class: 'mini-strip' }, ...info.next.map(n => grapeCard(n, [150, 190])))) : null,
       info ? el('div', { class: 'group' }, recRow('Trade up', info.up), recRow('Trade down', info.down)) : null,
