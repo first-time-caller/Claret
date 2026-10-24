@@ -651,8 +651,8 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
     <div class="tabs-inner">
       <div class="tabpill lgm four">
         <button class="tab" type="button" data-tab="tonight" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h10l-.4 5.2a4.6 4.6 0 0 1-9.2 0z"/><path d="M12 13v7M8.5 21h7"/><path d="M7.3 7h9.4"/></svg><span id="tabMoment">Tonight</span></button>
-        <button class="tab" type="button" data-tab="cellar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10a8 8 0 0 1 16 0v10"/><path d="M3 20h18"/><path d="M9 20v-6h6v6"/></svg>Cellar</button>
         <button class="tab" type="button" data-tab="explore"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>Explore</button>
+        <button class="tab" type="button" data-tab="cellar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10a8 8 0 0 1 16 0v10"/><path d="M3 20h18"/><path d="M9 20v-6h6v6"/></svg>Cellar</button>
         <button class="tab" type="button" data-tab="log"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18c4-9 7 2 11-6 2-4 4-6 7-7"/><circle cx="5" cy="18" r="1.4" fill="currentColor"/><circle cx="14" cy="12" r="1.4" fill="currentColor"/><circle cx="21" cy="5" r="1.4" fill="currentColor"/></svg>Journey</button>
       </div>
       <button class="scanbtn lgm tab" type="button" data-tab="scan" aria-label="Scan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M10 8h4v8h-4z"/></svg></button>
@@ -2322,12 +2322,16 @@ function toggleEntitySaved(kind, key) {
 
 /* Explore: the catalogue, places and grapes, searchable */
 function renderExplore() { renderExploreInner(); fitLetters($('#exploreOut')); }
+/* What a region answers to in search: its name, country, parents and the old names people use */
+const REGION_KEYWORDS = { 'burgundy': 'bourgogne chablis cote d or', 'cote-de-beaune': 'burgundy bourgogne montrachet puligny chassagne', 'northern-rhone': 'rhone cote rotie hermitage', 'champagne': 'reims epernay', 'bordeaux': 'claret medoc', 'tuscany': 'toscana chianti', 'piedmont': 'piemonte barolo barbaresco', 'valdobbiadene': 'prosecco veneto', 'south-west': 'madiran saint mont gascony cahors', 'barossa': 'australia shiraz', 'hawkes-bay': 'hawkes bay', 'napa-valley': 'california usa america', 'willamette-valley': 'oregon usa america', 'sussex': 'england uk english', 'mosel': 'germany riesling' };
+function regionSearchText(k) { const r = REGIONS[k]; return fold([r.name, r.country, ...regionAncestors(k).map(a => REGIONS[a].name), REGION_KEYWORDS[k] || ''].join(' ')); }
 function renderExploreInner() {
   const q = fold($('#q').value);
   const out = $('#exploreOut'); out.replaceChildren();
   const vintages = [...Store.nodes.values()].filter(n => n.type === 'vintage' && !n.mergedInto);
   const match = id => { if (!q) return true; const d = describeVintage(id); return fold(d.title + ' ' + d.by + ' ' + d.grapes.join(' ') + ' ' + (d.placeName || '')).includes(q); };
-  const regKeys = Object.keys(REGIONS).filter(k => q ? fold(REGIONS[k].name + ' ' + REGIONS[k].country + ' ' + REGIONS[k].grapes).includes(q) : !REGIONS[k].parent);
+  const regKeys = Object.keys(REGIONS).filter(k => q ? regionSearchText(k).includes(q) : !REGIONS[k].parent)
+    .sort((a, b) => (fold(REGIONS[b].name) === q) - (fold(REGIONS[a].name) === q) || !!REGIONS[a].parent - !!REGIONS[b].parent);
   const prods = producerEntities().filter(p => !q || fold(p.name + ' ' + p.place).includes(q));
   const grs = grapeList().filter(g => !q || fold(grapeName(g) + ' ' + ((GRAPE[g] && GRAPE[g].aliases) || []).join(' ')).includes(q));
   const grid = (cards, more) => el('div', { class: 'tiles' }, ...cards);
@@ -2348,7 +2352,12 @@ function renderExploreInner() {
       !q ? 'Two Berry Bros. & Rudd bottles to start, plus every wine you scan, log or get suggested.' : null)
   ];
   if (q) {
-    out.append(...wines().filter(Boolean), ...['regions', 'producers', 'grapes'].map(k => blocks[k]()).filter(Boolean));
+    const ents = ['regions', 'producers', 'grapes'].map(k => blocks[k]()).filter(Boolean);
+    if (ents.length) {
+      // a place, producer or grape was asked for: show those, and keep the wine list a tap away
+      out.append(...ents);
+      if (cat.length) out.append(S.exWines === q ? el('div', null, ...wines().filter(Boolean)) : el('button', { class: 'row', type: 'button', style: 'background:var(--cell);border-radius:var(--r)', onclick: () => { S.exWines = q; renderExplore(); } }, el('span', { class: 'row-main' }, el('span', { class: 'row-t', style: 'font-family:var(--sans);font-size:16px', text: cat.length + (cat.length === 1 ? ' wine matches' : ' wines match') }), el('span', { class: 'row-s', text: 'Show the wines' })), chev()));
+    } else out.append(...wines().filter(Boolean));
     if (!out.children.length) out.append(el('p', { class: 'foot', text: 'Nothing matches.' }));
     return;
   }
