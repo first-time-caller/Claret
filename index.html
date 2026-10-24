@@ -1368,7 +1368,7 @@ const PRODUCER_LETTERING = {
 };
 /* Real wordmarks (transparent PNGs in img/logos), drawn as a mask so they take the card's white */
 const LOGOS = { 'dom-perignon': 4.369, 'nyetimber': 5.66, 'cloudy-bay': 5.844, 'domaine-de-la-romanee-conti': 4.555, 'chateau-d-yquem': 3.422,
-  'chateau-arricau-bordes': 2.525, 'chateau-de-sabazan': 2.234, 'quinta-de-la-rosa': 1.219, 'beaumont-des-crayeres': 2.55 };
+  'chateau-arricau-bordes': 2.525, 'chateau-de-sabazan': 2.234, 'quinta-de-la-rosa': 1.219, 'beaumont-des-crayeres': 2.55, 'penfolds': 1.925, 'opus-one': 0.848 };
 /* Producers the way they are really named; matched on the folded name, so older entries such as "De La Rosa" are corrected */
 const PRODUCER_CANON = [[/^(quinta )?de la rosa$/, 'Quinta De La Rosa', 'quinta-de-la-rosa'], [/arricau/, 'Château Arricau-Bordes', 'chateau-arricau-bordes'], [/sabazan/, 'Château de Sabazan', 'chateau-de-sabazan'], [/beaumont des crayeres/, 'Beaumont des Crayères', 'beaumont-des-crayeres']];
 const canonProducer = name => { const f = fold(name || ''); const c = PRODUCER_CANON.find(x => x[0].test(f)); return c ? c[1] : name; };
@@ -1921,8 +1921,17 @@ function bottleFor(d) {
   return BOTTLE_FOR_GRAPE[g] || 'burgundy';
 }
 function claimsOf(node, a) { return (node && node.claims || []).filter(c => c.a === a); }
+/* When nobody has recorded a drinking window, a rough one from the style and vintage; the edit form and Cellar treat it as an estimate */
+const WINDOW_YEARS = { 'style:sparkling/traditional': [0, 4], 'style:sparkling/easy': [0, 2], 'style:rose/pale': [0, 2], 'style:orange/skin': [0, 5], 'style:red/light-chilled': [0, 3], 'style:red/pinot-fruit': [3, 10], 'style:red/savoury-medium': [2, 10], 'style:red/full-warm': [3, 12], 'style:red/classic': [4, 18], 'style:red/mature': [6, 20],
+  'style:white/zesty': [0, 3], 'style:white/crisp-saline': [0, 4], 'style:white/aromatic': [0, 8], 'style:white/rich': [1, 8], 'style:sweet/fortified': [2, 25], 'style:sweet/fino': [0, 2] };
+function estimateWindow(v) {
+  const vear = /^\d{4}$/.test(String(v.name || '')) ? +v.name : null, y = new Date().getFullYear();
+  const st = inferStyle(describeVintage(v.id)); const span = WINDOW_YEARS[st] || [1, 6];
+  return vear ? [vear + span[0], vear + span[1]] : [y, y + Math.max(2, Math.min(span[1], 4))];
+}
+const windowIsEstimate = v => !best(v, 'drink-window');
 function windowOf(v) {
-  const w = best(v, 'drink-window'); if (!w) return null;
+  const w = best(v, 'drink-window'); if (!w) return v && v.id ? estimateWindow(v) : null;
   if (Array.isArray(w) && w.length === 2) return w.map(Number);
   const m = /(\d{4})\D+(\d{4})/.exec(String(w)); return m ? [+m[1], +m[2]] : null;
 }
@@ -2324,14 +2333,14 @@ function inferStyle(d) {
   if (fam === 'red') {
     if (g === 'grape:pinot-noir') return 'style:red/pinot-fruit'; if (['grape:gamay', 'grape:poulsard', 'grape:frappato'].includes(g)) return 'style:red/light-chilled';
     if (['grape:syrah', 'grape:grenache', 'grape:cabernet-franc', 'grape:mencia', 'grape:nerello-mascalese', 'grape:mourvedre', 'grape:carignan'].includes(g)) return 'style:red/savoury-medium';
-    if (['grape:malbec', 'grape:zinfandel', 'grape:pinotage'].includes(g) || body.includes('full')) return 'style:red/full-warm';
+    if (['grape:malbec', 'grape:zinfandel', 'grape:pinotage', 'grape:tannat', 'grape:touriga-nacional', 'grape:primitivo'].includes(g) || body.includes('full')) return 'style:red/full-warm';
     return 'style:red/classic';
   }
   return null;
 }
 function lotInfo(lot) {
   const d = describeVintage(lot.links.vintage); const win = windowOf(d.vintage);
-  return { d, win, status: win ? maturityWord(win) : 'Ready', style: inferStyle(d), left: lotLeft(lot) };
+  return { d, win, est: windowIsEstimate(d.vintage), status: win ? maturityWord(win) : 'Ready', style: inferStyle(d), left: lotLeft(lot) };
 }
 function personName(id) { const n = Store.nodes.get(id); return n ? n.name : String(id || '').split(':')[1] || 'someone'; }
 
@@ -2435,7 +2444,7 @@ function groupLots(dim) {
   const add = (key, label, lot) => { const g = groups.get(key) || { key, label, lots: [], n: 0 }; if (!g.lots.includes(lot)) { g.lots.push(lot); g.n += lotLeft(lot); } groups.set(key, g); };
   for (const lot of cellarLots()) {
     const d = describeVintage(lot.links.vintage);
-    if (dim === 'region') { const k = regionKeyOf(d.place); add(k || 'other', k ? REGIONS[k].name : 'Elsewhere', lot); }
+    if (dim === 'region') { const k = regionKeyOf(d.place); const pl = d.place ? d.place.split('/').slice(0, 2).join('/') : null; if (k) add(k, REGIONS[k].name, lot); else if (pl) add(pl, placeLabel(pl) || pl, lot); else add('other', 'Region not recorded', lot); }
     else if (dim === 'producer') add(d.producer ? d.producer.id : 'none', d.producer ? d.producer.name : 'Producer not recorded', lot);
     else if (dim === 'grape') { const gs = (d.wine.links && d.wine.links.grapes) || []; if (!gs.length) add('none', 'Grape not recorded', lot); gs.forEach(g => add(g, grapeName(g), lot)); }
     else if (dim === 'style') { const st = inferStyle(d); add(st || 'none', st ? STYLE[st].name : 'Unclassified', lot); }
@@ -2453,7 +2462,7 @@ function groupCard(dim, g) {
   if (dim === 'style' && STYLE[g.key]) return styleCard(g.key, null, { onclick: pick });
   const tone = dim === 'vintage' ? 'color-mix(in oklab,var(--c-claret) ' + (30 + (String(g.key).slice(-1) | 0) * 4) + '%,#0c0709)' : '#2C2426';
   return el('button', { class: 'place plain', type: 'button', style: '--tone:' + tone, onclick: pick, 'aria-label': g.label },
-    el('span', { class: 'mark cellar', text: g.n + ' in cellar' }), el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: dim === 'vintage' ? 'Vintage' : dim === 'region' ? 'Region' : '' }), el('span', { class: 'letter', style: 'font:500 ' + (dim === 'vintage' ? 38 : 24) + 'px var(--serif)' }, g.label)));
+    el('span', { class: 'mark cellar', text: g.n + ' in cellar' }), el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: dim === 'vintage' ? 'Vintage' : dim === 'region' ? (COUNTRY[String(g.key).split('/')[0]] || {}).name || 'Region' : '' }), el('span', { class: 'letter', style: 'font:500 ' + (dim === 'vintage' ? 38 : 24) + 'px var(--serif)' }, g.label)));
 }
 function renderCellar() {
   const box = $('#cellarOut'); box.replaceChildren();
@@ -2481,7 +2490,7 @@ function renderCellar() {
     const g = groupLots(dim).find(x => String(x.key) === String(S.cFilter.key));
     const dimName = (CDIMS.find(c => c[0] === dim) || [])[1];
     box.append(el('div', { class: 'btns', style: 'justify-content:space-between;align-items:center' }, el('button', { class: 'link', type: 'button', onclick: () => { S.cFilter = null; renderCellar(); } }, '‹ By ' + dimName.toLowerCase()),
-      g && ['region', 'producer', 'grape'].includes(dim) && g.key !== 'other' && g.key !== 'none' ? el('button', { class: 'link', type: 'button', onclick: () => openEntity(dim, g.key) }, 'About ' + g.label + ' ›') : null));
+      g && ((dim === 'region' && REGIONS[g.key]) || (['producer', 'grape'].includes(dim) && g.key !== 'none')) ? el('button', { class: 'link', type: 'button', onclick: () => openEntity(dim, g.key) }, 'About ' + g.label + ' ›') : null));
     box.append(el('h2', { style: 'margin:0;font:600 24px/1.2 var(--serif)' }, ...words(g ? g.label : '')), el('p', { class: 'foot', style: 'margin:-10px 0 0', text: g ? g.n + (g.n === 1 ? ' bottle' : ' bottles') + ' in ' + g.lots.length + (g.lots.length === 1 ? ' lot' : ' lots') : '' }));
     box.append(g ? el('div', { class: 'group' }, ...g.lots.map(l => lotRow(l))) : el('p', { class: 'foot', text: 'Nothing here now.' }));
     fitLetters(box); return;
@@ -2494,6 +2503,7 @@ function renderCellar() {
     if (tab === 'open') box.append(opens.length ? el('div', { class: 'group' }, ...opens.map(openRowEl)) : el('p', { class: 'foot', text: 'Nothing open. Open a bottle from your cellar and it appears here.' }));
     else if (list.length) box.append(el('div', { class: 'group' }, ...list.sort((a, b) => (b.i.win ? 1 : 0) - (a.i.win ? 1 : 0) || (a.i.win ? a.i.win[1] - b.i.win[1] : 0)).map(x => lotRow(x.lot))));
     else box.append(el('p', { class: 'foot', text: { ready: 'Nothing is ready yet.', hold: 'Nothing is being held.', ending: 'Nothing is near the end of its window.' }[tab] }));
+    if (tab !== 'open' && infos.some(x => x.est)) box.append(el('p', { class: 'foot', text: 'Where a drinking window is not recorded, Claret estimates one from the style and vintage. Edit a lot to set your own.' }));
     const gaps = cellarGaps(3);
     if (gaps.length && tab !== 'open') box.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Short of' })), el('div', { class: 'chips' }, ...gaps.map(g => el('span', { class: 'chip static', text: g.name }))), el('p', { class: 'foot', text: 'Styles that suit now and that nothing in your cellar covers. Claret shows these when you scan in a shop.' })));
     return;
@@ -2560,13 +2570,14 @@ async function scanIntoForm(file, ui) {
   try {
     const img = await shrink(file);
     const prompt = ['You are Claret, a UK wine companion. The photo shows one wine bottle label (front, maybe back). Read the bottle in the foreground only. Only report what is printed or clearly shown; never invent; leave unknown fields out.',
-      'Reply with only JSON: {"items":[{"producer":"","cuvee":"the wine\'s name as printed, without producer or vintage","vintage":"2019 or NV","country":"","region":"","grapes":[""],"colour":"one of ' + COLOURS.map(c => c.id).join('|') + '","family":"red|white|rose|orange|sparkling|sweet","abv":13.5}]}'].join('\n');
+      'Reply with only JSON: {"items":[{"producer":"","cuvee":"the wine\'s name as printed, without producer or vintage","vintage":"2019 or NV","country":"","region":"","grapes":[""],"colour":"one of ' + COLOURS.map(c => c.id).join('|') + '","family":"red|white|rose|orange|sparkling|sweet","abv":13.5,"drink":[2026,2032]}]}','Always give country and region (use the appellation, e.g. Madiran, and fill them from the producer if the label does not print them) and the grapes (from the appellation if not printed). drink is your estimate of the drinking window as [from year, to year] for this vintage.'].join('\n');
     const r = await sample.json(prompt, { images: [img], modelTier: 'quick', cache: false });
     const w = cleanItem(Array.isArray(r && r.items) ? r.items[0] : r);
     if (!w) { ui.status.textContent = 'Couldn\u2019t read a wine. Try a closer photo, or type it in.'; return; }
     const set = (id, v) => { const n = $('#' + id); if (n && v) n.value = v; };
     set('lcProducer', w.producer); set('lcCuvee', w.cuvee); set('lcVintage', w.vintage); set('lcRegion', w.region); set('lcCountry', w.country); set('lcGrapes', w.grapes.join(', '));
     if (w.family && $('#lcFam')) $('#lcFam').value = w.family;
+    const dr = Array.isArray(r && r.items && r.items[0] && r.items[0].drink) ? r.items[0].drink.map(Number) : null; if (dr && dr.length === 2 && dr[0] > 1900 && dr[1] >= dr[0]) { $('#lcWFrom').value = dr[0]; $('#lcWTo').value = dr[1]; }
     ui.blob = img; ui.status.textContent = 'Read from the label. Check the details below.';
   } catch (e) { ui.status.textContent = e && e.code === 'cancelled' ? '' : sampleError(e); }
 }
