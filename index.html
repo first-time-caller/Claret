@@ -372,6 +372,9 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
 .pv-credit{margin:0;padding:4px max(20px,env(safe-area-inset-left,0px)) 24px;font:400 12px/1.4 var(--sans);color:rgba(255,255,255,.55)}
 .pv-credit a{color:inherit}
 /* Region lettering: each place's name drawn in a hand that belongs to it */
+.logo-mark{display:block;background:#fff;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:left center;mask-position:left center;filter:drop-shadow(0 2px 14px rgba(0,0,0,.4))}
+.logo-mark.card{width:86%;max-height:54px}
+.logo-mark.page{width:min(86%,340px);margin:0 auto;-webkit-mask-position:center;mask-position:center}
 .letter{display:inline-block;line-height:1.05;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.35);overflow-wrap:normal;white-space:nowrap;padding-inline:.04em}
 .letter-local{display:block;font-size:15px;letter-spacing:.08em;opacity:.82;margin-top:6px;color:#fff}
 .place .letter{font-size:var(--ls,34px);text-align:left}
@@ -1363,8 +1366,12 @@ const PRODUCER_LETTERING = {
   'cloudy-bay': { t: 'Cloudy Bay', f: 'Jost,sans-serif', w: 300, size: 48, card: 28, ls: '.32em', up: true },
   'vega-sicilia': { t: 'Vega Sicilia', f: '"Cormorant SC",serif', w: 500, size: 54, card: 30, ls: '.12em', up: true }
 };
+/* Real wordmarks (transparent PNGs in img/logos), drawn as a mask so they take the card's white */
+const LOGOS = { 'dom-perignon': 4.369, 'nyetimber': 5.66, 'cloudy-bay': 5.844, 'domaine-de-la-romanee-conti': 4.555, 'chateau-d-yquem': 3.422 };
 function producerLetter(pe, where) {
-  const L = PRODUCER_LETTERING[String(pe.id).replace('producer:', '')];
+  const key = String(pe.id).replace('producer:', '');
+  if (LOGOS[key] != null) { const u = 'url(img/logos/' + key + '.png)'; return el('span', { class: 'logo-mark ' + where, role: 'img', 'aria-label': pe.name, style: '-webkit-mask-image:' + u + ';mask-image:' + u + ';aspect-ratio:' + (LOGOS[key] || 4) }); }
+  const L = PRODUCER_LETTERING[key];
   if (!L) return where === 'page' ? el('span', { class: 'ph-name', style: 'display:block' }, ...words(pe.name)) : el('span', { class: 'place-t' }, ...words(pe.name));
   const size = where === 'page' ? L.size : L.card;
   return el('span', { style: 'display:block;width:100%' }, el('span', { class: 'letter', style: 'font-family:' + L.f + ';font-weight:' + (L.w || 400) + ';letter-spacing:' + (L.ls || '0') + ';font-size:' + size + 'px;' + (L.up ? 'text-transform:uppercase;' : '') }, where === 'page' ? L.t : (L.short || L.t)));
