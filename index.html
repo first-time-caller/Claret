@@ -231,6 +231,8 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
   background:linear-gradient(180deg,rgba(0,0,0,.28) 0,transparent 18%,transparent 30%,color-mix(in oklab,var(--wine) 70%,transparent) 50%,color-mix(in oklab,var(--wine) 92%,#000) 62%,transparent 63%)}
 .hero.noimg .hero-wash{display:none}
 .hero-in{position:relative;z-index:2;display:flex;flex-direction:column;gap:12px;padding:0 max(20px,env(safe-area-inset-right,0px)) 116px max(20px,env(safe-area-inset-left,0px))}
+.hero-date{position:absolute;z-index:4;top:14px;left:max(20px,env(safe-area-inset-left,0px));right:max(20px,env(safe-area-inset-right,0px));text-align:left;color:inherit;font:500 15px/1.3 var(--sans);min-height:44px;display:flex;align-items:center;text-shadow:0 1px 10px rgba(0,0,0,.35)}
+.hero.noimg .hero-date,.hero[style*="--hc:#241A10"] .hero-date{text-shadow:none}
 .hero-eyebrow{display:inline-flex;align-items:center;gap:6px;font:500 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;min-height:36px;color:inherit;align-self:flex-start;opacity:.92}
 .hero-eyebrow svg{width:12px;height:12px}
 .hero-title{font:500 clamp(34px,10.5vw,44px)/1.04 var(--serif);letter-spacing:-.02em;margin:0;text-wrap:balance;hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:normal}
@@ -251,7 +253,7 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
   box-shadow:inset 0 1px 0 color-mix(in oklab,#fff 60%,transparent),inset 0 0 0 .5px color-mix(in oklab,var(--ink) 10%,transparent),0 10px 34px rgba(0,0,0,.14)}
 .look-card{position:relative;z-index:4;margin-top:-92px;border-radius:30px;padding:20px;display:flex;flex-direction:column;gap:14px}
 .look-top{display:flex;gap:14px;align-items:flex-start}
-.bottle{width:34px;height:96px;flex:none}
+.bottle-svg{width:34px;height:96px;flex:none}
 .look-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
 .look-list{font:400 19px/1.35 var(--serif);margin:0}
 .pillbtns{display:flex;gap:10px}
@@ -294,7 +296,7 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
   margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));
   background:linear-gradient(180deg,transparent 70%,var(--bg) 100%),radial-gradient(ellipse 90% 80% at 50% 60%,color-mix(in oklab,var(--wine) 85%,#000) 0 22%,var(--wine) 42%,color-mix(in oklab,var(--wine) 45%,var(--bg)) 72%,var(--bg) 100%)}
 .wine-hero img.ph{position:absolute;inset:0 0 auto;width:100%;height:62%;object-fit:cover;opacity:.55;-webkit-mask-image:linear-gradient(180deg,#000 30%,transparent);mask-image:linear-gradient(180deg,#000 30%,transparent)}
-.wine-hero .bottle{position:relative;z-index:2;width:78px;height:220px;margin-bottom:22px;filter:drop-shadow(0 18px 24px rgba(0,0,0,.35))}
+.wine-hero .bottle-svg{position:relative;z-index:2;width:78px;height:220px;margin-bottom:22px;filter:drop-shadow(0 18px 24px rgba(0,0,0,.35))}
 .wine-hero img.label{position:relative;z-index:2;height:230px;max-width:70%;object-fit:contain;border-radius:10px;margin-bottom:18px;box-shadow:0 18px 40px rgba(0,0,0,.35)}
 .backbtn{position:absolute;z-index:5;top:10px;left:max(12px,env(safe-area-inset-left,0px));width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ink)}
 .backbtn svg{width:18px;height:18px}
@@ -421,8 +423,8 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
         <div class="hero-wash" aria-hidden="true"></div>
         <span class="region-name" id="heroRegion"></span>
         <button class="credit" id="heroCredit" type="button" hidden></button>
+        <button class="hero-date" id="momentBtn" type="button" aria-haspopup="dialog"><span id="heroWhen"></span></button>
         <div class="hero-in">
-          <button class="hero-eyebrow" id="momentBtn" type="button" aria-haspopup="dialog"><span id="heroWhen">Tonight</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></button>
           <h1 class="hero-title" id="heroTitle"></h1>
           <p class="hero-why" id="heroWhy"></p>
           <div class="ctx-chips" id="ctxChips"></div>
@@ -431,9 +433,9 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
 
       <article class="look-card lgm" id="pick" aria-live="polite"></article>
 
-      <div class="sec" id="placesSec">
-        <div class="sec-h"><h2>Where it's from</h2></div>
-        <div class="strip" id="places"></div>
+      <div class="sec">
+        <button class="btn" id="findBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Find bottles for this</button>
+        <div id="bottles" class="sec" aria-live="polite"></div>
       </div>
 
       <div class="sec">
@@ -441,9 +443,9 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
         <div class="group" id="alts"></div>
       </div>
 
-      <div class="sec">
-        <button class="btn" id="findBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Find bottles for this</button>
-        <div id="bottles" class="sec" aria-live="polite"></div>
+      <div class="sec" id="placesSec">
+        <div class="sec-h"><h2>Where it's from</h2></div>
+        <div class="strip" id="places"></div>
       </div>
 
       <div class="chips" id="limitsLine" aria-label="Your limits"></div>
@@ -859,7 +861,7 @@ function bottleSVG(shape, col) {
   const id = 'bg' + (++bottleN);
   const c = 'var(--c-' + col + ')';
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('viewBox', '0 0 34 96'); svg.setAttribute('class', 'bottle'); svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('viewBox', '0 0 34 96'); svg.setAttribute('class', 'bottle-svg'); svg.setAttribute('aria-hidden', 'true');
   svg.innerHTML = '<defs><linearGradient id="' + id + '" x1="0" x2="1"><stop offset="0" style="stop-color:color-mix(in oklab,' + c + ' 55%,#000)"/><stop offset=".38" style="stop-color:' + c + '"/><stop offset=".55" style="stop-color:color-mix(in oklab,' + c + ' 70%,#fff)"/><stop offset="1" style="stop-color:color-mix(in oklab,' + c + ' 45%,#000)"/></linearGradient></defs>' +
     '<path d="' + BOTTLE_PATH[shape || 'burgundy'] + '" fill="url(#' + id + ')"/>' +
     (shape === 'champagne' ? '<path d="M12 2h10v22H12z" fill="color-mix(in oklab,' + c + ' 40%,#000)" opacity=".9"/>' : '<rect x="13" y="2" width="8" height="7" rx="1.5" fill="color-mix(in oklab,' + c + ' 35%,#000)"/>') +
@@ -1467,7 +1469,7 @@ function renderTonight() {
   const hero = $('#hero'), card = $('#pick');
   card.replaceChildren();
   const d = new Date();
-  $('#heroWhen').textContent = [MOMENT_NAME[moment()], d.toLocaleDateString('en-GB', { weekday: 'long' }), season(d)[0].toUpperCase() + season(d).slice(1)].join(' · ');
+  setWhen();
   // context chips
   const chips = $('#ctxChips'); chips.replaceChildren();
   const wName = { warm: 'Warm', mild: 'Mild', 'cold-wet': 'Cold & wet' }[S.weather];
@@ -1501,6 +1503,7 @@ function renderTonight() {
   } else { hero.classList.add('noimg'); img.hidden = true; $('#heroCredit').hidden = true; $('#heroRegion').textContent = ''; }
   // the glass card
   const mins = prepMinutes(s.serve[2]);
+  $('#findBtn').hidden = !mins; // the card already offers Find bottles unless it is showing the fridge timer
   card.append(
     el('div', { class: 'look-top' }, bottleSVG(STYLE_BOTTLE[s.id] || 'burgundy', s.col),
       el('div', { class: 'look-main' }, el('span', { class: 'eyebrow', text: 'Look for · ' + FAMILY_NAME[s.fam] + ' · ' + COLOUR[s.col].name }), el('p', { class: 'look-list', text: s.look.slice(0, 4).join(' · ') }))),
@@ -1509,7 +1512,7 @@ function renderTonight() {
       el('div', null, el('span', { class: 'k', text: 'Glass' }), el('span', { class: 'v', text: s.serve[1] })),
       el('div', null, el('span', { class: 'k', text: 'Prep' }), el('span', { class: 'v', text: s.serve[2] }))),
     el('div', { class: 'pillbtns' },
-      mins ? el('button', { class: 'btn', type: 'button', onclick: () => Timer.start(s.look[0].split(' ')[0], mins) }, 'Fridge timer') : el('button', { class: 'btn', type: 'button', onclick: findBottles }, 'Find bottles'),
+      mins ? el('button', { class: 'btn', type: 'button', onclick: () => Timer.start(s.look[0].split(' ')[0], mins) }, 'Fridge timer') : el('button', { class: 'btn', type: 'button', onclick: () => { findBottles(); $('#bottles').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } }, 'Find bottles'),
       el('button', { class: 'btn ghost', type: 'button', style: 'background:color-mix(in oklab,var(--ink) 8%,transparent);color:var(--ink)', onclick: () => $('#alts').scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 'Sideways')));
   const inCat = [...Store.nodes.values()].filter(n => n.type === 'vintage' && n.catalogue).filter(v => { const w = Store.nodes.get(v.links.wine); return w && w.links.style === s.id; }).filter(v => !breaks({ family: best(v, 'family'), colour: best(v, 'appearance'), abv: best(v, 'abv'), prices: claimsOf(v, 'list-price').map(c => ({ amount: c.v.price / 100, per: 'bottle', size: c.v.size })) }).length);
   if (inCat.length) card.append(el('div', { class: 'group', style: 'background:transparent' }, ...inCat.slice(0, 2).map(v => wineRow(v.id, 'In the catalogue'))));
@@ -1582,6 +1585,7 @@ async function findBottles() {
   S.find.busy = true; S.find.ctl = new AbortController();
   $('#findBtn').lastChild.textContent = 'Stop';
   out.replaceChildren(el('div', { class: 'status' }, el('span', { class: 'spin', 'aria-hidden': 'true' }), 'Finding bottles you can buy…'));
+  out.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   try {
     const r = await sample.json(prompt, { modelTier: 'default', signal: S.find.ctl.signal, cache: false });
     const list = Array.isArray(r && r.bottles) ? r.bottles.slice(0, 4) : [];
@@ -2305,7 +2309,15 @@ $('#exportBtn').addEventListener('click', async () => {
    Shell: header, tabs, moment switch
    ============================================================ */
 const TAB_TITLE = { scan: 'Scan', log: 'Log', you: 'You', explore: 'Explore', wine: '', place: '' };
+/* "Saturday, 24 October, 07:55": plain, and live. Tapping it still switches Today / Tonight. */
+function setWhen() {
+  const n = $('#heroWhen'); if (!n) return;
+  const d = new Date();
+  n.textContent = d.toLocaleDateString('en-GB', { weekday: 'long' }) + ', ' + d.getDate() + ' ' + d.toLocaleDateString('en-GB', { month: 'long' }) + ', ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+  $('#momentBtn').setAttribute('aria-label', n.textContent + '. ' + MOMENT_NAME[moment()] + '. Change');
+}
 function renderHeader() {
+  setWhen();
   const m = moment();
   const d = new Date();
   $('.top').classList.toggle('hide', S.tab === 'tonight' || S.tab === 'wine' || S.tab === 'place');
