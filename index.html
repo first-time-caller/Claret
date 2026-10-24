@@ -773,7 +773,8 @@ const STYLE_BOTTLE = { 'style:red/full-warm': 'bordeaux', 'style:red/classic': '
   'style:sparkling/traditional': 'champagne', 'style:sparkling/easy': 'champagne', 'style:sweet/fortified': 'port', 'style:sweet/fino': 'port' };
 const PALE = new Set(['water-white', 'lemon', 'straw', 'gold', 'salmon', 'onion-skin', 'pink']);
 let CREDITS = {};
-fetch('img/credits.json').then(r => r.ok ? r.json() : {}).then(d => { CREDITS = d || {}; if (S.tab === 'tonight') renderTonight(); }).catch(() => {});
+Promise.all(['img/credits.json', 'img/producers.json'].map(u => fetch(u).then(r => r.ok ? r.json() : {}).catch(() => ({}))))
+  .then(([a, b]) => { CREDITS = Object.assign({}, a, b); renderAll(); });
 const hasPhoto = k => !!(CREDITS[k] && CREDITS[k].file);
 function regionPhoto(k) { return CREDITS[k].file; }
 function creditLine(k) { const c = CREDITS[k]; return c ? 'Photo: ' + c.artist + ' · ' + c.license : ''; }
@@ -905,6 +906,54 @@ const CATALOGUE = [
       { a: 'food', v: 'Pan-fried duck, roast pork, or mushroom pasta and risotto.', src: 'merchant', conf: 1, at: '2026-10-23' },
       { a: 'source', v: { name: 'Berry Bros. & Rudd product page', url: 'https://www.bbr.com/products-20238006286-2023-berry-bros-and-rudd-new-zealand-pinot-noir-by-greystone-wines-north-canterbury' }, src: 'merchant', conf: 1, at: '2026-10-23' }] }
 ];
+/* Famous names: estates and bottles with openly licensed photos (img/producers.json has the credits) */
+const FAMOUS = [
+  { k: 'romanee-conti', name: 'Domaine de la Romanée-Conti', place: 'Vosne-Romanée, Burgundy', blurb: 'The stone cross marks the Romanée-Conti vineyard itself: under two hectares of Pinot Noir, and the most sought-after wine in Burgundy.' },
+  { k: 'chateau-yquem', name: 'Château d’Yquem', place: 'Sauternes, Bordeaux', blurb: 'The only Sauternes ranked Premier Cru Supérieur in the 1855 classification. Botrytised Sémillon and Sauvignon Blanc that lasts a century.', bottle: 'yquem-bottle' },
+  { k: 'lopez-de-heredia', name: 'R. López de Heredia', place: 'Haro, Rioja', blurb: 'Founded in 1877 and famous for Viña Tondonia, released only after many years in old oak. The ornate pavilion was made for the 1910 Brussels World Fair.' },
+  { k: 'marques-de-riscal', name: 'Marqués de Riscal', place: 'Elciego, Rioja', blurb: 'One of Rioja’s oldest houses, founded in 1858. Its hotel, wrapped in titanium ribbons, is by Frank Gehry.' },
+  { k: 'tenuta-san-guido', name: 'Tenuta San Guido', place: 'Bolgheri, Tuscany', blurb: 'The cypress avenue of Bolgheri leads past the estate that made Sassicaia, the first "Super Tuscan" Cabernet.', bottle: 'sassicaia-bottle' },
+  { k: 'dom-perignon', name: 'Dom Pérignon', place: 'Épernay, Champagne', blurb: 'Moët & Chandon’s prestige cuvée, named after the Benedictine monk who was cellarmaster at the Abbey of Hautvillers.', bottle: 'dom-perignon-bottle' },
+  { k: 'scharzhofberg', name: 'Scharzhofberg', place: 'Wiltingen, Saar', blurb: 'A steep slate slope above the Saar and one of Germany’s great Riesling sites, best known through Egon Müller.' },
+  { k: 'penfolds', name: 'Penfolds', place: 'Magill Estate, Adelaide', blurb: 'Home of Grange, first made experimentally in 1951 and now Australia’s most famous red.' },
+  { k: 'cloudy-bay', name: 'Cloudy Bay', place: 'Marlborough, New Zealand', blurb: 'Its first Sauvignon Blanc, in 1985, did more than any other wine to put Marlborough on the map.' },
+  { k: 'catena-zapata', name: 'Catena Zapata', place: 'Mendoza, Argentina', blurb: 'A winery built as a Mayan-style pyramid, and the pioneer of high-altitude Malbec in the Andes.' },
+  { k: 'opus-one', name: 'Opus One', place: 'Oakville, Napa Valley', blurb: 'Founded in 1979 by Robert Mondavi and Baron Philippe de Rothschild of Mouton: Bordeaux blending in Napa.' },
+  { k: 'nyetimber', name: 'Nyetimber', place: 'West Sussex, England', blurb: 'A pioneer of English sparkling wine, planting Champagne’s grapes in Sussex from 1988.' },
+  { k: 'vega-sicilia-bottle', name: 'Vega Sicilia', place: 'Ribera del Duero, Spain', blurb: 'Único is released after a decade or more of ageing, and is Spain’s most celebrated red.' }
+];
+function openFamous(f) {
+  const c = CREDITS[f.k], cb = f.bottle && CREDITS[f.bottle];
+  openSheet(f.name, [
+    hasPhoto(f.k) ? el('img', { class: 'sheet-photo', src: regionPhoto(f.k), alt: f.name }) : null,
+    el('div', { class: 'eyebrow', text: f.place }),
+    el('p', { class: 'look-list', style: 'margin:0', text: f.blurb }),
+    cb && hasPhoto(f.bottle) ? el('img', { class: 'sheet-photo', src: regionPhoto(f.bottle), alt: f.name + ' bottle', style: 'height:280px;object-fit:contain;background:color-mix(in oklab,var(--ink) 5%,transparent)' }) : null,
+    el('button', { class: 'btn', type: 'button', onclick: () => { closeSheet(); $('#q').value = f.name; go('explore'); askAbout(f); } }, 'Their wines, in UK shops'),
+    el('p', { class: 'fine' }, ...[c, cb].filter(Boolean).flatMap((x, i) => [i ? ' · ' : '', 'Photo: ' + x.artist + ', ' + x.license + ' (', el('a', { href: x.source, target: '_blank', rel: 'noopener' }, 'source'), ')']))
+  ]);
+}
+/* Ask Claude for a producer's wines you can buy; each becomes a wine page in the catalogue */
+async function askAbout(f) {
+  const out = $('#exploreOut'); const sample = await getSample();
+  const box = el('div', { class: 'sec', 'aria-live': 'polite' }); out.prepend(box);
+  if (!sample) { box.append(el('p', { class: 'foot', text: 'This needs Claude. Open Claret in the Claude app.' })); return; }
+  box.append(el('div', { class: 'status' }, el('span', { class: 'spin', 'aria-hidden': 'true' }), 'Looking up ' + f.name + '…'));
+  const prompt = ['You are Claret, a UK wine companion with nothing to sell. List up to 4 wines made by ' + f.name + ' (' + f.place + ') that a UK buyer can actually find, from the entry level up, with a realistic UK price per 75cl for a recent vintage.',
+    'Do not invent cuvées or critic scores. Reply with only JSON: {"bottles":[{"producer":"' + f.name + '","wine":"name as on the label, without producer or vintage","vintage":"recent year or NV","country":"","region":"","grapes":[""],"colour":"one of ' + COLOURS.map(c => c.id).join('|') + '","family":"red|white|rose|orange|sparkling|sweet","price":40,"where":"UK merchants","why":"one line on what it is"}]}'].join('\n');
+  try {
+    const r = await sample.json(prompt, { modelTier: 'default', cache: true });
+    const g = el('div', { class: 'group' });
+    for (const b of (Array.isArray(r && r.bottles) ? r.bottles.slice(0, 4) : [])) {
+      const w = { producer: str(b.producer) || f.name, cuvee: str(b.wine), vintage: str(b.vintage), country: str(b.country), region: str(b.region), grapes: arr(b.grapes), colour: COLOUR[b.colour] ? b.colour : null, family: str(b.family), prices: num(b.price) ? [{ amount: num(b.price), per: 'bottle', size: 750 }] : [] };
+      if (!w.cuvee) continue;
+      const id = suggestedWine(w, b);
+      const over = breaks(w).length;
+      g.append(wineRow(id, over ? 'Breaks one of your limits' : null));
+    }
+    box.replaceChildren(el('div', { class: 'sec-h' }, el('h2', { text: f.name })), g, el('p', { class: 'foot', text: 'Suggested by Claude. Prices are typical UK estimates, not live stock.' }));
+  } catch (e) { box.replaceChildren(el('p', { class: 'foot', text: sampleError(e) })); }
+}
 const CRITICS = [['Jancis Robinson MW', 20], ['Decanter', 100], ['Wine Advocate', 100], ['Vinous', 100], ['James Suckling', 100], ['Wine Spectator', 100], ['Tim Atkin MW', 100], ['Bob Campbell MW', 100], ['Jasper Morris MW', 100], ['Jeb Dunnuck', 100], ['Guía Peñín', 100], ['Wine Enthusiast', 100]];
 
 /* ============================================================
@@ -1665,6 +1714,9 @@ function renderExplore() {
   out.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: q ? 'Wines' : 'The catalogue' })),
     cat.length ? el('div', { class: 'group' }, ...cat.slice(0, 40).map(v => wineRow(v.id))) : el('p', { class: 'foot', text: 'No wines match. Scan a label or ask for bottles on Tonight to add more.' }),
     !q ? el('p', { class: 'foot', text: 'Two Berry Bros. & Rudd bottles to start, plus every wine you scan, log or get suggested.' }) : null));
+  const fam = FAMOUS.filter(f => hasPhoto(f.k) && (!q || fold(f.name + ' ' + f.place).includes(q)));
+  if (fam.length) out.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Famous names' })), el('div', { class: 'strip' }, ...fam.map(f => el('button', { class: 'place', type: 'button', style: 'width:200px;height:250px', onclick: () => openFamous(f), 'aria-label': f.name },
+    el('img', { src: regionPhoto(f.k), alt: '', loading: 'lazy' }), el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: f.place }), el('span', { class: 'place-t', text: f.name })))))));
   const regs = Object.keys(REGIONS).filter(k => hasPhoto(k) && (!q || fold(REGIONS[k].name + ' ' + REGIONS[k].country + ' ' + REGIONS[k].grapes).includes(q)));
   if (regs.length) out.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Places' })), el('div', { class: 'tiles' }, ...regs.map(k => el('button', { class: 'place', type: 'button', onclick: () => openRegion(k), 'aria-label': REGIONS[k].name },
     el('img', { src: regionPhoto(k), alt: '', loading: 'lazy' }), el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: REGIONS[k].country }), el('span', { class: 'place-t', text: REGIONS[k].name })))))));
@@ -1891,7 +1943,7 @@ function renderLog() {
 
 /* Sheet */
 function openSheet(title, body, onClose) {
-  const b = $('#sheetBody'); b.replaceChildren(el('div', { class: 'sheet-h' }, el('h2', { id: 'sheetTitle', text: title }), el('button', { class: 'link', type: 'button', 'data-close': true }, 'Close')), ...body);
+  const b = $('#sheetBody'); b.replaceChildren(el('div', { class: 'sheet-h' }, el('h2', { id: 'sheetTitle', text: title }), el('button', { class: 'link', type: 'button', 'data-close': true }, 'Close')), ...body.filter(Boolean));
   $('#sheet').hidden = false; document.body.style.overflow = 'hidden';
   S.sheetClose = onClose || null;
   setTimeout(() => { const f = b.querySelector('input,textarea'); f && f.focus({ preventScroll: true }); }, 350);

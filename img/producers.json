@@ -1,0 +1,182 @@
+{
+ "marlborough": {
+  "file": "img/p/marlborough.jpg",
+  "kind": "estate",
+  "title": "File:Wairau Valley vineyards in Marlborough, New Zealand.jpg",
+  "artist": "Jonathan Harker",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Wairau_Valley_vineyards_in_Marlborough,_New_Zealand.jpg",
+  "query": "Wairau Valley Marlborough vineyards"
+ },
+ "north-canterbury": {
+  "file": "img/p/north-canterbury.jpg",
+  "kind": "estate",
+  "title": "File:Across the Valley. (50960386038).jpg",
+  "artist": "Bernard Spragg. NZ from Christchurch, New Zealand",
+  "license": "Public domain",
+  "licenseUrl": "",
+  "source": "https://commons.wikimedia.org/wiki/File:Across_the_Valley._(50960386038).jpg",
+  "query": "Waipara Valley vineyard"
+ },
+ "chateau-yquem": {
+  "file": "img/p/chateau-yquem.jpg",
+  "kind": "estate",
+  "title": "File:Château d'Yquem.jpg",
+  "artist": "Benjamin Zingg, Switzerland",
+  "license": "CC BY-SA 2.5",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+  "source": "https://commons.wikimedia.org/wiki/File:Ch%C3%A2teau_d%27Yquem.jpg",
+  "query": "Château d'Yquem"
+ },
+ "marques-de-riscal": {
+  "file": "img/p/marques-de-riscal.jpg",
+  "kind": "estate",
+  "title": "File:Elciego - Marqués de Riscal Hotel RK01.jpg",
+  "artist": "Roderich Kahn",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Elciego_-_Marqu%C3%A9s_de_Riscal_Hotel_RK01.jpg",
+  "query": "Marqués de Riscal Elciego Gehry"
+ },
+ "lopez-de-heredia": {
+  "file": "img/p/lopez-de-heredia.jpg",
+  "kind": "estate",
+  "title": "File:Haro - Bodegas López de Heredia Viña Tondonia 24.jpg",
+  "artist": "Zarateman",
+  "license": "CC0",
+  "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "source": "https://commons.wikimedia.org/wiki/File:Haro_-_Bodegas_L%C3%B3pez_de_Heredia_Vi%C3%B1a_Tondonia_24.jpg",
+  "query": "López de Heredia Haro bodega"
+ },
+ "tenuta-san-guido": {
+  "file": "img/p/tenuta-san-guido.jpg",
+  "kind": "estate",
+  "title": "File:Cipressibolgheri.jpg",
+  "artist": "Repuli",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Cipressibolgheri.jpg",
+  "query": "Bolgheri cypress avenue"
+ },
+ "dom-perignon": {
+  "file": "img/p/dom-perignon.jpg",
+  "kind": "estate",
+  "title": "File:Epernay Dom Perignon.jpg",
+  "artist": "Palauenc05",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Epernay_Dom_Perignon.jpg",
+  "query": "Dom Pérignon statue Moët Épernay"
+ },
+ "penfolds": {
+  "file": "img/p/penfolds.jpg",
+  "kind": "estate",
+  "title": "File:Penfolds Magill 20190626 155109.jpg",
+  "artist": "Picadder",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Penfolds_Magill_20190626_155109.jpg",
+  "query": "Penfolds Magill Estate"
+ },
+ "catena-zapata": {
+  "file": "img/p/catena-zapata.jpg",
+  "kind": "estate",
+  "title": "File:ALTURA Argentina Wine Tourism - Bodega Catena Zapata - panoramio.jpg",
+  "artist": "ArgentinaWineTourism…",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:ALTURA_Argentina_Wine_Tourism_-_Bodega_Catena_Zapata_-_panoramio.jpg",
+  "query": "Catena Zapata winery"
+ },
+ "romanee-conti": {
+  "file": "img/p/romanee-conti.jpg",
+  "kind": "estate",
+  "title": "File:Vosne-Romanée, Domaine de la Romanée-Conti (1).JPG",
+  "artist": "© Pierre André",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Vosne-Roman%C3%A9e,_Domaine_de_la_Roman%C3%A9e-Conti_(1).JPG",
+  "query": "Romanée-Conti vineyard cross"
+ },
+ "scharzhofberg": {
+  "file": "img/p/scharzhofberg.jpg",
+  "kind": "estate",
+  "title": "File:Wiltiger Scharzhofberg.jpg",
+  "artist": "Rhmaster",
+  "license": "CC0",
+  "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "source": "https://commons.wikimedia.org/wiki/File:Wiltiger_Scharzhofberg.jpg",
+  "query": "Scharzhofberg vineyard"
+ },
+ "cloudy-bay": {
+  "file": "img/p/cloudy-bay.jpg",
+  "kind": "estate",
+  "title": "File:Cloudy Bay Vineyard.jpg",
+  "artist": "Matt Boulton",
+  "license": "CC BY-SA 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Cloudy_Bay_Vineyard.jpg",
+  "query": "Cloudy Bay vineyard Marlborough"
+ },
+ "nyetimber": {
+  "file": "img/p/nyetimber.jpg",
+  "kind": "estate",
+  "title": "File:Nyetimber-Manor-Vineyard-Dusk-4000x2667.jpg",
+  "artist": "Brianmaclondon",
+  "license": "CC0",
+  "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "source": "https://commons.wikimedia.org/wiki/File:Nyetimber-Manor-Vineyard-Dusk-4000x2667.jpg",
+  "query": "Nyetimber vineyard"
+ },
+ "opus-one": {
+  "file": "img/p/opus-one.jpg",
+  "kind": "estate",
+  "title": "File:Opus One Winery, Oakville, CA - panoramio.jpg",
+  "artist": "Jim Gateley",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Opus_One_Winery,_Oakville,_CA_-_panoramio.jpg",
+  "query": "Opus One winery Oakville"
+ },
+ "vega-sicilia-bottle": {
+  "file": "img/p/vega-sicilia-bottle.jpg",
+  "kind": "bottle",
+  "title": "File:Vega Sicilia Unico 2000.jpg",
+  "artist": "Dominic Lockyer",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Vega_Sicilia_Unico_2000.jpg",
+  "query": "Vega Sicilia Unico bottle"
+ },
+ "dom-perignon-bottle": {
+  "file": "img/p/dom-perignon-bottle.jpg",
+  "kind": "bottle",
+  "title": "File:Dom Perignon 1999.jpg",
+  "artist": "PlatinumSunlight at English Wikipedia",
+  "license": "Public domain",
+  "licenseUrl": "",
+  "source": "https://commons.wikimedia.org/wiki/File:Dom_Perignon_1999.jpg",
+  "query": "Dom Pérignon bottle"
+ },
+ "sassicaia-bottle": {
+  "file": "img/p/sassicaia-bottle.jpg",
+  "kind": "bottle",
+  "title": "File:Sassicaia.jpg",
+  "artist": "Lucarelli",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "source": "https://commons.wikimedia.org/wiki/File:Sassicaia.jpg",
+  "query": "Sassicaia bottle"
+ },
+ "yquem-bottle": {
+  "file": "img/p/yquem-bottle.jpg",
+  "kind": "bottle",
+  "title": "File:Assortment of Château d’Yquem, Sauternes.jpg",
+  "artist": "Megan Mallen",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Assortment_of_Ch%C3%A2teau_d%E2%80%99Yquem,_Sauternes.jpg",
+  "query": "Château d'Yquem bottle"
+ }
+}

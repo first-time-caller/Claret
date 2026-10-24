@@ -97,5 +97,23 @@
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
   "source": "https://commons.wikimedia.org/wiki/File:Qvevri-Georgia-UNOG-2016-02.jpg",
   "query": "Qvevri Georgia wine"
+ },
+ "provence": {
+  "file": "img/provence.jpg",
+  "title": "File:2005-09-17 Provence Luberon vineyard.jpg",
+  "artist": "Allie_Caulfield",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:2005-09-17_Provence_Luberon_vineyard.jpg",
+  "query": "Provence vineyards"
+ },
+ "champagne": {
+  "file": "img/champagne.jpg",
+  "title": "File:Champagne Vineyards.jpg",
+  "artist": "Rob & Lisa Meehan",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Champagne_Vineyards.jpg",
+  "query": "Hautvillers vineyards Champagne"
  }
 }
