@@ -2,6 +2,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Great+Vibes&family=IM+Fell+English+SC&family=Abril+Fatface&family=Cinzel:wght@500&family=Cinzel+Decorative:wght@700&family=Marcellus&family=Italianno&family=UnifrakturMaguntia&family=Dancing+Script:wght@500&family=Limelight&family=Josefin+Sans:wght@300&family=Noto+Serif+Georgian:wght@400&display=swap">
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
 <style>
 /* Layout: one iPhone column. Large serif title, grouped lists, a frosted tab bar. Colour comes from the glass: every wine wears its tasting colour. */
@@ -368,6 +369,42 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
 .pv-more{color:#fff;font:600 14px var(--sans);min-height:40px;padding:0 14px;border-radius:20px;background:rgba(255,255,255,.16);flex:none}
 .pv-credit{margin:0;padding:4px max(20px,env(safe-area-inset-left,0px)) 24px;font:400 12px/1.4 var(--sans);color:rgba(255,255,255,.55)}
 .pv-credit a{color:inherit}
+/* Region lettering: each place's name drawn in a hand that belongs to it */
+.letter{display:inline-block;line-height:1.05;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.35);overflow-wrap:normal;white-space:nowrap;padding-inline:.04em}
+.letter-local{display:block;font-size:15px;letter-spacing:.08em;opacity:.82;margin-top:6px;color:#fff}
+.place .letter{font-size:var(--ls,34px);text-align:left}
+.tiles .place .letter{font-size:calc(var(--ls,34px) * .78)}
+/* Region page, laid out like an artist page */
+#v-place{padding-top:0}
+.ph{--tone:#2C2426;position:relative;margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));min-height:560px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;overflow:hidden;background:var(--tone)}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25),transparent 22%,transparent 42%,color-mix(in oklab,var(--tone) 70%,transparent) 72%,var(--tone) 100%)}
+.ph-in{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:18px;padding:0 max(20px,env(safe-area-inset-left,0px)) 26px;text-align:center;width:100%}
+.ph .letter{font-size:var(--lb,64px);text-align:center}
+.ph-btns{display:flex;align-items:center;justify-content:center;gap:24px}
+.cbtn{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;background:rgba(255,255,255,.16);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.3)}
+.cbtn svg{width:24px;height:24px}
+.cbtn.big{width:78px;height:78px;background:#fff;color:var(--tone)}
+.cbtn.big svg{width:34px;height:34px}
+.cbtn[aria-pressed="true"]{color:#F2C14E}
+.ph-below{--tone:#2C2426;background:var(--tone);color:#fff;margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));padding:4px max(16px,env(safe-area-inset-left,0px)) 40px;display:flex;flex-direction:column;gap:22px;min-height:60vh}
+.ph-below .sec-h h2{color:rgba(255,255,255,.7)}
+.ph-below .group{background:rgba(255,255,255,.1)}
+.ph-below .row+.row::before{background:rgba(255,255,255,.12)}
+.ph-below .row-s,.ph-below .eyebrow{color:rgba(255,255,255,.7)}
+.ph-below .chev{color:#fff}
+.feat{display:flex;gap:14px;align-items:center;padding:14px;border-radius:22px;background:rgba(255,255,255,.12);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.22);text-align:left;color:#fff;width:100%}
+.feat .glass{width:64px;height:64px}
+.feat .k{font:400 13px var(--sans);opacity:.75}
+.feat .t{font:600 18px/1.25 var(--sans)}
+.feat .s{font:400 14px/1.35 var(--sans);opacity:.75}
+.feat .plus{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex:none;margin-left:auto}
+.ph-blurb{font:400 18px/1.5 var(--serif);margin:0;color:rgba(255,255,255,.9)}
+.ph-credit{font:400 12px/1.4 var(--sans);color:rgba(255,255,255,.5);margin:0}
+.ph-credit a{color:inherit}
+.ph-back{position:absolute;z-index:4;top:12px;left:max(14px,env(safe-area-inset-left,0px));width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;background:rgba(0,0,0,.25);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.ph-back svg{width:20px;height:20px}
+@media (min-width:560px){.ph,.ph-below{margin-inline:0}.ph{border-radius:32px 32px 0 0}}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
@@ -423,6 +460,8 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:44px}
     </section>
 
     <section class="view" id="v-wine" hidden aria-label="Wine"></section>
+
+    <section class="view" id="v-place" hidden aria-label="Place"></section>
 
     <section class="view" id="v-scan" hidden>
       <div class="seg" id="scanMode" role="radiogroup" aria-label="What are you scanning?">
@@ -827,6 +866,107 @@ function bottleSVG(shape, col) {
     '<rect x="8" y="58" width="18" height="22" rx="2" fill="color-mix(in oklab,#fff 82%,' + c + ')" opacity=".92"/>';
   return svg;
 }
+/* Each region's lettering: the face, how it is set, the page's tone, and the name in the local script where it has one */
+const LETTERING = {
+  'northern-rhone': { t: 'Côte-Rôtie', f: '"Pinyon Script",cursive', size: 66, card: 40, tone: '#3E1A1E' },
+  'cote-de-beaune': { t: 'Meursault', f: '"Pinyon Script",cursive', size: 66, card: 40, tone: '#4A3E22' },
+  'beaujolais': { t: 'Beaujolais', f: '"Great Vibes",cursive', size: 70, card: 42, tone: '#4A1428' },
+  'burgundy': { t: 'Clos de Vougeot', f: '"IM Fell English SC",serif', size: 40, card: 26, tone: '#332720', ls: '.02em' },
+  'bordeaux': { t: 'MARGAUX', f: 'Cinzel,serif', w: 500, size: 50, card: 30, tone: '#2A0E16', ls: '.14em' },
+  'rioja': { t: 'RIOJA', f: '"Cinzel Decorative",serif', w: 700, size: 60, card: 36, tone: '#4E2618', ls: '.06em' },
+  'santorini': { t: 'SANTORINI', f: 'Marcellus,serif', size: 46, card: 28, tone: '#1C3A55', ls: '.16em', local: 'Σαντορίνη' },
+  'sancerre': { t: 'Sancerre', f: 'Italianno,cursive', size: 84, card: 50, tone: '#36422F' },
+  'mosel': { t: 'Mosel', f: '"UnifrakturMaguntia",serif', size: 78, card: 46, tone: '#29313C' },
+  'provence': { t: 'Provence', f: '"Dancing Script",cursive', w: 500, size: 64, card: 38, tone: '#5E3B4A' },
+  'kakheti': { t: 'KAKHETI', f: 'Marcellus,serif', size: 46, card: 28, tone: '#4E321A', ls: '.16em', local: 'კახეთი', lf: '"Noto Serif Georgian",serif' },
+  'champagne': { t: 'CHAMPAGNE', f: 'Limelight,serif', size: 40, card: 25, tone: '#3E3826', ls: '.04em' },
+  'barossa': { t: 'Barossa', f: '"Abril Fatface",serif', size: 62, card: 38, tone: '#5A321A' },
+  'marlborough': { t: 'MARLBOROUGH', f: '"Josefin Sans",sans-serif', w: 300, size: 36, card: 22, tone: '#24402F', ls: '.22em' },
+  'north-canterbury': { t: 'WAIPARA', f: '"Josefin Sans",sans-serif', w: 300, size: 44, card: 26, tone: '#2C3E3A', ls: '.24em' },
+  'etna': { t: 'Etna', f: '"Abril Fatface",serif', size: 70, card: 42, tone: '#231C1C' },
+  'douro': { t: 'DOURO', f: 'Cinzel,serif', w: 500, size: 56, card: 34, tone: '#3A2416', ls: '.16em' },
+  'jerez': { t: 'Jerez', f: '"Great Vibes",cursive', size: 74, card: 44, tone: '#4A3A1E' },
+  'valdobbiadene': { t: 'Valdobbiadene', f: 'Italianno,cursive', size: 66, card: 40, tone: '#2E3E2A' },
+  'central-otago': { t: 'CENTRAL OTAGO', f: '"Josefin Sans",sans-serif', w: 300, size: 32, card: 20, tone: '#2A3444', ls: '.2em' }
+};
+function lettering(k, where) {
+  const L = LETTERING[k]; const r = REGIONS[k] || {};
+  if (!L) return el('span', { class: 'letter', style: 'font:500 ' + (where === 'page' ? 48 : 28) + 'px var(--serif)' }, r.name || '');
+  const size = where === 'page' ? L.size : L.card;
+  const out = el('span', { style: 'display:block;width:100%' }, el('span', { class: 'letter', lang: 'en', style: 'font-family:' + L.f + ';font-weight:' + (L.w || 400) + ';letter-spacing:' + (L.ls || '0') + ';font-size:' + size + 'px' }, L.t));
+  if (L.local && where === 'page') out.append(el('span', { class: 'letter-local', style: L.lf ? 'font-family:' + L.lf : '', text: L.local }));
+  return out;
+}
+/* Fit each name to its space once its face has loaded: shrink, never wrap */
+function fitLetters(root) {
+  const run = () => (root || document).querySelectorAll('.letter').forEach(n => {
+    const base = +n.dataset.size || parseFloat(n.style.fontSize) || 40; n.dataset.size = base;
+    n.style.fontSize = base + 'px';
+    const room = n.parentElement.getBoundingClientRect().width;
+    const need = n.scrollWidth;
+    if (room > 0 && need > room) n.style.fontSize = Math.max(14, Math.floor(base * room / need * 0.98)) + 'px';
+  });
+  requestAnimationFrame(run);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => requestAnimationFrame(run));
+}
+addEventListener('resize', () => fitLetters());
+/* Region page: the photo, the name in its own hand, and what to drink from there */
+function openRegion(k) { if (S.tab !== 'place') S.prevTab = S.tab; S.place = k; go('place'); }
+function isPlaceSaved(k) { return LS.get('claret.places', []).includes(k); }
+function renderPlace() {
+  const k = S.place; const r = REGIONS[k]; const box = $('#v-place'); box.replaceChildren();
+  if (!r) return;
+  const L = LETTERING[k] || { tone: '#2C2426' };
+  const c = CREDITS[k];
+  const styleId = Object.keys(STYLE_REGIONS).find(id => STYLE_REGIONS[id].includes(k));
+  const st = styleId && STYLE[styleId];
+  const placeIds = Object.keys(PLACE_REGION).filter(id => PLACE_REGION[id] === k);
+  const wines = [...Store.nodes.values()].filter(n => n.type === 'vintage' && !n.mergedInto).filter(v => { const w = Store.nodes.get(v.links.wine); return w && w.links.place && placeIds.some(id => w.links.place.startsWith(id)); });
+  const saved = isPlaceSaved(k);
+  const ico = p => svgIcon(p);
+  box.append(
+    el('div', { class: 'ph', style: '--tone:' + L.tone },
+      hasPhoto(k) ? el('img', { src: regionPhoto(k), alt: r.name + ', ' + r.country }) : null,
+      el('button', { class: 'ph-back', type: 'button', 'aria-label': 'Back', onclick: () => go(S.prevTab || 'explore') }, ico('<path d="M15 5l-7 7 7 7"/>')),
+      hasPhoto(k) ? el('button', { class: 'credit', type: 'button', style: 'height:60%', 'aria-label': 'View the photo full screen', onclick: () => openPhoto(k) }) : null,
+      el('div', { class: 'ph-in' },
+        el('h1', { style: 'margin:0;width:100%', 'aria-label': r.name }, lettering(k, 'page')),
+        el('div', { class: 'ph-btns' },
+          el('button', { class: 'cbtn', type: 'button', 'aria-label': 'About ' + r.name, onclick: () => $('#phAbout').scrollIntoView({ behavior: 'smooth', block: 'start' }) }, ico('<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>')),
+          el('button', { class: 'cbtn big', type: 'button', 'aria-label': 'Find bottles from ' + r.name + ' in UK shops', onclick: () => askRegion(k) }, svgIcon('<path d="M7 3h10l-.4 5.2a4.6 4.6 0 0 1-9.2 0z" fill="currentColor"/><path d="M12 13v7M8.5 21h7"/>')),
+          el('button', { class: 'cbtn', type: 'button', 'aria-pressed': String(saved), 'aria-label': saved ? 'Saved' : 'Save this place', onclick: () => { const cur = LS.get('claret.places', []); LS.set('claret.places', saved ? cur.filter(x => x !== k) : [...cur, k]); renderPlace(); toast(saved ? 'Removed from saved places' : 'Saved to Explore'); } },
+            svgIcon(saved ? '<path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z" fill="currentColor"/>' : '<path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/>'))))),
+    el('div', { class: 'ph-below', style: '--tone:' + L.tone },
+      st ? el('button', { class: 'feat', type: 'button', onclick: () => { S.pick = st.id; S.momentOverride = S.momentOverride; go('tonight'); } },
+        el('span', { class: 'glass' + (st.sparkle ? ' sparkle' : ''), style: '--c:var(--c-' + st.col + ')', 'aria-hidden': 'true' }),
+        el('span', { style: 'display:flex;flex-direction:column;gap:2px;min-width:0' }, el('span', { class: 'k', text: 'The style' }), el('span', { class: 't', text: st.name }), el('span', { class: 's', text: 'Make it tonight’s pick' })),
+        el('span', { class: 'plus', 'aria-hidden': 'true' }, svgIcon('<path d="M12 6v12M6 12h12"/>'))) : null,
+      el('div', { id: 'phFind', class: 'sec', 'aria-live': 'polite' }),
+      wines.length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Wines from here' })), el('div', { class: 'group' }, ...wines.map(v => wineRow(v.id)))) : null,
+      el('div', { class: 'sec', id: 'phAbout' }, el('div', { class: 'sec-h' }, el('h2', { text: 'About' })), el('p', { class: 'ph-blurb', text: r.blurb }), el('div', { class: 'group' }, el('div', { class: 'row' }, el('span', { class: 'lab', style: 'color:#fff', text: 'Grapes' }), el('span', { class: 'row-main row-s', text: r.grapes })), el('div', { class: 'row' }, el('span', { class: 'lab', style: 'color:#fff', text: 'Where' }), el('span', { class: 'row-main row-s', text: r.country })))),
+      c ? el('p', { class: 'ph-credit' }, 'Photo: ' + c.artist + ' · ' + c.license + ' · ', el('a', { href: c.source, target: '_blank', rel: 'noopener' }, 'Source')) : null));
+  fitLetters(box);
+}
+async function askRegion(k) {
+  const r = REGIONS[k]; const out = $('#phFind'); const sample = await getSample();
+  out.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  if (!sample) { out.replaceChildren(el('p', { class: 'ph-credit', style: 'font-size:14px', text: 'Finding bottles needs Claude. Open Claret in the Claude app.' })); return; }
+  out.replaceChildren(el('div', { class: 'status', style: 'color:#fff' }, el('span', { class: 'spin', 'aria-hidden': 'true' }), 'Finding bottles from ' + r.name + '…'));
+  const prompt = ['You are Claret, a UK wine companion with nothing to sell. Suggest 4 real wines from ' + r.name + ' (' + r.country + ') that are easy to buy in the UK, from a good everyday bottle to a treat, with a realistic UK shelf price per 75cl.',
+    'Do not invent wines or critic scores. Never break a hard limit.', 'Hard limits:', ...(limitsText().length ? limitsText().map(t => '- ' + t) : ['- none']), 'Their palate:', palateText(palate()),
+    'Reply with only JSON: {"bottles":[{"producer":"","wine":"name as on the label, without producer or vintage","vintage":"recent year or NV","country":"","region":"","grapes":[""],"colour":"one of ' + COLOURS.map(c => c.id).join('|') + '","family":"red|white|rose|orange|sparkling|sweet","price":20,"where":"UK merchants","why":"one line"}]}'].join('\n');
+  try {
+    const res = await sample.json(prompt, { modelTier: 'default', cache: true });
+    const g = el('div', { class: 'group' }); let dropped = 0;
+    for (const b of (Array.isArray(res && res.bottles) ? res.bottles.slice(0, 4) : [])) {
+      const w = { producer: str(b.producer), cuvee: str(b.wine), vintage: str(b.vintage), country: str(b.country) || r.country, region: str(b.region), grapes: arr(b.grapes), colour: COLOUR[b.colour] ? b.colour : null, family: str(b.family), prices: num(b.price) ? [{ amount: num(b.price), per: 'bottle', size: 750 }] : [] };
+      if (!w.cuvee && !w.producer) continue;
+      if (breaks(w).length) { dropped++; continue; }
+      g.append(wineRow(suggestedWine(w, b)));
+    }
+    out.replaceChildren(el('div', { class: 'sec-h' }, el('h2', { text: 'In UK shops' })), g, el('p', { class: 'ph-credit', style: 'font-size:13px', text: (dropped ? dropped + ' removed for breaking your limits. ' : '') + 'Suggested by Claude. Prices are typical UK estimates, not live stock.' }));
+  } catch (e) { out.replaceChildren(el('p', { class: 'ph-credit', style: 'font-size:14px', text: sampleError(e) })); }
+}
 /* Full view of a photo, with its credit: the only place the credit needs to sit */
 function openPhoto(k) {
   const r = REGIONS[k] || {}; const c = CREDITS[k];
@@ -839,16 +979,6 @@ function openPhoto(k) {
   const esc = e => { if (e.key === 'Escape') close(); };
   document.addEventListener('keydown', esc);
   document.body.append(box);
-}
-function openRegion(k) {
-  const r = REGIONS[k]; const c = CREDITS[k];
-  openSheet(r.name, [
-    hasPhoto(k) ? el('img', { class: 'sheet-photo', src: regionPhoto(k), alt: r.name + ', ' + r.country }) : null,
-    el('div', { class: 'eyebrow', text: r.country }),
-    el('p', { class: 'look-list', style: 'margin:0', text: r.blurb }),
-    el('div', { class: 'group' }, el('div', { class: 'row' }, el('span', { class: 'lab', text: 'Grapes' }), el('span', { class: 'row-main row-s', style: 'color:var(--ink)', text: r.grapes }))),
-    c ? el('p', { class: 'fine' }, creditLine(k) + ' · ', el('a', { href: c.source, target: '_blank', rel: 'noopener' }, 'Source')) : null
-  ]);
 }
 function openContext() {
   const weather = el('div', { class: 'seg', role: 'radiogroup', 'aria-label': 'Weather' }, ...[['warm', 'Warm'], ['mild', 'Mild'], ['cold-wet', 'Cold & wet']].map(([k, n]) =>
@@ -1367,7 +1497,7 @@ function renderTonight() {
     if (img.dataset.k !== rk) { img.dataset.k = rk; img.setAttribute('data-loading', ''); img.onload = () => img.removeAttribute('data-loading'); img.src = regionPhoto(rk); img.alt = REGIONS[rk].name; }
     img.hidden = false;
     $('#heroRegion').textContent = '';
-    const cr = $('#heroCredit'); cr.hidden = false; cr.setAttribute('aria-label', 'View the photo of ' + REGIONS[rk].name); cr.onclick = () => openPhoto(rk);
+    const cr = $('#heroCredit'); cr.hidden = false; cr.setAttribute('aria-label', 'About ' + REGIONS[rk].name); cr.onclick = () => openRegion(rk);
   } else { hero.classList.add('noimg'); img.hidden = true; $('#heroCredit').hidden = true; $('#heroRegion').textContent = ''; }
   // the glass card
   const mins = prepMinutes(s.serve[2]);
@@ -1397,9 +1527,10 @@ function renderTonight() {
   $('#placesSec').hidden = !keys.length;
   $('#places').replaceChildren(...keys.map(k => el('button', { class: 'place', type: 'button', onclick: () => openRegion(k), 'aria-label': REGIONS[k].name },
     el('img', { src: regionPhoto(k), alt: '', loading: 'lazy' }),
-    el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: REGIONS[k].country }), el('span', { class: 'place-t' }, ...words(REGIONS[k].name)), el('span', { class: 'place-s', text: REGIONS[k].blurb })))));
+    el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: REGIONS[k].country }), lettering(k, 'card'), el('span', { class: 'place-s', text: REGIONS[k].blurb })))));
   renderLimitsLine();
   renderRecent();
+  fitLetters($('#places'));
 }
 /* Titles never break inside a word: each word, hyphenated ones too, is kept whole */
 function words(text) { return String(text || '').split(/(\s+)/).map(t => /\s/.test(t) ? t : el('span', { class: 'w', text: t })); }
@@ -1754,7 +1885,8 @@ function openGrape(gId) {
     wines.length ? el('div', { class: 'group' }, ...wines.map(v => wineRow(v.id))) : null]);
 }
 /* Explore: the catalogue, places and grapes, searchable */
-function renderExplore() {
+function renderExplore() { renderExploreInner(); fitLetters($('#exploreOut')); }
+function renderExploreInner() {
   const q = fold($('#q').value);
   const out = $('#exploreOut'); out.replaceChildren();
   const vintages = [...Store.nodes.values()].filter(n => n.type === 'vintage' && !n.mergedInto);
@@ -1765,12 +1897,15 @@ function renderExplore() {
   out.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: q ? 'Wines' : 'The catalogue' })),
     cat.length ? el('div', { class: 'group' }, ...cat.slice(0, 40).map(v => wineRow(v.id))) : el('p', { class: 'foot', text: 'No wines match. Scan a label or ask for bottles on Tonight to add more.' }),
     !q ? el('p', { class: 'foot', text: 'Two Berry Bros. & Rudd bottles to start, plus every wine you scan, log or get suggested.' }) : null));
+  const savedPlaces = LS.get('claret.places', []).filter(k => REGIONS[k] && hasPhoto(k));
+  if (savedPlaces.length && !q) out.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Saved places' })), el('div', { class: 'strip' }, ...savedPlaces.map(k => el('button', { class: 'place', type: 'button', style: 'width:200px;height:200px', onclick: () => openRegion(k), 'aria-label': REGIONS[k].name },
+    el('img', { src: regionPhoto(k), alt: '', loading: 'lazy' }), el('span', { class: 'place-in' }, lettering(k, 'card')))))));
   const fam = FAMOUS.filter(f => hasPhoto(f.k) && (!q || fold(f.name + ' ' + f.place).includes(q)));
   if (fam.length) out.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Famous names' })), el('div', { class: 'strip' }, ...fam.map(f => el('button', { class: 'place', type: 'button', style: 'width:200px;height:250px', onclick: () => openFamous(f), 'aria-label': f.name },
     el('img', { src: regionPhoto(f.k), alt: '', loading: 'lazy' }), el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: f.place }), el('span', { class: 'place-t' }, ...words(f.name))))))));
   const regs = Object.keys(REGIONS).filter(k => hasPhoto(k) && (!q || fold(REGIONS[k].name + ' ' + REGIONS[k].country + ' ' + REGIONS[k].grapes).includes(q)));
   if (regs.length) out.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Places' })), el('div', { class: 'tiles' }, ...regs.map(k => el('button', { class: 'place', type: 'button', onclick: () => openRegion(k), 'aria-label': REGIONS[k].name },
-    el('img', { src: regionPhoto(k), alt: '', loading: 'lazy' }), el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: REGIONS[k].country }), el('span', { class: 'place-t' }, ...words(REGIONS[k].name))))))));
+    el('img', { src: regionPhoto(k), alt: '', loading: 'lazy' }), el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: REGIONS[k].country }), lettering(k, 'card')))))));
   const P = palate();
   const gr = Object.keys(GRAPE_INFO).filter(g => !q || fold(grapeName(g)).includes(q));
   if (gr.length) out.append(el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Grapes' })), el('div', { class: 'chips' }, ...gr.map(g => el('button', { class: 'chip grape-chip', type: 'button', 'data-tried': String(!!P.grape[g]), onclick: () => openGrape(g) }, grapeName(g)))),
@@ -2169,11 +2304,11 @@ $('#exportBtn').addEventListener('click', async () => {
 /* ============================================================
    Shell: header, tabs, moment switch
    ============================================================ */
-const TAB_TITLE = { scan: 'Scan', log: 'Log', you: 'You', explore: 'Explore', wine: '' };
+const TAB_TITLE = { scan: 'Scan', log: 'Log', you: 'You', explore: 'Explore', wine: '', place: '' };
 function renderHeader() {
   const m = moment();
   const d = new Date();
-  $('.top').classList.toggle('hide', S.tab === 'tonight' || S.tab === 'wine');
+  $('.top').classList.toggle('hide', S.tab === 'tonight' || S.tab === 'wine' || S.tab === 'place');
   $('#title').textContent = TAB_TITLE[S.tab] || '';
   $('#tabMoment').textContent = MOMENT_NAME[m] === 'This afternoon' ? 'Today' : MOMENT_NAME[m];
   const s = season(d);
@@ -2181,8 +2316,8 @@ function renderHeader() {
 }
 function go(tab, focusSel) {
   S.tab = tab;
-  for (const v of ['tonight', 'explore', 'wine', 'scan', 'log', 'you']) $('#v-' + v).hidden = v !== tab;
-  const lit = tab === 'wine' ? S.prevTab : tab;
+  for (const v of ['tonight', 'explore', 'wine', 'place', 'scan', 'log', 'you']) $('#v-' + v).hidden = v !== tab;
+  const lit = tab === 'wine' || tab === 'place' ? S.prevTab : tab;
   $$('.tab').forEach(b => { if (b.dataset.tab === lit) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
   renderAll();
   window.scrollTo(0, 0);
@@ -2195,6 +2330,7 @@ function renderAll() {
   if (S.tab === 'log') renderLog();
   if (S.tab === 'explore') renderExplore();
   if (S.tab === 'wine') renderWine();
+  if (S.tab === 'place') renderPlace();
   if (S.tab === 'you') renderYou();
 }
 let toastT = null;
