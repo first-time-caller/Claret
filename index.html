@@ -1043,10 +1043,10 @@ function openProducer(pId) { openEntity('producer', pId); }
 function openGrape(gId) { openEntity('grape', gId); }
 /* A rough map: the country in context and the region's political area picked out (img/maps.json, built from Natural Earth) */
 /* What sits inside a region: islands, regions or appellations, each tile with its key varieties */
-function regionKidSections(k) {
+function regionKidSections(k, light) {
   const kids = regionKids(k); if (!kids.length) return [];
   const tiles = list => el('div', { class: 'tiles' }, ...list.map(o => regionCard(o, null, { sub: String(REGIONS[o].grapes || '').split(/,\s*/).slice(0, 3).join(' · ') })));
-  if (kids.every(o => REGIONS[o].level === 'Island')) return kids.map(o => el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('button', { class: 'link', type: 'button', style: 'color:#fff;font:600 13px var(--sans);letter-spacing:.06em;text-transform:uppercase', onclick: () => openRegion(o) }, REGIONS[o].name + ' ›')), regionKids(o).length ? tiles(regionKids(o)) : el('p', { class: 'foot', text: 'No regions added yet.' })));
+  if (kids.every(o => REGIONS[o].level === 'Island')) return kids.map(o => el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('button', { class: 'link', type: 'button', style: (light ? '' : 'color:#fff;') + 'font:600 13px var(--sans);letter-spacing:.06em;text-transform:uppercase', onclick: () => openRegion(o) }, REGIONS[o].name + ' ›')), regionKids(o).length ? tiles(regionKids(o)) : el('p', { class: 'foot', text: 'No regions added yet.' })));
   const lvl = REGIONS[kids[0]].level; const head = lvl === 'Appellation' ? 'Appellations in ' + REGIONS[k].name : lvl === 'Region' ? 'Regions of ' + REGIONS[k].name : 'Inside ' + REGIONS[k].name;
   return [el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: head })), tiles(kids))];
 }
@@ -2528,8 +2528,7 @@ function renderExploreInner() {
       if (!q) return sec('Regions', grid(a.map(k => regionCard(k))));
       const set = new Set(a); const tops = a.filter(k => !regionAncestors(k).some(x => set.has(x)));
       const inside = k => a.filter(o => regionAncestors(o).includes(k));
-      return sec('Regions', el('div', null, grid(tops.map(k => regionCard(k))), ...tops.filter(k => inside(k).length).map(k => el('div', { class: 'chips scroll', style: 'margin-top:10px', role: 'group', 'aria-label': 'Inside ' + REGIONS[k].name }, el('span', { class: 'foot', style: 'align-self:center', text: 'Inside ' + REGIONS[k].name + ':' }), ...inside(k).slice(0, 14).map(o => el('button', { class: 'chip', type: 'button', onclick: () => openRegion(o) }, REGIONS[o].name))))));
-    },
+      return sec('Regions', el('div', { style: 'display:flex;flex-direction:column;gap:18px' }, grid(tops.map(k => regionCard(k))), ...tops.filter(k => inside(k).length).flatMap(k => regionKidSections(k, true))));    },
     producers: () => { const a = prods.filter(p => q || passes('producer', p.id)); return a.length ? sec('Producers', grid(a.map(p => producerCard(p)))) : null; },
     grapes: () => { const a = grs.filter(g => q || passes('grape', g)); return a.length ? sec('Grapes', grid(a.slice(0, q ? 60 : 80).map(g => grapeCard(g)))) : null; }
   };
