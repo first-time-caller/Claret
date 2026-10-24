@@ -178,5 +178,23 @@
   "licenseUrl": "https://creativecommons.org/licenses/",
   "source": "",
   "query": "hawkes-bay"
+ },
+ "martinborough": {
+  "file": "img/martinborough.jpg",
+  "title": "Supplied by the project owner",
+  "artist": "Public domain (supplied by the project owner)",
+  "license": "Public domain",
+  "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "source": "",
+  "query": "martinborough"
+ },
+ "waiheke-auckland": {
+  "file": "img/waiheke-auckland.jpg",
+  "title": "Supplied by the project owner",
+  "artist": "Public domain (supplied by the project owner)",
+  "license": "Public domain",
+  "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "source": "",
+  "query": "waiheke-auckland"
  }
 }
