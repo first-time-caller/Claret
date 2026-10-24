@@ -1042,12 +1042,22 @@ function openRegion(k) { openEntity('region', k); }
 function openProducer(pId) { openEntity('producer', pId); }
 function openGrape(gId) { openEntity('grape', gId); }
 /* A rough map: the country in context and the region's political area picked out (img/maps.json, built from Natural Earth) */
+/* What sits inside a region: islands, regions or appellations, each tile with its key varieties */
+function regionKidSections(k) {
+  const kids = regionKids(k); if (!kids.length) return [];
+  const tiles = list => el('div', { class: 'tiles' }, ...list.map(o => regionCard(o, null, { sub: String(REGIONS[o].grapes || '').split(/,\s*/).slice(0, 3).join(' · ') })));
+  if (kids.every(o => REGIONS[o].level === 'Island')) return kids.map(o => el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('button', { class: 'link', type: 'button', style: 'color:#fff;font:600 13px var(--sans);letter-spacing:.06em;text-transform:uppercase', onclick: () => openRegion(o) }, REGIONS[o].name + ' ›')), regionKids(o).length ? tiles(regionKids(o)) : el('p', { class: 'foot', text: 'No regions added yet.' })));
+  const lvl = REGIONS[kids[0]].level; const head = lvl === 'Appellation' ? 'Appellations in ' + REGIONS[k].name : lvl === 'Region' ? 'Regions of ' + REGIONS[k].name : 'Inside ' + REGIONS[k].name;
+  return [el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: head })), tiles(kids))];
+}
 /* France › Bordeaux › Médoc › Haut-Médoc › Margaux, each step tappable */
 function regionCrumbs(k) {
   const chain = [...regionAncestors(k).reverse()]; const country = (REGIONS[k].country || '').split(',').pop().trim();
-  const bar = el('nav', { class: 'crumbs', 'aria-label': 'Where this sits' }, el('span', { text: country }));
-  for (const a of chain) bar.append(el('span', { 'aria-hidden': 'true', text: '›' }), el('button', { type: 'button', onclick: () => openRegion(a), text: REGIONS[a].name }));
-  bar.append(el('span', { 'aria-hidden': 'true', text: '›' }), el('span', { class: 'here', text: REGIONS[k].name }), REGIONS[k].level ? el('span', { class: 'level', text: REGIONS[k].level }) : '');
+  const hub = chain.length && REGIONS[chain[0]].level === 'Country';
+  const parts = [...(hub || REGIONS[k].level === 'Country' ? [] : [el('span', { text: country })]), ...chain.map(a => el('button', { type: 'button', onclick: () => openRegion(a), text: REGIONS[a].name })), el('span', { class: 'here', text: REGIONS[k].name })];
+  const bar = el('nav', { class: 'crumbs', 'aria-label': 'Where this sits' });
+  parts.forEach((p, n) => { if (n) bar.append(el('span', { 'aria-hidden': 'true', text: '›' })); bar.append(p); });
+  if (REGIONS[k].level) bar.append(el('span', { class: 'level', text: REGIONS[k].level }));
   return chain.length || REGIONS[k].level ? bar : null;
 }
 function regionMap(k) {
@@ -1095,8 +1105,7 @@ function renderPlace() {
       wines.filter(v => !mn.shown.has(v.id)).length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: mn.shown.size ? 'Also in the catalogue' : 'Wines from here' })), el('div', { class: 'group' }, ...wines.filter(v => !mn.shown.has(v.id)).map(v => wineRow(v.id)))) : null,
       stripSec('Top producers', producersOfRegion(k).slice(0, 8).map(p => (w, h) => producerCard(p, [w, h]))),
       stripSec('Grapes', grapesOfRegion(k).map(g => (w, h) => grapeCard(g, [w, h]))),
-      regionKids(k).length ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: REGIONS[regionKids(k)[0]].parent === k && REGIONS[k].level === 'Region' ? 'Appellations in ' + r.name : 'Inside ' + r.name })), el('div', { class: 'tiles' }, ...regionKids(k).map(o => regionCard(o)))) : null,
-      regionMap(k) ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Where it is' })), regionMap(k), el('p', { class: 'foot', style: 'color:rgba(255,255,255,.6);margin:0', text: 'Rough area, drawn from political boundaries.' })) : null,
+      ...regionKidSections(k),      regionMap(k) ? el('div', { class: 'sec' }, el('div', { class: 'sec-h' }, el('h2', { text: 'Where it is' })), regionMap(k), el('p', { class: 'foot', style: 'color:rgba(255,255,255,.6);margin:0', text: 'Rough area, drawn from political boundaries.' })) : null,
       el('div', { class: 'sec', id: 'phAbout' }, el('div', { class: 'sec-h' }, el('h2', { text: 'About' })), el('p', { class: 'ph-blurb', text: r.blurb }), el('div', { class: 'group' }, el('div', { class: 'row' }, el('span', { class: 'lab', style: 'color:#fff', text: 'Grapes' }), el('span', { class: 'row-main row-s', text: r.grapes })), el('div', { class: 'row' }, el('span', { class: 'lab', style: 'color:#fff', text: 'Where' }), el('span', { class: 'row-main row-s', text: r.country })))),
       c ? el('p', { class: 'ph-credit' }, 'Photo: ' + c.artist + ' · ' + c.license + ' · ', el('a', { href: c.source, target: '_blank', rel: 'noopener' }, 'Source')) : null));
   fitLetters(box);
@@ -1323,6 +1332,19 @@ APP('saint-estephe', 'haut-medoc', 'Saint-Estèphe', 'The most northerly of the 
 APP('saint-emilion', 'bordeaux', 'Saint-Émilion', 'A hillside town on the Right Bank, on limestone and clay. Merlot and Cabernet Franc, with a classification of its own.', 'Merlot, Cabernet Franc', 'Cinzel,serif', 42, 24, '#2A1A12', '.08em');
 APP('pomerol', 'bordeaux', 'Pomerol', 'A small Right Bank appellation of mostly Merlot on clay and gravel, with no official classification. Home to Pétrus.', 'Merlot, Cabernet Franc', 'Cinzel,serif', 54, 30, '#2A1A12', '.16em');
 APP('pessac-leognan', 'bordeaux', 'Pessac-Léognan', 'Gravel just south of the city. Home to Château Haut-Brion, a 1855 first growth, and the one Bordeaux area known for both red and dry white.', 'Cabernet Sauvignon, Merlot, Sauvignon Blanc, Sémillon', 'Cinzel,serif', 38, 20, '#2A1A12', '.06em');
+/* New Zealand: country > island > region (and Gimblett Gravels as an appellation). The model for other countries: level, parent, key varieties (grapes), and terroir & style (blurb). */
+const NZ = (key, parent, level, name, grapes, blurb, lt) => { REGIONS[key] = { level, parent, name, country: 'New Zealand', grapes, blurb }; if (lt) LETTERING[key] = lt; };
+NZ('new-zealand', null, 'Country', 'New Zealand', 'Sauvignon Blanc, Pinot Noir, Chardonnay, Syrah, Riesling', 'Two long, narrow, maritime islands at the bottom of the world, with a wine region on almost every coast. Marlborough Sauvignon Blanc made the name; Pinot Noir, Chardonnay, Riesling and Bordeaux-style reds follow.', { t: 'NEW ZEALAND', f: '"Josefin Sans",sans-serif', w: 300, size: 36, card: 20, tone: '#24363A', ls: '.22em' });
+NZ('north-island', 'new-zealand', 'Island', 'North Island', 'Merlot, Cabernet Sauvignon, Syrah, Pinot Noir, Chardonnay', 'Warmer and more varied: from Auckland and Waiheke down through Hawke’s Bay to Martinborough and Wairarapa at the southern tip. Bordeaux-style reds, Syrah and Chardonnay do well, with Pinot Noir in the south.', { t: 'North Island', f: '"Cormorant SC",serif', w: 500, size: 52, card: 30, tone: '#2E3A2A', ls: '.1em' });
+NZ('south-island', 'new-zealand', 'Island', 'South Island', 'Sauvignon Blanc, Pinot Noir, Riesling, Chardonnay', 'Cooler and drier, with the Southern Alps behind. Home of Marlborough Sauvignon Blanc, Central Otago and Canterbury Pinot Noir, and crisp aromatic whites.', { t: 'South Island', f: '"Cormorant SC",serif', w: 500, size: 52, card: 30, tone: '#24323C', ls: '.1em' });
+NZ('marlborough', 'south-island', 'Region', 'Marlborough', 'Sauvignon Blanc, Pinot Noir', 'The crown jewel of New Zealand. Alluvial soils and high sunshine hours produce explosive, intensely aromatic whites with pungent gooseberry, passionfruit and cut-grass notes.');
+NZ('central-otago', 'south-island', 'Region', 'Central Otago', 'Pinot Noir, Riesling', 'The world’s southernmost wine region. A ring of alpine mountains and a continental climate give intensely concentrated, muscular Pinot Noir with dark cherry, herbs and spice.');
+NZ('north-canterbury', 'south-island', 'Region', 'Canterbury / Waipara Valley', 'Riesling, Pinot Noir, Chardonnay', 'Sheltered by coastal hills, this dry, sunny region makes mineral, bright and taut aromatic whites alongside elegant Pinot Noir.');
+NZ('hawkes-bay', 'north-island', 'Region', 'Hawke’s Bay', 'Merlot, Cabernet Sauvignon, Syrah, Chardonnay', 'A warmer, sun-drenched region famous for the Gimblett Gravels. Stony riverbed soils hold the heat for elegant Bordeaux-style blends and peppery Syrah.');
+NZ('gimblett-gravels', 'hawkes-bay', 'Appellation', 'Gimblett Gravels', 'Merlot, Cabernet Sauvignon, Syrah', 'A district on an old stony riverbed in Hawke’s Bay. The gravel retains heat, ripening Bordeaux-style blends and Syrah.', { t: 'GIMBLETT GRAVELS', f: 'Cinzel,serif', w: 500, size: 34, card: 19, tone: '#3A3426', ls: '.12em' });
+NZ('martinborough', 'north-island', 'Region', 'Martinborough / Wairarapa', 'Pinot Noir, Sauvignon Blanc', 'A boutique, wind-swept region at the southern tip of the North Island. Deep gravel terraces give complex, savoury, structured Pinot Noir often compared with Burgundy.', { t: 'Martinborough', f: '"IM Fell English SC",serif', size: 52, card: 28, tone: '#3A3228' });
+NZ('waiheke-auckland', 'north-island', 'Region', 'Waiheke Island & Auckland', 'Cabernet Sauvignon, Merlot, Syrah, Chardonnay', 'A maritime paradise a short ferry ride from Auckland. Volcanic and clay soils bake in the heat, giving small batches of velvety premium reds and rich Chardonnay.', { t: 'Waiheke', f: '"Great Vibes",cursive', size: 76, card: 46, tone: '#26363A' });
+LETTERING['north-canterbury'] = { t: 'CANTERBURY', f: '"Josefin Sans",sans-serif', w: 300, size: 40, card: 22, tone: '#2C3E3A', ls: '.2em' };
 const regionParent = k => REGIONS[k] && REGIONS[k].parent || null;
 function regionAncestors(k) { const out = []; for (let p = regionParent(k); p && out.length < 6; p = regionParent(p)) out.push(p); return out; }
 const regionKids = k => Object.keys(REGIONS).filter(o => REGIONS[o].parent === k);
@@ -1336,11 +1358,11 @@ LETTERING['mclaren-vale'] = { t: 'McLaren Vale', f: '"DM Serif Display",serif', 
 LETTERING['yarra-valley'] = { t: 'Yarra Valley', f: '"Josefin Sans",sans-serif', w: 300, size: 40, card: 22, tone: '#2E3A2A', ls: '.16em' };
 LETTERING['hunter-valley'] = { t: 'Hunter Valley', f: '"IM Fell English SC",serif', size: 48, card: 28, tone: '#4A3A22' };
 LETTERING['tasmania'] = { t: 'Tasmania', f: '"Cormorant SC",serif', w: 500, size: 56, card: 32, tone: '#26363A', ls: '.14em' };
-const REGION_PHOTO_ALIAS = { 'margaux': 'bordeaux', 'chateau-margaux': 'bordeaux', 'loire': 'sancerre', 'bolgheri': 'tenuta-san-guido', 'mendoza': 'catena-zapata', 'napa-valley': 'opus-one', 'sussex': 'nyetimber', 'sauternes': 'chateau-yquem' };
+const REGION_PHOTO_ALIAS = { 'new-zealand': 'central-otago', 'north-island': 'hawkes-bay', 'south-island': 'marlborough', 'margaux': 'bordeaux', 'chateau-margaux': 'bordeaux', 'loire': 'sancerre', 'bolgheri': 'tenuta-san-guido', 'mendoza': 'catena-zapata', 'napa-valley': 'opus-one', 'sussex': 'nyetimber', 'sauternes': 'chateau-yquem' };
 const PLACE_REGION = { 'place:fr/loire': 'loire', 'place:fr/chinon': 'loire', 'place:fr/vouvray': 'loire', 'place:fr/saumur': 'loire', 'place:fr/anjou': 'loire', 'place:fr/muscadet': 'loire', 'place:it/tuscany': 'tuscany', 'place:it/piedmont': 'piedmont', 'place:it/barolo': 'piedmont', 'place:fr/alsace': 'alsace', 'place:fr/languedoc': 'languedoc', 'place:za/stellenbosch': 'stellenbosch', 'place:us/willamette': 'willamette-valley', 'place:nz/hawke-s-bay': 'hawkes-bay', 'place:it/bolgheri': 'bolgheri', 'place:ar/mendoza': 'mendoza', 'place:us/napa': 'napa-valley', 'place:gb/sussex': 'sussex', 'place:es/ribera-del-duero': 'ribera-del-duero', 'place:nz/marlborough': 'marlborough', 'place:nz/north-canterbury': 'north-canterbury', 'place:nz/central-otago': 'central-otago', 'place:fr/burgundy': 'burgundy',
   'place:fr/bordeaux': 'bordeaux', 'place:fr/beaujolais': 'beaujolais', 'place:fr/rhone': 'northern-rhone', 'place:fr/champagne': 'champagne', 'place:fr/provence': 'provence',
   'place:es/rioja': 'rioja', 'place:es/jerez': 'jerez', 'place:pt/douro': 'douro', 'place:de/mosel': 'mosel', 'place:gr/santorini': 'santorini', 'place:it/etna': 'etna', 'place:it/veneto': 'valdobbiadene',
-  'place:au/barossa': 'barossa', 'place:au/barossa-valley': 'barossa', 'place:au/mclaren-vale': 'mclaren-vale', 'place:au/yarra-valley': 'yarra-valley', 'place:au/hunter-valley': 'hunter-valley', 'place:au/tasmania': 'tasmania', 'place:ge/kakheti': 'kakheti' };
+  'place:nz/martinborough': 'martinborough', 'place:nz/wairarapa': 'martinborough', 'place:nz/waiheke-island': 'waiheke-auckland', 'place:nz/waiheke': 'waiheke-auckland', 'place:nz/auckland': 'waiheke-auckland', 'place:nz/canterbury': 'north-canterbury', 'place:nz/waipara': 'north-canterbury', 'place:nz/waipara-valley': 'north-canterbury', 'place:nz/north-canterbury': 'north-canterbury', 'place:nz/gimblett-gravels': 'gimblett-gravels', 'place:nz/hawkes-bay': 'hawkes-bay', 'place:nz/marlborough': 'marlborough', 'place:au/barossa': 'barossa', 'place:au/barossa-valley': 'barossa', 'place:au/mclaren-vale': 'mclaren-vale', 'place:au/yarra-valley': 'yarra-valley', 'place:au/hunter-valley': 'hunter-valley', 'place:au/tasmania': 'tasmania', 'place:ge/kakheti': 'kakheti' };
 Object.assign(PLACE_REGION, { 'place:fr/madiran': 'south-west', 'place:fr/saint-mont': 'south-west', 'place:fr/gascony': 'south-west', 'place:fr/cotes-de-gascogne': 'south-west', 'place:fr/jurancon': 'south-west', 'place:fr/cahors': 'south-west', 'place:fr/south-west': 'south-west', 'place:fr/bergerac': 'bergerac', 'place:fr/monbazillac': 'bergerac' });
 
 /* Grapes: what they taste like, where they're classic, where to go next, and how to trade up or down */
@@ -2448,7 +2470,7 @@ function regionCard(k, size, opts) {
   const has = hasPhoto(k); const L = LETTERING[k] || {};
   return decorate(el('button', { class: 'place' + (has ? '' : ' plain'), type: 'button', style: (has ? '' : '--tone:' + (L.tone || '#2C2426') + ';') + (size ? 'width:' + size[0] + 'px;height:' + size[1] + 'px' : ''), onclick: (opts && opts.onclick) || (() => openRegion(k)), 'aria-label': REGIONS[k].name },
     has ? el('img', { src: regionPhoto(k), alt: '', loading: 'lazy' }) : null,
-    el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: REGIONS[k].country.split(',').pop().trim() }), lettering(k, 'card'), opts && opts.blurb ? el('span', { class: 'place-s', text: REGIONS[k].blurb }) : null)), 'region', k);
+    el('span', { class: 'place-in' }, el('span', { class: 'place-k', text: REGIONS[k].country.split(',').pop().trim() }), lettering(k, 'card'), opts && opts.blurb ? el('span', { class: 'place-s', text: REGIONS[k].blurb }) : opts && opts.sub ? el('span', { class: 'place-s', text: opts.sub }) : null)), 'region', k);
 }
 function producerCard(pe, size, opts) {
   const cp = COUNTRY_PHOTO[String(pe.placeId || '').split('/')[0]]; const k = pe.photo || (pe.region && hasPhoto(pe.region) ? pe.region : null) || (cp && hasPhoto(cp) ? cp : null); const L = LETTERING[pe.region] || {};

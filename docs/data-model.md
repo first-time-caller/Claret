@@ -414,3 +414,17 @@ A `place` node has a **Level**: Country, Region, or Appellation (commune and sub
 An estate that shares a name with its appellation is a separate **producer** row, never the same node: *Margaux* (appellation, a place) and *Château Margaux* (Premier Grand Cru Classé 1855, a producer based in that appellation). The same split applies to Pauillac, Saint-Émilion, Pomerol and others; Château Pétrus and Château Lafite are producers, and the communes they are named after are places.
 
 In the artifact, `REGIONS` carries `level` and `parent`; Explore lists top-level regions only (search finds the appellations), and a region page shows its breadcrumb and the appellations inside it. Region maps (`img/maps.json`) use political boundaries where available and a rough ellipse for appellations.
+
+### Country model: New Zealand first
+
+New Zealand is the template for deepening a country. Each place is one row with:
+
+| Field | Meaning | NZ example |
+|---|---|---|
+| `level` | Country, Island (or State), Region, Appellation | Country: New Zealand; Island: South Island; Region: Marlborough; Appellation: Gimblett Gravels |
+| `parent` | The level above it | Marlborough → South Island → New Zealand |
+| `grapes` | Key varieties, most important first | Sauvignon Blanc, Pinot Noir |
+| `blurb` | Terroir and style, one or two sentences | Alluvial soils and high sunshine hours… |
+| lettering and map | Title style, and political or ellipse highlight | `img/maps.json` |
+
+A country hub page lists its islands or states, each with its regions as tiles showing their key varieties. Explore shows the hub, not every region under it; search and the hub page reach the regions. Next countries to give the same treatment: Australia (states → regions), then France, Italy and Spain.
